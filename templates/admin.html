@@ -15,11 +15,11 @@
   <meta name="twitter:title" content="لوحة الإدارة | محلات الحبيشي | Alhabeshi Stores">
   <meta name="twitter:description" content="لوحة إدارة محلات الحبيشي لإدارة الطلبات والمنتجات والعملاء والعروض.">
   <title>لوحة الإدارة | محلات الحبيشي | Alhabeshi Stores</title>
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js') }}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js') }}"></script>
   <style>
     .admin-layout {
       display: flex;
@@ -1021,7 +1021,7 @@
 
 <div id="toast-container"></div>
 
-<script src="js/common.js"></script>
+<script src="{{ url_for('static', filename='js/common.js') }}"></script>
 <script>
   // ===================
   // Variables

@@ -15,7 +15,7 @@
   <meta name="twitter:title" content="اطلب الآن | محلات الحبيشي | Alhabeshi Stores">
   <meta name="twitter:description" content="أرسل طلبك إلى محلات الحبيشي وحدد التوصيل أو الاستلام وطريقة الدفع بسهولة.">
   <title>اطلب الآن | محلات الحبيشي | Alhabeshi Stores</title>
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
@@ -576,7 +576,7 @@
   </div>
 <div class="footer-bottom" style="padding-top:12px"><p>التصنيفات: مواد البناء • السباكة • الكهرباء • أدوات الورشة • الأسمنت • مستلزمات طبية</p></div></footer>
 
-<script src="js/common.js"></script>
+<script src="{{ url_for('static', filename='js/common.js') }}"></script>
 <script>
   // =====================
   // بيانات المنتجات

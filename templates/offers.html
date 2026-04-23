@@ -15,7 +15,7 @@
   <meta name="twitter:title" content="العروض والمسابقات | محلات الحبيشي | Alhabeshi Stores">
   <meta name="twitter:description" content="تابع أحدث عروض ومسابقات محلات الحبيشي على مواد البناء والسباكة والكهرباء.">
   <title>العروض والمسابقات | محلات الحبيشي | Alhabeshi Stores</title>
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
@@ -536,7 +536,7 @@
   .quiz-option.wrong { border-color: #e74c3c; background: rgba(231,76,60,0.08); color: #c0392b; }
 </style>
 
-<script src="js/common.js"></script>
+<script src="{{ url_for('static', filename='js/common.js') }}"></script>
 <script>
   let selectedQuizAnswer = null;
   let quizAnswered = false;
