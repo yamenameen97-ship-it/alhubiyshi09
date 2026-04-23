@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="تابع أحدث الأخبار الرياضية العربية والعالمية في صفحة الرياضة الخاصة بمحلات الحبيشي.">
+  <meta name="keywords" content="الأخبار الرياضية, رياضة, كرة قدم, محلات الحبيشي, إب, اليمن">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta name="theme-color" content="#1a5276">
+  <title>الأخبار الرياضية | محلات الحبيشي</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    .sports-hero {
+      background: linear-gradient(135deg, #0f2027, #1a5276, #2c5364);
+      color: #fff;
+      padding: 70px 20px 55px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .sports-hero::before,
+    .sports-hero::after {
+      content: '⚽';
+      position: absolute;
+      opacity: 0.08;
+      font-size: 9rem;
+    }
+    .sports-hero::before { top: -10px; right: 7%; }
+    .sports-hero::after { bottom: -10px; left: 8%; }
+    .sports-wrap {
+      max-width: 1250px;
+      margin: 0 auto;
+      padding: 35px 20px 60px;
+    }
+    .sports-toolbar {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+    .sports-search {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .sports-search input {
+      min-width: 270px;
+      padding: 11px 14px;
+      border: 2px solid #dbe3ea;
+      border-radius: 12px;
+      font-family: 'Cairo', sans-serif;
+    }
+    .sports-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 18px;
+    }
+    .sports-card {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 8px 25px rgba(0,0,0,.08);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+    }
+    .sports-card-image {
+      height: 180px;
+      background: linear-gradient(135deg,#dff3ff,#f5fbff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #1a5276;
+      font-size: 3rem;
+    }
+    .sports-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      display: block;
+    }
+    .sports-card-body {
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .sports-meta {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      color: #6c757d;
+      font-size: .8rem;
+      margin-bottom: 10px;
+    }
+    .sports-card h3 {
+      font-size: 1.05rem;
+      color: #163a52;
+      line-height: 1.8;
+      margin-bottom: 10px;
+    }
+    .sports-card p {
+      color: #55616c;
+      line-height: 1.9;
+      font-size: .9rem;
+      flex: 1;
+    }
+    .sports-card-footer {
+      padding-top: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .source-badge {
+      background: rgba(26,82,118,.08);
+      color: #1a5276;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: .78rem;
+      font-weight: 700;
+    }
+    .empty-state {
+      background: #fff;
+      border-radius: 18px;
+      padding: 40px 20px;
+      text-align: center;
+      color: #6c757d;
+      box-shadow: 0 8px 25px rgba(0,0,0,.06);
+    }
+    @media (max-width: 768px) {
+      .sports-toolbar { align-items: stretch; }
+      .sports-search input { min-width: 100%; width: 100%; }
+    }
+  </style>
+</head>
+<body>
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-brand">
+      <div class="navbar-logo">🏪</div>
+      <div class="navbar-title">
+        <span class="store-name">محلات الحبيشي</span>
+        <span class="store-sub">مواد البناء • السباكة • الكهرباء</span>
+      </div>
+    </a>
+    <ul class="navbar-links" id="navLinks">
+      <li><a href="index.html"><i class="fas fa-home"></i> الرئيسية</a></li>
+      <li><a href="order.html"><i class="fas fa-shopping-cart"></i> الطلب</a></li>
+      <li><a href="offers.html"><i class="fas fa-tags"></i> العروض</a></li>
+      <li><a href="new-products.html"><i class="fas fa-star"></i> المميزة</a></li>
+      <li><a href="chat.html"><i class="fas fa-comments"></i> التفاعلية</a></li>
+      <li><a href="about.html"><i class="fas fa-info-circle"></i> عن المحل</a></li>
+      <li><a href="admin.html" style="background:rgba(243,156,18,0.2); border-radius:8px;"><i class="fas fa-user-shield"></i> الإدارة</a></li>
+    </ul>
+    <button class="navbar-toggle" onclick="document.getElementById('navLinks').classList.toggle('open')">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<header class="sports-hero">
+  <div class="container">
+    <h1 style="font-size:2.1rem;font-weight:900;margin-bottom:10px">صفحة الأخبار الرياضية</h1>
+    <p style="max-width:780px;margin:0 auto;line-height:2;font-size:1rem;opacity:.94">
+      من هنا تتابع الإدارة أحدث الأخبار القادمة من المواقع الرياضية المشتركة، وكل تحديث جديد يظهر تلقائياً في هذه الصفحة.
+    </p>
+  </div>
+</header>
+
+<section class="sports-wrap">
+  <div class="sports-toolbar">
+    <div>
+      <h2 class="section-title" style="margin:0"><i class="fas fa-newspaper" style="color:#1a5276"></i> آخر الأخبار</h2>
+      <div style="color:#6c757d;font-size:.9rem">محدّثة من مصادر رياضية مضافة في لوحة الإدارة</div>
+    </div>
+    <div class="sports-search">
+      <input id="sportsSearchInput" type="text" placeholder="ابحث في الأخبار الرياضية...">
+      <button class="btn btn-primary btn-sm" onclick="loadSportsArticles()"><i class="fas fa-search"></i> بحث</button>
+      <button class="btn btn-outline btn-sm" onclick="document.getElementById('sportsSearchInput').value=''; loadSportsArticles()"><i class="fas fa-sync"></i> الكل</button>
+    </div>
+  </div>
+
+  <div id="sportsArticlesWrap" class="sports-grid"></div>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-section">
+      <h4>محلات الحبيشي</h4>
+      <p>موقع متكامل لعرض المنتجات وتقديم الطلبات ومتابعة الأخبار الرياضية والعروض.</p>
+    </div>
+    <div class="footer-section">
+      <h4>روابط سريعة</h4>
+      <a href="index.html">الرئيسية</a>
+      <a href="order.html">إرسال طلب</a>
+      <a href="sports.html">الأخبار الرياضية</a>
+      <a href="admin.html">الإدارة</a>
+    </div>
+  </div>
+  <div class="footer-bottom"><p>© 2026 محلات الحبيشي | إب - اليمن</p></div>
+</footer>
+
+<div id="toast-container"></div>
+<script src="js/common.js"></script>
+<script>
+  function escapeHtml(value) {
+    return String(value || '').replace(/[&<>\"]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[m]));
+  }
+
+  async function loadSportsArticles() {
+    const q = document.getElementById('sportsSearchInput').value.trim();
+    const wrap = document.getElementById('sportsArticlesWrap');
+    wrap.innerHTML = '<div class="empty-state">جاري تحميل الأخبار...</div>';
+    try {
+      const res = await requestJSON(`/api/sports/articles?limit=18${q ? `&q=${encodeURIComponent(q)}` : ''}`, { method: 'GET' });
+      const articles = res.data || [];
+      if (!articles.length) {
+        wrap.innerHTML = '<div class="empty-state"><div style="font-size:2.6rem;margin-bottom:10px">📰</div>لا توجد أخبار مطابقة حالياً.</div>';
+        return;
+      }
+      wrap.innerHTML = articles.map(article => `
+        <article class="sports-card">
+          ${article.image_url ? `<img src="${escapeHtml(article.image_url)}" alt="${escapeHtml(article.title)}">` : '<div class="sports-card-image">⚽</div>'}
+          <div class="sports-card-body">
+            <div class="sports-meta">
+              <span><i class="fas fa-calendar-alt"></i> ${formatDate(article.published_at || article.created_at)}</span>
+              <span><i class="fas fa-rss"></i> ${escapeHtml(article.source_name || 'مصدر رياضي')}</span>
+            </div>
+            <h3>${escapeHtml(article.title)}</h3>
+            <p>${escapeHtml(article.summary || 'اضغط على رابط الخبر لقراءة التفاصيل من المصدر الرياضي.')}</p>
+            <div class="sports-card-footer">
+              <span class="source-badge">${escapeHtml(article.source_name || 'رياضة')}</span>
+              <a class="btn btn-primary btn-sm" href="${escapeHtml(article.link)}" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i> قراءة الخبر</a>
+            </div>
+          </div>
+        </article>
+      `).join('');
+    } catch (e) {
+      wrap.innerHTML = `<div class="empty-state">تعذر تحميل الأخبار الرياضية<br><small>${escapeHtml(e.message || '')}</small></div>`;
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    loadSportsArticles();
+    document.getElementById('sportsSearchInput').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') loadSportsArticles();
+    });
+  });
+</script>
+</body>
+</html>

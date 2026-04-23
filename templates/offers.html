@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="تابع أحدث عروض ومسابقات محلات الحبيشي على مواد البناء والسباكة والكهرباء.">
+  <meta name="keywords" content="محلات الحبيشي, Alhabeshi Stores, مواد البناء, السباكة, الكهرباء, إب, اليمن, توصيل, عروض, متجر مواد بناء">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta name="theme-color" content="#1a5276">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="محلات الحبيشي | Alhabeshi Stores">
+  <meta property="og:title" content="العروض والمسابقات | محلات الحبيشي | Alhabeshi Stores">
+  <meta property="og:description" content="تابع أحدث عروض ومسابقات محلات الحبيشي على مواد البناء والسباكة والكهرباء.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="العروض والمسابقات | محلات الحبيشي | Alhabeshi Stores">
+  <meta name="twitter:description" content="تابع أحدث عروض ومسابقات محلات الحبيشي على مواد البناء والسباكة والكهرباء.">
+  <title>العروض والمسابقات | محلات الحبيشي | Alhabeshi Stores</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    .offers-hero {
+      background: linear-gradient(135deg, #d35400, #e67e22, #f39c12);
+      color: white;
+      padding: 60px 20px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .offers-hero::before {
+      content: '🎁';
+      position: absolute;
+      top: -20px;
+      right: 5%;
+      font-size: 8rem;
+      opacity: 0.1;
+    }
+    .offers-hero::after {
+      content: '🏆';
+      position: absolute;
+      bottom: -20px;
+      left: 5%;
+      font-size: 8rem;
+      opacity: 0.1;
+    }
+    .offers-hero h1 { font-size: 2.2rem; font-weight: 900; margin-bottom: 10px; }
+    .offers-hero p { font-size: 1.05rem; opacity: 0.9; }
+
+    .offers-tabs {
+      background: white;
+      border-bottom: 2px solid #e9ecef;
+      padding: 0;
+      position: sticky;
+      top: 70px;
+      z-index: 100;
+    }
+    .offers-tabs-inner {
+      display: flex;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    .offer-tab-btn {
+      padding: 16px 25px;
+      border: none;
+      background: none;
+      font-family: 'Cairo', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      color: #6c757d;
+      transition: all 0.3s;
+      border-bottom: 3px solid transparent;
+    }
+    .offer-tab-btn.active {
+      color: #f39c12;
+      border-bottom-color: #f39c12;
+    }
+
+    .offers-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 35px 20px 60px;
+    }
+
+    /* Offer Cards */
+    .offer-card {
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+      position: relative;
+      background: white;
+    }
+    .offer-card:hover { transform: translateY(-6px); box-shadow: 0 12px 40px rgba(0,0,0,0.15); }
+
+    .offer-card-header {
+      padding: 30px 25px;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+    .offer-card-header::before {
+      content: '';
+      position: absolute;
+      top: -40px;
+      left: -40px;
+      width: 150px;
+      height: 150px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 50%;
+    }
+    .offer-type-badge {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      background: rgba(255,255,255,0.25);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+    .offer-discount-big {
+      font-size: 3rem;
+      font-weight: 900;
+      line-height: 1;
+      margin-bottom: 5px;
+    }
+    .offer-card-body { padding: 20px; }
+    .offer-card-body h3 { font-size: 1.1rem; font-weight: 800; margin-bottom: 8px; color: #1a1a2e; }
+    .offer-card-body p { font-size: 0.88rem; color: #6c757d; line-height: 1.7; margin-bottom: 15px; }
+
+    .countdown {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin: 15px 0;
+    }
+    .countdown-item {
+      text-align: center;
+      background: #f8f9fa;
+      border-radius: 10px;
+      padding: 10px 14px;
+      min-width: 65px;
+    }
+    .countdown-item .number {
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: #1a5276;
+      line-height: 1;
+    }
+    .countdown-item .label {
+      font-size: 0.7rem;
+      color: #6c757d;
+      margin-top: 3px;
+    }
+
+    /* Competition Cards */
+    .competition-card {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+      margin-bottom: 20px;
+    }
+    .competition-header {
+      background: linear-gradient(135deg, #8e44ad, #9b59b6);
+      padding: 25px;
+      color: white;
+      position: relative;
+    }
+    .competition-header::after {
+      content: '🏆';
+      position: absolute;
+      left: 25px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 3rem;
+      opacity: 0.3;
+    }
+    .competition-body { padding: 25px; }
+
+    .competition-prizes {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 15px 0;
+    }
+    .prize-item {
+      text-align: center;
+      background: linear-gradient(135deg, #fff8e1, #fff3cd);
+      border-radius: 12px;
+      padding: 15px 10px;
+      border: 2px solid #ffc107;
+    }
+    .prize-item .prize-icon { font-size: 1.8rem; margin-bottom: 5px; }
+    .prize-item .prize-place { font-size: 0.7rem; color: #6c757d; font-weight: 700; }
+    .prize-item .prize-value { font-weight: 900; color: #d35400; font-size: 0.9rem; }
+
+    /* Form مسابقة */
+    .competition-form {
+      background: #f8f9fa;
+      border-radius: 14px;
+      padding: 20px;
+      margin-top: 15px;
+    }
+    .competition-form h4 { color: #8e44ad; margin-bottom: 15px; font-size: 1rem; }
+
+    /* Grid layouts */
+    .offers-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 22px;
+      margin-top: 20px;
+    }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* Countdown active animation */
+    @keyframes countDown {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .offer-bg-1 { background: linear-gradient(135deg, #1a5276, #2e86c1); }
+    .offer-bg-2 { background: linear-gradient(135deg, #e67e22, #f39c12); }
+    .offer-bg-3 { background: linear-gradient(135deg, #1e8449, #27ae60); }
+    .offer-bg-4 { background: linear-gradient(135deg, #c0392b, #e74c3c); }
+  </style>
+</head>
+<body>
+
+<!-- شريط التنقل -->
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-brand">
+      <div class="navbar-logo">🏪</div>
+      <div class="navbar-title">
+        <span class="store-name">محلات الحبيشي</span>
+        <span class="store-sub">المواد البناء • السباكة • الكهرباء</span>
+      </div>
+    </a>
+    <ul class="navbar-links" id="navLinks">
+      <li><a href="index.html"><i class="fas fa-home"></i> الرئيسية</a></li>
+      <li><a href="new-products.html"><i class="fas fa-star"></i> جديدنا</a></li>
+      <li><a href="order.html"><i class="fas fa-shopping-cart"></i> اطلب الآن</a></li>
+      <li><a href="offers.html"><i class="fas fa-tags"></i> العروض</a></li>
+      <li><a href="chat.html"><i class="fas fa-comments"></i> الدردشة</a></li>
+      <li><a href="about.html"><i class="fas fa-info-circle"></i> عن المحل</a></li>
+      <li><a href="admin.html" style="background:rgba(243,156,18,0.2);">
+        <i class="fas fa-cog"></i> الإدارة
+        <span class="nav-badge" id="orders-badge" style="display:none">0</span>
+      </a></li>
+    </ul>
+    <button class="navbar-toggle" onclick="document.getElementById('navLinks').classList.toggle('open')">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Hero -->
+<div class="offers-hero">
+  <div style="position:relative;z-index:1;">
+    <div class="hero-badge">🔥 عروض حصرية</div>
+    <h1>العروض والمسابقات</h1>
+    <p>لا تفوّت أفضل عروض مواد البناء والسباكة والكهرباء<br>وشارك في مسابقاتنا الحصرية واربح جوائز قيّمة!</p>
+  </div>
+</div>
+
+<!-- Tabs -->
+<div class="offers-tabs">
+  <div class="offers-tabs-inner">
+    <button class="offer-tab-btn active" onclick="switchOfferTab('offers', this)">
+      🏷️ العروض الحالية
+    </button>
+    <button class="offer-tab-btn" onclick="switchOfferTab('competitions', this)">
+      🏆 المسابقات
+    </button>
+    <button class="offer-tab-btn" onclick="switchOfferTab('seasonal', this)">
+      🌟 تخفيضات موسمية
+    </button>
+  </div>
+</div>
+
+<div class="offers-content">
+
+  <!-- Panel: العروض -->
+  <div class="tab-panel active" id="panel-offers">
+    <h2 class="section-title"><i class="fas fa-tags" style="color:#f39c12"></i> العروض الحالية</h2>
+    <div class="offers-grid" id="offersGrid">
+      <!-- يتم تحميلها ديناميكياً -->
+      <div class="skeleton" style="height:320px; border-radius:20px;"></div>
+      <div class="skeleton" style="height:320px; border-radius:20px;"></div>
+      <div class="skeleton" style="height:320px; border-radius:20px;"></div>
+    </div>
+  </div>
+
+  <!-- Panel: المسابقات -->
+  <div class="tab-panel" id="panel-competitions">
+    <h2 class="section-title"><i class="fas fa-trophy" style="color:#f39c12"></i> المسابقات</h2>
+
+    <div class="competition-card">
+      <div class="competition-header">
+        <span class="offer-type-badge">نشط</span>
+        <h2 style="font-size:1.4rem; margin-bottom:8px;">🏆 مسابقة العميل المميز</h2>
+        <p style="opacity:0.9; font-size:0.9rem;">اشترِ بأكثر من 100,000 ريال خلال الشهر وادخل القرعة اليومية لجوائز رائعة!</p>
+      </div>
+      <div class="competition-body">
+        <div class="competition-prizes">
+          <div class="prize-item">
+            <div class="prize-icon">🥇</div>
+            <div class="prize-place">المركز الأول</div>
+            <div class="prize-value">50,000 ريال</div>
+          </div>
+          <div class="prize-item">
+            <div class="prize-icon">🥈</div>
+            <div class="prize-place">المركز الثاني</div>
+            <div class="prize-value">25,000 ريال</div>
+          </div>
+          <div class="prize-item">
+            <div class="prize-icon">🥉</div>
+            <div class="prize-place">المركز الثالث</div>
+            <div class="prize-value">10,000 ريال</div>
+          </div>
+        </div>
+
+        <div style="background:rgba(142,68,173,0.08); border-radius:12px; padding:15px; margin-bottom:15px;">
+          <h4 style="color:#8e44ad; margin-bottom:10px; font-size:0.95rem;">📋 شروط المشاركة:</h4>
+          <ul style="list-style:none; padding:0; color:#6c757d; font-size:0.88rem; line-height:2;">
+            <li>✅ يجب أن تكون من عملائنا المشتركين</li>
+            <li>✅ الحد الأدنى للمشتريات: 100,000 ريال</li>
+            <li>✅ يتم اختيار الفائز بالقرعة العشوائية</li>
+            <li>✅ المسابقة شهرية وتُجدَّد كل بداية شهر</li>
+          </ul>
+        </div>
+
+        <div class="competition-form">
+          <h4>🎟️ سجّل مشاركتك الآن</h4>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:15px;">
+            <div>
+              <label class="form-label">الاسم الكامل</label>
+              <input type="text" id="compName" class="form-control" placeholder="اسمك">
+            </div>
+            <div>
+              <label class="form-label">رقم الجوال</label>
+              <input type="tel" id="compPhone" class="form-control" placeholder="07XXXXXXXX">
+            </div>
+          </div>
+          <button class="btn btn-secondary w-100" onclick="registerCompetition()">
+            <i class="fas fa-paper-plane"></i> سجّل مشاركتي
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="competition-card">
+      <div class="competition-header" style="background:linear-gradient(135deg,#1a5276,#2e86c1)">
+        <h2 style="font-size:1.3rem; margin-bottom:8px;">🎯 مسابقة سؤال وجواب</h2>
+        <p style="opacity:0.9; font-size:0.9rem;">أجب على السؤال الأسبوعي وفز بقسيمة شراء!</p>
+      </div>
+      <div class="competition-body">
+        <div id="quizSection">
+          <div style="background:#f8f9fa; border-radius:12px; padding:20px; margin-bottom:15px;">
+            <h4 style="color:#1a5276; margin-bottom:15px; font-size:1rem;">❓ سؤال هذا الأسبوع:</h4>
+            <p style="font-size:1.05rem; font-weight:700; margin-bottom:15px;" id="quizQuestion">ما هو الأسمنت الأفضل للمناطق الرطبة والبحرية؟</p>
+            <div style="display:grid; gap:10px;" id="quizOptions">
+              <label class="quiz-option" onclick="selectQuiz(this, 'wrong')">
+                <input type="radio" name="quiz" value="a">
+                <span>أ. أسمنت بورتلاندي عادي</span>
+              </label>
+              <label class="quiz-option" onclick="selectQuiz(this, 'correct')">
+                <input type="radio" name="quiz" value="b">
+                <span>ب. أسمنت مقاوم للكبريتات</span>
+              </label>
+              <label class="quiz-option" onclick="selectQuiz(this, 'wrong')">
+                <input type="radio" name="quiz" value="c">
+                <span>ج. أسمنت أبيض</span>
+              </label>
+              <label class="quiz-option" onclick="selectQuiz(this, 'wrong')">
+                <input type="radio" name="quiz" value="d">
+                <span>د. أسمنت سريع التصلب</span>
+              </label>
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="submitQuiz()">
+            <i class="fas fa-check"></i> أرسل إجابتي
+          </button>
+        </div>
+        <div id="quizResult" style="display:none; text-align:center; padding:30px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel: التخفيضات الموسمية -->
+  <div class="tab-panel" id="panel-seasonal">
+    <h2 class="section-title"><i class="fas fa-calendar-alt" style="color:#1a5276"></i> التخفيضات الموسمية</h2>
+
+    <div class="alert alert-info mb-20">
+      <i class="fas fa-info-circle"></i>
+      تخفيضات موسم البناء تستمر حتى نهاية الشهر! سارع للاستفادة من أفضل الأسعار.
+    </div>
+
+    <div class="offers-grid">
+      <div class="offer-card">
+        <div class="offer-card-header offer-bg-1">
+          <div class="offer-type-badge">موسمي</div>
+          <div class="offer-discount-big">10%</div>
+          <p style="opacity:0.9; font-size:0.9rem; margin:0;">على جميع مواد البناء</p>
+        </div>
+        <div class="offer-card-body">
+          <h3>تخفيضات مواد البناء</h3>
+          <p>خصم 10% على الأسمنت والرمل والحديد وجميع مواد البناء الأساسية طوال هذا الشهر.</p>
+          <div class="countdown" id="countdown1"></div>
+          <a href="order.html" class="btn btn-primary w-100">اطلب الآن بالخصم</a>
+        </div>
+      </div>
+
+      <div class="offer-card">
+        <div class="offer-card-header offer-bg-3">
+          <div class="offer-type-badge">حصري</div>
+          <div class="offer-discount-big">15%</div>
+          <p style="opacity:0.9; font-size:0.9rem; margin:0;">على لوازم الكهرباء</p>
+        </div>
+        <div class="offer-card-body">
+          <h3>عرض الكهرباء الذكية</h3>
+          <p>خصم 15% على جميع الكابلات والمفاتيح والمقابس واللوحات الكهربائية.</p>
+          <div class="countdown" id="countdown2"></div>
+          <a href="order.html" class="btn btn-success w-100">اطلب الآن بالخصم</a>
+        </div>
+      </div>
+
+      <div class="offer-card">
+        <div class="offer-card-header offer-bg-2">
+          <div class="offer-type-badge">مميز</div>
+          <div class="offer-discount-big">20%</div>
+          <p style="opacity:0.9; font-size:0.9rem; margin:0;">للعملاء المشتركين</p>
+        </div>
+        <div class="offer-card-body">
+          <h3>مكافأة العملاء المميزين</h3>
+          <p>العملاء المشتركون يحصلون على خصم إضافي 20% على أي طلب فوق 50,000 ريال.</p>
+          <div class="countdown" id="countdown3"></div>
+          <a href="order.html" class="btn btn-secondary w-100">استفد من العرض</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="max-width:1200px;">
+  <h2 class="section-title"><i class="fas fa-gift" style="color:#f39c12"></i> مزايا العروض والاشتراك</h2>
+  <div class="feature-grid">
+    <div class="feature-card">
+      <div class="feature-icon"><i class="fas fa-bell"></i></div>
+      <h3>تنبيهات مستمرة</h3>
+      <p>تابع العروض الحالية والأصناف الجديدة بسهولة من صفحات الموقع المخصصة لذلك.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(39,174,96,0.12); color:#27ae60;"><i class="fas fa-user-plus"></i></div>
+      <h3>مزايا للمشتركين</h3>
+      <p>العميل المشترك يحصل على أولوية بالمتابعة وقد يستفيد من خصومات إضافية على بعض الطلبات.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(231,76,60,0.1); color:#e74c3c;"><i class="fas fa-box-open"></i></div>
+      <h3>عروض على الفئات الأكثر طلباً</h3>
+      <p>نركّز على مواد البناء والسباكة والكهرباء حتى تكون العروض فعلاً مفيدة لاحتياج السوق.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(142,68,173,0.12); color:#8e44ad;"><i class="fas fa-trophy"></i></div>
+      <h3>تجارب ومسابقات موسمية</h3>
+      <p>المسابقات والجوائز تضيف تجربة تفاعلية وتشجع العملاء على متابعة الجديد أولاً بأول.</p>
+    </div>
+  </div>
+
+  <h2 class="section-title"><i class="fas fa-question-circle" style="color:#1a5276"></i> أسئلة شائعة</h2>
+  <div class="faq-list">
+    <div class="faq-item open">
+      <button class="faq-question"><span>هل يمكن الاستفادة من العرض عبر الموقع</span><i class="fas fa-chevron-down"></i></button>
+      <div class="faq-answer" style="max-height:220px;"><div class="faq-answer-inner">نعم، معظم العروض مرتبطة بصفحة الطلب مباشرة، فقط اختر العرض المناسب ثم أرسل طلبك وسيتم تأكيد التفاصيل معك.</div></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question"><span>هل العروض تتغير باستمرار</span><i class="fas fa-chevron-down"></i></button>
+      <div class="faq-answer"><div class="faq-answer-inner">نعم، توجد عروض موسمية وأخرى مرتبطة بالمخزون أو بالمناسبات، لذلك ننصح بمتابعة الصفحة بانتظام.</div></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question"><span>كيف أشارك في المسابقات</span><i class="fas fa-chevron-down"></i></button>
+      <div class="faq-answer"><div class="faq-answer-inner">ادخل بياناتك في نموذج المسابقة أو تجاوب مع السؤال الأسبوعي، وبعدها يتم حفظ مشاركتك ومراجعتها من الإدارة.</div></div>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-section">
+      <h4>🏪 محلات الحبيشي</h4>
+      <p>وجهتك الأولى لمواد البناء والسباكة والكهرباء في إب والمنطقة.</p>
+    </div>
+    <div class="footer-section">
+      <h4>🔗 روابط سريعة</h4>
+      <a href="index.html">الرئيسية</a>
+      <a href="order.html">اطلب الآن</a>
+      <a href="chat.html">الدردشة</a>
+      <a href="about.html">عن المحل</a>
+    </div>
+    <div class="footer-section">
+      <h4>🧾 التصنيفات</h4>
+      <p>مواد البناء</p>
+      <p>السباكة</p>
+      <p>الكهرباء</p>
+      <p>أدوات الورشة</p>
+      <p>الأسمنت</p>
+      <p>مستلزمات طبية</p>
+    </div>
+  </div>
+  <div class="footer-bottom"><p>© 2025 محلات الحبيشي | إب - اليمن</p></div>
+</footer>
+
+<style>
+  .quiz-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.3s;
+  }
+  .quiz-option:hover { border-color: #2e86c1; background: rgba(46,134,193,0.05); }
+  .quiz-option.selected { border-color: #2e86c1; background: rgba(46,134,193,0.1); }
+  .quiz-option.correct { border-color: #27ae60; background: rgba(39,174,96,0.1); color: #1e8449; }
+  .quiz-option.wrong { border-color: #e74c3c; background: rgba(231,76,60,0.08); color: #c0392b; }
+</style>
+
+<script src="js/common.js"></script>
+<script>
+  let selectedQuizAnswer = null;
+  let quizAnswered = false;
+
+  function switchOfferTab(name, btn) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.offer-tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(`panel-${name}`).classList.add('active');
+    if (btn) btn.classList.add('active');
+    if (history.replaceState) history.replaceState(null, '', `#${name}`);
+    else window.location.hash = name;
+  }
+
+  // تحميل العروض
+  async function loadOffers() {
+    try {
+      const data = await apiGet('offers', { limit: 20 });
+      const offers = (data.data || []).filter(o => o.is_active);
+      const bgClasses = ['offer-bg-1', 'offer-bg-2', 'offer-bg-3', 'offer-bg-4'];
+      const icons = ['🏷️','⭐','💎','🎁'];
+
+      const grid = document.getElementById('offersGrid');
+      if (!offers.length) {
+        grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:40px; color:#6c757d">لا توجد عروض حالياً</div>';
+        return;
+      }
+
+      grid.innerHTML = offers.map((o, i) => `
+        <div class="offer-card">
+          <div class="offer-card-header ${bgClasses[i % 4]}">
+            <div class="offer-type-badge">${o.type}</div>
+            ${o.discount_percent > 0 ?
+              `<div class="offer-discount-big">-${o.discount_percent}%</div>` :
+              `<div style="font-size:2.5rem; margin-bottom:5px;">${icons[i % 4]}</div>`
+            }
+            <h3 style="margin:0; font-size:1.05rem;">${o.title}</h3>
+          </div>
+          <div class="offer-card-body">
+            <p>${o.description}</p>
+            <div style="display:flex; gap:10px;">
+              ${o.type === 'مسابقة' ?
+                `<button onclick="document.querySelector('.offer-tab-btn:nth-child(2)').click()" class="btn btn-secondary btn-sm">🏆 شارك الآن</button>` :
+                `<a href="order.html" class="btn btn-primary btn-sm">🛒 استفد من العرض</a>`
+              }
+            </div>
+          </div>
+        </div>
+      `).join('');
+    } catch(e) {
+      document.getElementById('offersGrid').innerHTML = '<p style="color:#6c757d">تعذر تحميل العروض</p>';
+    }
+  }
+
+  // العداد التنازلي
+  function createCountdown(elementId, daysRemaining) {
+    const endDate = new Date();
+    endDate.setDate(endDate.getDate() + daysRemaining);
+
+    function update() {
+      const now = new Date();
+      const diff = endDate - now;
+      if (diff <= 0) return;
+
+      const days = Math.floor(diff / 86400000);
+      const hours = Math.floor((diff % 86400000) / 3600000);
+      const mins = Math.floor((diff % 3600000) / 60000);
+      const secs = Math.floor((diff % 60000) / 1000);
+
+      const el = document.getElementById(elementId);
+      if (!el) return;
+      el.innerHTML = `
+        <div class="countdown-item"><div class="number">${days}</div><div class="label">يوم</div></div>
+        <div class="countdown-item"><div class="number">${hours}</div><div class="label">ساعة</div></div>
+        <div class="countdown-item"><div class="number">${mins}</div><div class="label">دقيقة</div></div>
+        <div class="countdown-item"><div class="number">${secs}</div><div class="label">ثانية</div></div>
+      `;
+    }
+    update();
+    setInterval(update, 1000);
+  }
+
+  // تسجيل المسابقة
+  function registerCompetition() {
+    const name = document.getElementById('compName').value.trim();
+    const phone = document.getElementById('compPhone').value.trim();
+    if (!name || !phone) {
+      showToast('يرجى إدخال الاسم ورقم الجوال', 'warning');
+      return;
+    }
+    showToast(`شكراً ${name}! تم تسجيل مشاركتك. سيتم التواصل معك على ${phone} عند الفوز 🎉`, 'success', 6000);
+    document.getElementById('compName').value = '';
+    document.getElementById('compPhone').value = '';
+  }
+
+  // اختبار المعرفة
+  function selectQuiz(label, type) {
+    if (quizAnswered) return;
+    selectedQuizAnswer = type;
+    document.querySelectorAll('.quiz-option').forEach(l => l.classList.remove('selected'));
+    label.classList.add('selected');
+  }
+
+  function submitQuiz() {
+    if (!selectedQuizAnswer) {
+      showToast('يرجى اختيار إجابة أولاً', 'warning');
+      return;
+    }
+    quizAnswered = true;
+
+    document.querySelectorAll('.quiz-option').forEach((label, i) => {
+      if (i === 1) label.classList.add('correct');
+      else if (label.classList.contains('selected')) label.classList.add('wrong');
+    });
+
+    const resultDiv = document.getElementById('quizResult');
+    if (selectedQuizAnswer === 'correct') {
+      resultDiv.innerHTML = `
+        <div style="font-size:3rem; margin-bottom:10px;">🎉</div>
+        <h3 style="color:#27ae60; font-size:1.3rem; margin-bottom:8px;">إجابة صحيحة!</h3>
+        <p style="color:#6c757d;">أسمنت مقاوم للكبريتات هو الأنسب للمناطق الرطبة. حصلت على 10% خصم على طلبك القادم!</p>
+        <a href="order.html" class="btn btn-success mt-20">🛒 استفد من الخصم الآن</a>
+      `;
+    } else {
+      resultDiv.innerHTML = `
+        <div style="font-size:3rem; margin-bottom:10px;">😊</div>
+        <h3 style="color:#f39c12; font-size:1.2rem; margin-bottom:8px;">الإجابة الصحيحة هي: ب</h3>
+        <p style="color:#6c757d;">أسمنت مقاوم للكبريتات مثالي للبيئات الرطبة والبحرية. حاول مرة أخرى الأسبوع القادم!</p>
+      `;
+    }
+
+    resultDiv.style.display = 'block';
+    document.getElementById('quizSection').style.display = 'none';
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    loadOffers();
+    createCountdown('countdown1', 12);
+    createCountdown('countdown2', 8);
+    createCountdown('countdown3', 20);
+    const hash = (window.location.hash || '').replace('#', '');
+    if (hash) {
+      const btnMap = { offers: 0, competitions: 1, seasonal: 2 };
+      const idx = btnMap[hash];
+      const btn = typeof idx === 'number' ? document.querySelectorAll('.offer-tab-btn')[idx] : null;
+      if (btn) switchOfferTab(hash, btn);
+    }
+  });
+</script>
+</body>
+</html>

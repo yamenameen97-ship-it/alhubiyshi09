@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="آخر الواصلات والأصناف الجديدة في محلات الحبيشي مع تنبيهات ومتابعة سريعة.">
+  <meta name="keywords" content="محلات الحبيشي, Alhabeshi Stores, مواد البناء, السباكة, الكهرباء, إب, اليمن, توصيل, عروض, متجر مواد بناء">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta name="theme-color" content="#1a5276">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="محلات الحبيشي | Alhabeshi Stores">
+  <meta property="og:title" content="الأصناف الجديدة | محلات الحبيشي | Alhabeshi Stores">
+  <meta property="og:description" content="آخر الواصلات والأصناف الجديدة في محلات الحبيشي مع تنبيهات ومتابعة سريعة.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="الأصناف الجديدة | محلات الحبيشي | Alhabeshi Stores">
+  <meta name="twitter:description" content="آخر الواصلات والأصناف الجديدة في محلات الحبيشي مع تنبيهات ومتابعة سريعة.">
+  <title>الأصناف الجديدة | محلات الحبيشي | Alhabeshi Stores</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    .new-hero {
+      background: linear-gradient(135deg, #1e8449 0%, #27ae60 50%, #2ecc71 100%);
+      color: white;
+      padding: 60px 20px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .new-hero::before {
+      content: '✨';
+      position: absolute;
+      top: -10px;
+      right: 5%;
+      font-size: 10rem;
+      opacity: 0.1;
+    }
+
+    .new-content {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 35px 20px 60px;
+    }
+
+    /* New products grid */
+    .new-products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 22px;
+    }
+
+    .new-product-card {
+      background: white;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+      position: relative;
+    }
+
+    .new-product-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 35px rgba(39,174,96,0.2);
+      border-color: rgba(39,174,96,0.3);
+    }
+
+    .new-ribbon {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background: linear-gradient(135deg, #27ae60, #1e8449);
+      color: white;
+      padding: 5px 14px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      border-radius: 0 0 0 14px;
+      z-index: 2;
+    }
+
+    .new-product-img {
+      height: 160px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4.5rem;
+      background: linear-gradient(135deg, #f0fff5, #e8f8ef);
+    }
+
+    .new-product-body {
+      padding: 16px;
+    }
+
+    .new-product-cat {
+      font-size: 0.72rem;
+      color: #27ae60;
+      font-weight: 700;
+      background: rgba(39,174,96,0.1);
+      padding: 2px 8px;
+      border-radius: 10px;
+      display: inline-block;
+      margin-bottom: 8px;
+    }
+
+    .new-product-name {
+      font-size: 1rem;
+      font-weight: 800;
+      color: #1a1a2e;
+      margin-bottom: 5px;
+    }
+
+    .new-product-desc {
+      font-size: 0.82rem;
+      color: #6c757d;
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+
+    .new-product-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 12px;
+      border-top: 1px solid #f0fff5;
+    }
+
+    .new-product-price {
+      font-size: 1.1rem;
+      font-weight: 900;
+      color: #27ae60;
+    }
+
+    /* Featured New Product */
+    .featured-new {
+      background: linear-gradient(135deg, #1e8449, #27ae60);
+      color: white;
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 30px;
+      display: grid;
+      grid-template-columns: 1fr 180px;
+      gap: 20px;
+      align-items: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .featured-new::before {
+      content: '';
+      position: absolute;
+      top: -40px;
+      left: -40px;
+      width: 200px;
+      height: 200px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 50%;
+    }
+
+    .featured-new h3 {
+      font-size: 1.5rem;
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+
+    .featured-new p { opacity: 0.9; font-size: 0.95rem; line-height: 1.7; margin-bottom: 15px; }
+
+    .featured-icon {
+      text-align: center;
+      font-size: 6rem;
+      line-height: 1;
+    }
+
+    /* Newsletter signup */
+    .newsletter-card {
+      background: linear-gradient(135deg, #1a5276, #2e86c1);
+      border-radius: 20px;
+      padding: 35px;
+      color: white;
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    .newsletter-card h3 { font-size: 1.4rem; font-weight: 900; margin-bottom: 10px; }
+    .newsletter-card p { opacity: 0.9; margin-bottom: 20px; font-size: 0.9rem; }
+
+    .newsletter-form {
+      display: flex;
+      gap: 10px;
+      max-width: 450px;
+      margin: 0 auto;
+    }
+
+    .newsletter-form input {
+      flex: 1;
+      padding: 12px 16px;
+      border-radius: 10px;
+      border: none;
+      font-family: 'Cairo', sans-serif;
+      font-size: 0.9rem;
+      background: rgba(255,255,255,0.9);
+    }
+
+    /* Recently added animation */
+    @keyframes newItemGlow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(39,174,96,0); }
+      50% { box-shadow: 0 0 20px 5px rgba(39,174,96,0.3); }
+    }
+
+    .new-glow {
+      animation: newItemGlow 2s ease-in-out 3;
+    }
+
+    @media (max-width: 600px) {
+      .featured-new { grid-template-columns: 1fr; }
+      .featured-icon { display: none; }
+      .newsletter-form { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- شريط التنقل -->
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-brand">
+      <div class="navbar-logo">🏪</div>
+      <div class="navbar-title">
+        <span class="store-name">محلات الحبيشي</span>
+        <span class="store-sub">المواد البناء • السباكة • الكهرباء</span>
+      </div>
+    </a>
+    <ul class="navbar-links" id="navLinks">
+      <li><a href="index.html"><i class="fas fa-home"></i> الرئيسية</a></li>
+      <li><a href="new-products.html"><i class="fas fa-star"></i> جديدنا</a></li>
+      <li><a href="order.html"><i class="fas fa-shopping-cart"></i> اطلب الآن</a></li>
+      <li><a href="offers.html"><i class="fas fa-tags"></i> العروض</a></li>
+      <li><a href="chat.html"><i class="fas fa-comments"></i> الدردشة</a></li>
+      <li><a href="about.html"><i class="fas fa-info-circle"></i> عن المحل</a></li>
+      <li><a href="admin.html" style="background:rgba(243,156,18,0.2);">
+        <i class="fas fa-cog"></i> الإدارة
+        <span class="nav-badge" id="orders-badge" style="display:none">0</span>
+      </a></li>
+    </ul>
+    <button class="navbar-toggle" onclick="document.getElementById('navLinks').classList.toggle('open')">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Hero -->
+<div class="new-hero">
+  <div style="position:relative;z-index:1;">
+    <div class="hero-badge">✨ وصل حديثاً</div>
+    <h1 style="font-size:2.3rem; font-weight:900; margin-bottom:10px;">الأصناف الجديدة</h1>
+    <p style="opacity:0.9; font-size:1rem; line-height:1.8;">أحدث الوافدين إلى مخازننا من منتجات البناء والسباكة والكهرباء<br>كن أول من يحصل عليها!</p>
+  </div>
+</div>
+
+<div class="new-content">
+
+  <!-- بطاقة منتج مميز جديد -->
+  <div class="featured-new" id="featuredNew" style="display:none">
+    <div>
+      <span class="hero-badge" style="font-size:0.8rem; margin-bottom:10px; display:inline-block;">🔥 الأحدث وصولاً</span>
+      <h3 id="featuredName">منتج مميز جديد</h3>
+      <p id="featuredDesc">وصف المنتج المميز</p>
+      <button class="btn btn-lg" style="background:rgba(255,255,255,0.2); color:white; border-color:rgba(255,255,255,0.4);"
+        onclick="goToOrderWithProduct()">
+        <i class="fas fa-shopping-cart"></i> اطلبه الآن
+      </button>
+    </div>
+    <div class="featured-icon" id="featuredIcon">📦</div>
+  </div>
+
+  <div class="info-strip" style="margin-bottom:25px;">
+    <div class="info-strip-grid">
+      <div class="info-strip-item">
+        <i class="fas fa-star"></i>
+        <div>
+          <strong>وصل حديثاً</strong>
+          <small>نعرض هنا أحدث الأصناف المضافة حتى تتابع التحديثات بشكل أسرع.</small>
+        </div>
+      </div>
+      <div class="info-strip-item">
+        <i class="fas fa-fire"></i>
+        <div>
+          <strong>فرص أفضل قبل نفاد الكمية</strong>
+          <small>بعض الأصناف الجديدة تكون بكميات محدودة أو بعروض افتتاحية خاصة.</small>
+        </div>
+      </div>
+      <div class="info-strip-item">
+        <i class="fas fa-tools"></i>
+        <div>
+          <strong>تنوع للفنيين وأصحاب المشاريع</strong>
+          <small>مواد بناء وسباكة وكهرباء وعدد يتم تحديثها باستمرار حسب الطلب.</small>
+        </div>
+      </div>
+      <div class="info-strip-item">
+        <i class="fas fa-bell"></i>
+        <div>
+          <strong>تنبيهك بسهولة</strong>
+          <small>سجّل رقمك في أسفل الصفحة لنذكرك بالجديد والعروض القادمة.</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- فلاتر -->
+  <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:25px; align-items:center; justify-content:space-between;">
+    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+      <button class="cat-btn active" onclick="filterNewProducts('all', this)">⭐ الكل</button>
+      <button class="cat-btn" onclick="filterNewProducts('مواد البناء', this)">🧱 بناء</button>
+      <button class="cat-btn" onclick="filterNewProducts('السباكة', this)">🚿 سباكة</button>
+      <button class="cat-btn" onclick="filterNewProducts('الكهرباء', this)">⚡ كهرباء</button>
+      <button class="cat-btn" onclick="filterNewProducts('عدد ومعدات', this)">🔧 عدد</button>
+    </div>
+    <div style="display:flex; gap:8px; align-items:center; color:#6c757d; font-size:0.88rem;">
+      <i class="fas fa-box"></i>
+      <span id="newProductsCount">يتم التحميل...</span>
+    </div>
+  </div>
+
+  <!-- الشبكة -->
+  <div class="new-products-grid" id="newProductsGrid">
+    <div class="skeleton" style="height:300px; border-radius:18px;"></div>
+    <div class="skeleton" style="height:300px; border-radius:18px;"></div>
+    <div class="skeleton" style="height:300px; border-radius:18px;"></div>
+    <div class="skeleton" style="height:300px; border-radius:18px;"></div>
+  </div>
+
+  <!-- لا منتجات -->
+  <div class="empty-state" id="emptyNew" style="display:none">
+    <i class="fas fa-star" style="color:#dee2e6; font-size:4rem; margin-bottom:15px; display:block;"></i>
+    <h3>لا توجد أصناف جديدة حالياً في هذه الفئة</h3>
+    <p>تابعونا لأحدث المنتجات!</p>
+    <a href="index.html" class="btn btn-primary mt-20">تصفح جميع المنتجات</a>
+  </div>
+
+  <!-- اشتراك الإشعارات -->
+  <div class="newsletter-card">
+    <h3>🔔 أبقَ على اطّلاع بأحدث المنتجات</h3>
+    <p>سجل اسمك وبريدك الإلكتروني لتصلك إشعارات المنتجات الجديدة والعروض الحصرية مباشرةً</p>
+    <div class="newsletter-form" style="max-width:760px;flex-wrap:wrap;justify-content:center;">
+      <input type="text" id="notifName" placeholder="اسمك">
+      <input type="email" id="notifEmail" placeholder="بريدك الإلكتروني...">
+      <button class="btn btn-secondary" onclick="subscribeNotifs()">
+        <i class="fas fa-bell"></i> اشترك
+      </button>
+      <button class="btn btn-outline" onclick="unsubscribeNotifs()">
+        <i class="fas fa-bell-slash"></i> إلغاء الاشتراك
+      </button>
+      <button class="btn btn-outline" onclick="logoutCurrentPageMember()">
+        <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
+      </button>
+    </div>
+  </div>
+
+</div>
+
+<div id="toast-container"></div>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-section">
+      <h4>🏪 محلات الحبيشي</h4>
+      <p><span class="store-description-target">وجهتك الأولى لمواد البناء والسباكة والكهرباء ومستلزمات الورش والأسمنت والمستلزمات الطبية في إب والمنطقة.</span></p>
+    </div>
+    <div class="footer-section">
+      <h4>🔗 روابط سريعة</h4>
+      <a href="index.html">الرئيسية</a>
+      <a href="order.html">اطلب الآن</a>
+      <a href="offers.html">العروض</a>
+      <a href="about.html">عن المحل</a>
+    </div>
+    <div class="footer-section">
+      <h4>🧾 التصنيفات</h4>
+      <p>مواد البناء</p>
+      <p>السباكة</p>
+      <p>الكهرباء</p>
+      <p>أدوات الورشة</p>
+      <p>الأسمنت</p>
+      <p>مستلزمات طبية</p>
+    </div>
+  </div>
+  <div class="footer-bottom"><p>© 2025 محلات الحبيشي | إب - اليمن</p></div>
+</footer>
+
+<script src="js/common.js"></script>
+<script>
+  let allNewProducts = [];
+  let filteredNew = [];
+  let currentFilterCat = 'all';
+
+  const categoryIcons = {
+    'مواد البناء':'🧱','السباكة':'🚿','الكهرباء':'⚡','عدد ومعدات':'🔧','أدوات الورشة':'🪛','الأسمنت':'🧱','مستلزمات طبية':'🩺','أخرى':'📦'
+  };
+
+  async function loadNewProducts() {
+    try {
+      const data = await apiGet('products', { limit: 200 });
+      const all = data.data || [];
+      allNewProducts = all.filter(p => p.is_new);
+      filteredNew = [...allNewProducts];
+
+      // عرض المنتج المميز
+      if (allNewProducts.length > 0) {
+        const featured = allNewProducts[0];
+        document.getElementById('featuredName').textContent = featured.name;
+        document.getElementById('featuredDesc').textContent = featured.description || '';
+        document.getElementById('featuredIcon').textContent = categoryIcons[featured.category] || '📦';
+        document.getElementById('featuredNew').style.display = 'grid';
+        document.getElementById('featuredNew')._productName = featured.name;
+      }
+
+      renderNewProducts();
+    } catch(e) {
+      showToast('خطأ في تحميل المنتجات الجديدة', 'error');
+    }
+  }
+
+  function filterNewProducts(cat, btn) {
+    currentFilterCat = cat;
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    filteredNew = cat === 'all' ? [...allNewProducts] :
+      allNewProducts.filter(p => p.category === cat);
+    renderNewProducts();
+  }
+
+  function renderNewProducts() {
+    const grid = document.getElementById('newProductsGrid');
+    const empty = document.getElementById('emptyNew');
+    const count = document.getElementById('newProductsCount');
+
+    count.textContent = `${filteredNew.length} صنف جديد`;
+
+    if (filteredNew.length === 0) {
+      grid.innerHTML = '';
+      empty.style.display = 'block';
+      return;
+    }
+
+    empty.style.display = 'none';
+
+    grid.innerHTML = filteredNew.map((p, i) => {
+      const discountedPrice = p.discount > 0 ? p.price * (1 - p.discount/100) : null;
+      const icon = categoryIcons[p.category] || '📦';
+      const media = p.image_url ? `<img src="${p.image_url}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;">` : icon;
+      return `
+        <div class="new-product-card ${i === 0 ? 'new-glow' : ''}">
+          <div class="new-ribbon">✨ جديد</div>
+          <div class="new-product-img">${media}</div>
+          <div class="new-product-body">
+            <span class="new-product-cat">${p.category}</span>
+            <div class="new-product-name">${p.name}</div>
+            <div class="new-product-desc">${p.description || ''}</div>
+            <div class="new-product-footer">
+              <div>
+                ${discountedPrice ?
+                  `<div class="new-product-price" style="color:#e74c3c;">${Math.round(discountedPrice).toLocaleString('ar-YE')} ر</div>
+                   <div style="text-decoration:line-through;color:#aaa;font-size:0.8rem;">${p.price?.toLocaleString('ar-YE')} ر</div>` :
+                  `<div class="new-product-price">${p.price?.toLocaleString('ar-YE')} ر / ${p.unit}</div>`
+                }
+              </div>
+              <button class="btn btn-success btn-sm" onclick="orderNewProduct('${p.name.replace(/'/g, "\\'")}')">
+                <i class="fas fa-cart-plus"></i> اطلب
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function orderNewProduct(name) {
+    localStorage.setItem('preselectedProduct', name);
+    window.location.href = 'order.html';
+  }
+
+  function goToOrderWithProduct() {
+    const featured = document.getElementById('featuredNew');
+    if (featured._productName) orderNewProduct(featured._productName);
+    else window.location.href = 'order.html';
+  }
+
+  async function subscribeNotifs() {
+    const full_name = document.getElementById('notifName').value.trim();
+    const email = document.getElementById('notifEmail').value.trim();
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      showToast('يرجى إدخال بريد إلكتروني صحيح', 'warning');
+      return;
+    }
+    try {
+      await requestJSON('/api/newsletter/subscribe', {
+        method: 'POST',
+        body: JSON.stringify({ full_name, email })
+      });
+      localStorage.setItem('hiba_newsletter_name', full_name);
+      localStorage.setItem('hiba_newsletter_email', email);
+      showToast(`تم تسجيل ${email} لاستلام الإشعارات البريدية`, 'success', 5000);
+    } catch (e) {
+      showToast(e.message || 'تعذر حفظ الاشتراك', 'error');
+    }
+  }
+
+  async function unsubscribeNotifs() {
+    const email = document.getElementById('notifEmail').value.trim() || localStorage.getItem('hiba_newsletter_email') || window.__memberSession?.email || '';
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      showToast('أدخل البريد الإلكتروني المطلوب إلغاء اشتراكه', 'warning');
+      return;
+    }
+    try {
+      await requestJSON('/api/newsletter/unsubscribe', {
+        method: 'POST',
+        body: JSON.stringify({ email })
+      });
+      localStorage.removeItem('hiba_newsletter_name');
+      localStorage.removeItem('hiba_newsletter_email');
+      showToast('تم إلغاء الاشتراك بنجاح', 'success');
+    } catch (e) {
+      showToast(e.message || 'تعذر إلغاء الاشتراك', 'error');
+    }
+  }
+
+  window.addEventListener('DOMContentLoaded', async () => {
+    const savedName = localStorage.getItem('hiba_newsletter_name');
+    const savedEmail = localStorage.getItem('hiba_newsletter_email');
+    if (savedName) document.getElementById('notifName').value = savedName;
+    if (savedEmail) document.getElementById('notifEmail').value = savedEmail;
+    if (typeof refreshMemberSession === 'function') {
+      await refreshMemberSession();
+      if (window.__memberSession) {
+        document.getElementById('notifName').value = document.getElementById('notifName').value || (window.__memberSession.full_name || '');
+        document.getElementById('notifEmail').value = document.getElementById('notifEmail').value || (window.__memberSession.email || '');
+      }
+    }
+    loadNewProducts();
+  });
+</script>
+</body>
+</html>

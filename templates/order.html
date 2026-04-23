@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="أرسل طلبك إلى محلات الحبيشي وحدد التوصيل أو الاستلام وطريقة الدفع بسهولة.">
+  <meta name="keywords" content="محلات الحبيشي, Alhabeshi Stores, مواد البناء, السباكة, الكهرباء, إب, اليمن, توصيل, عروض, متجر مواد بناء">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta name="theme-color" content="#1a5276">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="محلات الحبيشي | Alhabeshi Stores">
+  <meta property="og:title" content="اطلب الآن | محلات الحبيشي | Alhabeshi Stores">
+  <meta property="og:description" content="أرسل طلبك إلى محلات الحبيشي وحدد التوصيل أو الاستلام وطريقة الدفع بسهولة.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="اطلب الآن | محلات الحبيشي | Alhabeshi Stores">
+  <meta name="twitter:description" content="أرسل طلبك إلى محلات الحبيشي وحدد التوصيل أو الاستلام وطريقة الدفع بسهولة.">
+  <title>اطلب الآن | محلات الحبيشي | Alhabeshi Stores</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    .order-page {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 30px 20px 60px;
+    }
+
+    .order-header {
+      background: linear-gradient(135deg, #1a5276, #2e86c1);
+      color: white;
+      padding: 30px 25px;
+      border-radius: 20px;
+      margin-bottom: 25px;
+      text-align: center;
+    }
+
+    .order-header h1 {
+      font-size: 1.8rem;
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+
+    .order-header p {
+      opacity: 0.9;
+      font-size: 0.95rem;
+    }
+
+    .order-form-card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .form-section-title {
+      background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+      padding: 15px 22px;
+      font-weight: 800;
+      font-size: 1rem;
+      color: #1a5276;
+      border-bottom: 1px solid #e9ecef;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .form-section-body {
+      padding: 22px;
+    }
+
+    .member-toggle {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      background: linear-gradient(135deg, rgba(39, 174, 96, 0.08), rgba(39, 174, 96, 0.04));
+      border: 2px solid rgba(39, 174, 96, 0.2);
+      border-radius: 12px;
+      padding: 14px 18px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .member-toggle:hover {
+      border-color: #27ae60;
+      background: rgba(39, 174, 96, 0.1);
+    }
+
+    .member-toggle input[type="checkbox"] {
+      width: 22px;
+      height: 22px;
+      cursor: pointer;
+      accent-color: #27ae60;
+    }
+
+    .member-toggle-label {
+      flex: 1;
+    }
+
+    .member-toggle-label strong {
+      display: block;
+      color: #1a1a2e;
+      font-size: 0.95rem;
+    }
+
+    .member-toggle-label small {
+      color: #27ae60;
+      font-size: 0.8rem;
+    }
+
+    /* Order Items Table */
+    .order-items-section {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .order-items-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .order-items-table thead {
+      background: linear-gradient(135deg, #1a5276, #2e86c1);
+    }
+
+    .order-items-table th {
+      padding: 12px 14px;
+      text-align: right;
+      font-size: 0.85rem;
+      color: white;
+      font-weight: 700;
+    }
+
+    .order-items-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid #f0f4f8;
+      vertical-align: middle;
+    }
+
+    .order-items-table tbody tr:hover {
+      background: rgba(26, 82, 118, 0.03);
+    }
+
+    .item-row td:first-child {
+      font-weight: 600;
+      color: #1a1a2e;
+    }
+
+    .item-qty-input {
+      width: 80px;
+      padding: 6px 10px;
+      border: 2px solid #e9ecef;
+      border-radius: 8px;
+      font-family: 'Cairo', sans-serif;
+      font-size: 0.9rem;
+      text-align: center;
+      transition: all 0.3s;
+    }
+
+    .item-qty-input:focus {
+      outline: none;
+      border-color: #2e86c1;
+    }
+
+    .btn-remove-item {
+      background: rgba(231, 76, 60, 0.1);
+      color: #e74c3c;
+      border: none;
+      border-radius: 8px;
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-remove-item:hover {
+      background: #e74c3c;
+      color: white;
+    }
+
+    /* Add Item Row */
+    .add-item-row {
+      background: rgba(26, 82, 118, 0.03);
+      padding: 16px;
+      border-top: 2px dashed rgba(26, 82, 118, 0.2);
+      display: grid;
+      grid-template-columns: 1fr 130px auto;
+      gap: 10px;
+      align-items: end;
+    }
+
+    .add-item-row .autocomplete-wrapper {
+      position: relative;
+    }
+
+    .add-item-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #6c757d;
+      margin-bottom: 5px;
+    }
+
+    /* Summary */
+    .order-summary {
+      background: linear-gradient(135deg, #1a5276, #154360);
+      color: white;
+      border-radius: 16px;
+      padding: 25px;
+      margin-bottom: 20px;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      font-size: 0.95rem;
+      border-bottom: 1px solid rgba(255,255,255,0.15);
+    }
+
+    .summary-row:last-child {
+      border-bottom: none;
+      font-size: 1.2rem;
+      font-weight: 900;
+      padding-top: 12px;
+    }
+
+    .summary-total {
+      color: #f39c12;
+      font-size: 1.4rem;
+      font-weight: 900;
+    }
+
+    /* Empty items state */
+    .empty-items {
+      text-align: center;
+      padding: 30px;
+      color: #6c757d;
+    }
+
+    .empty-items i {
+      font-size: 2.5rem;
+      color: #dee2e6;
+      margin-bottom: 10px;
+    }
+
+    /* Success Page */
+    .success-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 3000;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(5px);
+    }
+
+    .success-overlay.show {
+      display: flex;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .success-card {
+      background: white;
+      border-radius: 24px;
+      padding: 40px 30px;
+      text-align: center;
+      max-width: 450px;
+      width: 90%;
+      animation: scaleIn 0.4s ease;
+    }
+
+    .success-icon {
+      width: 90px;
+      height: 90px;
+      background: linear-gradient(135deg, #27ae60, #1e8449);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      margin: 0 auto 20px;
+      box-shadow: 0 10px 30px rgba(39, 174, 96, 0.4);
+    }
+
+    .success-card h2 {
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: #1a1a2e;
+      margin-bottom: 10px;
+    }
+
+    .success-card p {
+      color: #6c757d;
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    .order-number-badge {
+      background: rgba(26, 82, 118, 0.08);
+      border: 2px solid rgba(26, 82, 118, 0.2);
+      border-radius: 12px;
+      padding: 12px 20px;
+      font-size: 0.9rem;
+      margin-bottom: 25px;
+    }
+
+    .order-number-badge strong {
+      color: #1a5276;
+      font-size: 1.1rem;
+    }
+
+    @media (max-width: 600px) {
+      .add-item-row {
+        grid-template-columns: 1fr;
+      }
+      .order-items-table { font-size: 0.82rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- شريط التنقل -->
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-brand">
+      <div class="navbar-logo">🏪</div>
+      <div class="navbar-title">
+        <span class="store-name">محلات الحبيشي</span>
+        <span class="store-sub">المواد البناء • السباكة • الكهرباء</span>
+      </div>
+    </a>
+    <ul class="navbar-links" id="navLinks">
+      <li><a href="index.html"><i class="fas fa-home"></i> الرئيسية</a></li>
+      <li><a href="new-products.html"><i class="fas fa-star"></i> جديدنا</a></li>
+      <li><a href="order.html"><i class="fas fa-shopping-cart"></i> اطلب الآن</a></li>
+      <li><a href="offers.html"><i class="fas fa-tags"></i> العروض</a></li>
+      <li><a href="chat.html"><i class="fas fa-comments"></i> الدردشة</a></li>
+      <li><a href="about.html"><i class="fas fa-info-circle"></i> عن المحل</a></li>
+      <li><a href="admin.html" style="background:rgba(243,156,18,0.2); border-radius:8px;">
+        <i class="fas fa-cog"></i> الإدارة
+        <span class="nav-badge" id="orders-badge" style="display:none">0</span>
+      </a></li>
+    </ul>
+    <button class="navbar-toggle" onclick="document.getElementById('navLinks').classList.toggle('open')">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="order-page">
+  <!-- رأس الصفحة -->
+  <div class="order-header">
+    <h1><i class="fas fa-shopping-cart"></i> تقديم طلب جديد</h1>
+    <p>اختر منتجاتك وأضف بياناتك وسيتم تأكيد طلبك في أسرع وقت</p>
+  </div>
+
+  <div class="feature-grid" style="margin-bottom:20px;">
+    <div class="feature-card">
+      <div class="feature-icon"><i class="fas fa-bolt"></i></div>
+      <h3>تأكيد سريع للطلب</h3>
+      <p>بعد الإرسال يصل طلبك للإدارة مباشرة ليتم مراجعته والتواصل معك بأسرع وقت.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(39,174,96,0.12); color:#27ae60;"><i class="fas fa-user-check"></i></div>
+      <h3>مزايا للمشتركين</h3>
+      <p>عند تفعيل خيار الاشتراك يتم تمييز الطلب ومتابعته بسهولة أكبر من داخل النظام.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(243,156,18,0.12); color:#d68910;"><i class="fas fa-truck"></i></div>
+      <h3>تنسيق التوصيل</h3>
+      <p>يمكن إضافة ملاحظات عن الموقع أو وقت الاستلام وسنتواصل معك لتأكيد تفاصيل التوصيل.</p>
+    </div>
+  </div>
+
+  <div class="helper-note" style="margin-bottom:20px;">
+    <strong>نصيحة:</strong> إذا كانت عندك قائمة طويلة للمشروع، أضف أهم الأصناف أولاً ثم استخدم خانة الملاحظات لشرح باقي التفاصيل.
+  </div>
+
+  <!-- بيانات العميل -->
+  <div class="order-form-card">
+    <div class="form-section-title">
+      <i class="fas fa-user-circle"></i> بيانات مقدم الطلب
+    </div>
+    <div class="form-section-body">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+        <div class="form-group">
+          <label class="form-label">الاسم الكامل *</label>
+          <input type="text" id="customerName" class="form-control" placeholder="أدخل اسمك الكامل" required>
+          <div class="form-error" id="nameError"></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">رقم الجوال *</label>
+          <input type="tel" id="customerPhone" class="form-control" placeholder="07XXXXXXXX" required>
+          <div class="form-error" id="phoneError"></div>
+        </div>
+      </div>
+
+      <!-- اشتراك العضوية -->
+      <label class="member-toggle" id="memberToggle">
+        <input type="checkbox" id="isMember" onchange="toggleMemberField()">
+        <div class="member-toggle-label">
+          <strong>🏅 أنا مشترك في الصفحة</strong>
+          <small>سيصل الرد مباشرة إلى حسابكم وستحصل على مزايا إضافية</small>
+        </div>
+      </label>
+
+      <div id="memberIdSection" style="display:none; margin-top:12px;">
+        <div class="form-group">
+          <label class="form-label">رقم العضوية (اختياري)</label>
+          <input type="text" id="memberId" class="form-control" placeholder="أدخل رقم عضويتك">
+        </div>
+      </div>
+
+      <div class="form-group mt-20">
+        <label class="form-label">طريقة الاستلام</label>
+        <div style="display:flex; gap:12px; flex-wrap:wrap;">
+          <label class="form-check"><input type="radio" name="orderMode" value="delivery" checked onchange="toggleOrderMode()"> 🚚 توصيل</label>
+          <label class="form-check"><input type="radio" name="orderMode" value="pickup" onchange="toggleOrderMode()"> 🏪 استلام من المحل</label>
+        </div>
+      </div>
+
+      <div id="deliveryFields">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap: 15px;">
+          <div class="form-group">
+            <label class="form-label">عنوان التوصيل</label>
+            <input type="text" id="deliveryAddress" class="form-control" placeholder="المدينة - الحي - أقرب معلم">
+          </div>
+          <div class="form-group">
+            <label class="form-label">الوقت المناسب</label>
+            <input type="text" id="deliveryTime" class="form-control" placeholder="مثال: بعد العصر">
+          </div>
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px; margin-top:10px;">
+        <div class="form-group">
+          <label class="form-label">طريقة الدفع</label>
+          <select id="paymentMethod" class="form-control">
+            <option value="cash">نقداً عند الاستلام</option>
+            <option value="wallet">تحويل إلى محفظة صراف</option>
+            <option value="bank">حوالة / تحويل بنكي</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">مرجع الدفع أو اسم الصراف</label>
+          <input type="text" id="paymentReference" class="form-control" placeholder="اختياري">
+        </div>
+      </div>
+
+      <div class="helper-note" style="margin-top:12px;">يمكنك مراجعة <a href="payment.html" style="font-weight:700;">صفحة الدفع الإلكتروني</a> لمعرفة خيارات الدفع المتاحة.</div>
+
+      <div class="form-group mt-20">
+        <label class="form-label">ملاحظات (اختياري)</label>
+        <textarea id="orderNotes" class="form-control" rows="2" placeholder="أي ملاحظات خاصة بطلبك..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- أصناف الطلب -->
+  <div class="order-items-section">
+    <div class="form-section-title">
+      <i class="fas fa-list"></i> أصناف الطلب
+      <span id="itemsCount" style="margin-right:auto; background:rgba(26,82,118,0.1); padding:2px 10px; border-radius:20px; font-size:0.82rem; color:#2e86c1;">0 صنف</span>
+    </div>
+
+    <!-- جدول الأصناف -->
+    <div id="itemsTableWrapper">
+      <div class="empty-items" id="emptyItems">
+        <i class="fas fa-shopping-basket"></i>
+        <p>لم تضف أي أصناف بعد<br><small>استخدم الحقل أدناه لإضافة الأصناف</small></p>
+      </div>
+      <table class="order-items-table" id="itemsTable" style="display:none">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>اسم الصنف</th>
+            <th>الوحدة</th>
+            <th>الكمية</th>
+            <th>سعر الوحدة</th>
+            <th>الإجمالي</th>
+            <th>حذف</th>
+          </tr>
+        </thead>
+        <tbody id="itemsTableBody"></tbody>
+      </table>
+    </div>
+
+    <!-- إضافة صنف -->
+    <div class="add-item-row">
+      <div>
+        <div class="add-item-label">🔍 اسم الصنف</div>
+        <div class="autocomplete-wrapper">
+          <input type="text" id="itemNameInput" class="form-control"
+            placeholder="اكتب أول حروف الصنف..." autocomplete="off"
+            oninput="handleItemSearch(this.value)"
+            onkeydown="handleAutocompleteKey(event)">
+          <div class="autocomplete-list" id="autocompleteList"></div>
+        </div>
+      </div>
+      <div>
+        <div class="add-item-label">📦 الكمية</div>
+        <input type="number" id="itemQtyInput" class="form-control" placeholder="الكمية"
+          min="1" value="1" onkeydown="if(event.key==='Enter') addItem()">
+      </div>
+      <div style="padding-top:22px">
+        <button class="btn btn-success" onclick="addItem()" id="addItemBtn">
+          <i class="fas fa-plus"></i> إضافة
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ملخص الطلب -->
+  <div class="order-summary" id="orderSummary" style="display:none">
+    <h3 style="margin-bottom:15px; font-size:1.1rem;"><i class="fas fa-receipt"></i> ملخص الطلب</h3>
+    <div id="summaryItems"></div>
+    <div class="summary-row" style="margin-top:5px;">
+      <span>عدد الأصناف:</span>
+      <span id="summaryCount">0</span>
+    </div>
+    <div class="summary-row">
+      <span>الإجمالي:</span>
+      <span class="summary-total" id="summaryTotal">0 ريال</span>
+    </div>
+  </div>
+
+  <!-- زر الإرسال -->
+  <div style="text-align:center;">
+    <button class="btn btn-success btn-lg w-100" id="submitOrderBtn" onclick="submitOrder()"
+      style="font-size:1.1rem; padding:16px; border-radius:14px; max-width:400px; margin:0 auto; display:block">
+      <i class="fas fa-paper-plane"></i> إرسال الطلب
+    </button>
+    <p style="color:#6c757d; font-size:0.82rem; margin-top:10px;">
+      <i class="fas fa-info-circle"></i> سيتم إرسال إشعار بطلبك إلى إدارة المحل فوراً
+    </p>
+  </div>
+</div>
+
+<!-- نجاح الطلب -->
+<div class="success-overlay" id="successOverlay">
+  <div class="success-card">
+    <div class="success-icon">✅</div>
+    <h2>تم إرسال طلبك بنجاح!</h2>
+    <p>شكراً <strong id="successName"></strong>،<br>تم استلام طلبك وسنتواصل معك على الرقم <strong id="successPhone"></strong> في أقرب وقت.</p>
+    <div class="order-number-badge">
+      رقم الطلب: <strong id="successOrderId"></strong>
+    </div>
+    <div id="memberMsg" style="display:none; background:rgba(39,174,96,0.1); border-radius:10px; padding:12px; margin-bottom:20px; color:#1e8449; font-size:0.88rem;">
+      🏅 نظراً لاشتراكك في صفحتنا، سيصل الرد مباشرة لحسابك!<br>شكراً لزيارتكم صفحتنا 🙏
+    </div>
+    <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+      <a href="index.html" class="btn btn-primary">
+        <i class="fas fa-home"></i> الرئيسية
+      </a>
+      <button class="btn btn-outline" onclick="resetForm()">
+        <i class="fas fa-plus"></i> طلب جديد
+      </button>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+
+<footer>
+  <div class="footer-bottom" style="padding:20px">
+    <p>© 2025 محلات الحبيشي | إب - المجمعة - اليمن</p>
+  </div>
+<div class="footer-bottom" style="padding-top:12px"><p>التصنيفات: مواد البناء • السباكة • الكهرباء • أدوات الورشة • الأسمنت • مستلزمات طبية</p></div></footer>
+
+<script src="js/common.js"></script>
+<script>
+  // =====================
+  // بيانات المنتجات
+  // =====================
+  let allProducts = [];
+  let orderItems = [];
+  let selectedAutocompleteIndex = -1;
+  const ORDER_DRAFT_KEY = 'hiba_order_draft_v1';
+
+  function saveDraft() {
+    const draft = {
+      customerName: document.getElementById('customerName')?.value || '',
+      customerPhone: document.getElementById('customerPhone')?.value || '',
+      isMember: document.getElementById('isMember')?.checked || false,
+      memberId: document.getElementById('memberId')?.value || '',
+      orderMode: document.querySelector('input[name="orderMode"]:checked')?.value || 'delivery',
+      deliveryAddress: document.getElementById('deliveryAddress')?.value || '',
+      deliveryTime: document.getElementById('deliveryTime')?.value || '',
+      paymentMethod: document.getElementById('paymentMethod')?.value || 'cash',
+      paymentReference: document.getElementById('paymentReference')?.value || '',
+      orderNotes: document.getElementById('orderNotes')?.value || '',
+      orderItems
+    };
+    localStorage.setItem(ORDER_DRAFT_KEY, JSON.stringify(draft));
+  }
+
+  function restoreDraft() {
+    try {
+      const raw = localStorage.getItem(ORDER_DRAFT_KEY);
+      if (!raw) return;
+      const draft = JSON.parse(raw);
+      if (draft.customerName) document.getElementById('customerName').value = draft.customerName;
+      if (draft.customerPhone) document.getElementById('customerPhone').value = draft.customerPhone;
+      if (draft.memberId) document.getElementById('memberId').value = draft.memberId;
+      if (draft.orderNotes) document.getElementById('orderNotes').value = draft.orderNotes;
+      document.getElementById('isMember').checked = !!draft.isMember;
+      toggleMemberField();
+      if (Array.isArray(draft.orderItems) && draft.orderItems.length) {
+        orderItems = draft.orderItems;
+        renderOrderItems();
+        showToast('تم استعادة مسودة الطلب السابقة', 'info', 3500);
+      }
+    } catch (e) {}
+  }
+
+  function clearDraft() {
+    localStorage.removeItem(ORDER_DRAFT_KEY);
+  }
+
+  function bindDraftInputs() {
+    ['customerName', 'customerPhone', 'memberId', 'orderNotes', 'isMember'].forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.addEventListener('input', saveDraft);
+      el.addEventListener('change', saveDraft);
+    });
+  }
+
+  // تحميل المنتجات
+  async function loadProducts() {
+    try {
+      const data = await apiGet('products', { limit: 200 });
+      allProducts = data.data || [];
+
+      // تحقق من وجود منتج محدد مسبقاً من الصفحة الرئيسية
+      const preselected = localStorage.getItem('preselectedProduct');
+      if (preselected) {
+        document.getElementById('itemNameInput').value = preselected;
+        handleItemSearch(preselected);
+        localStorage.removeItem('preselectedProduct');
+        document.getElementById('itemNameInput').focus();
+        setTimeout(() => document.getElementById('itemQtyInput').focus(), 500);
+      }
+      restoreDraft();
+    } catch(e) {
+      showToast('تعذر تحميل قائمة المنتجات', 'warning');
+    }
+  }
+
+  // =====================
+  // Autocomplete
+  // =====================
+  function handleItemSearch(query) {
+    const q = query.trim().toLowerCase();
+    const list = document.getElementById('autocompleteList');
+
+    if (q.length < 1) {
+      list.classList.remove('show');
+      return;
+    }
+
+    const matches = allProducts.filter(p =>
+      p.name.toLowerCase().includes(q) ||
+      (p.category || '').toLowerCase().includes(q)
+    ).slice(0, 10);
+
+    if (matches.length === 0) {
+      list.innerHTML = `<div class="autocomplete-item" style="color:#6c757d">لا توجد نتائج</div>`;
+      list.classList.add('show');
+      return;
+    }
+
+    selectedAutocompleteIndex = -1;
+    list.innerHTML = matches.map((p, i) => {
+      const discountedPrice = p.discount > 0 ? p.price * (1 - p.discount/100) : p.price;
+      return `
+        <div class="autocomplete-item" data-index="${i}" data-id="${p.id}"
+          onclick="selectProduct('${p.id}')"
+          onmouseover="this.classList.add('selected')"
+          onmouseout="this.classList.remove('selected')">
+          <div>
+            <div style="font-weight:700;">${highlightMatch(p.name, q)}</div>
+            <div style="font-size:0.75rem; color:#6c757d;">${p.category} • ${p.unit}</div>
+          </div>
+          <div class="item-price">${Math.round(discountedPrice).toLocaleString('ar-YE')} ر/${p.unit}</div>
+        </div>
+      `;
+    }).join('');
+    list.classList.add('show');
+  }
+
+  function highlightMatch(text, query) {
+    const idx = text.toLowerCase().indexOf(query);
+    if (idx === -1) return text;
+    return text.substring(0, idx) +
+      `<mark style="background:#fef3cd; border-radius:3px; padding:0 2px">${text.substring(idx, idx + query.length)}</mark>` +
+      text.substring(idx + query.length);
+  }
+
+  function handleAutocompleteKey(event) {
+    const list = document.getElementById('autocompleteList');
+    const items = list.querySelectorAll('.autocomplete-item[data-id]');
+
+    if (!list.classList.contains('show')) return;
+
+    if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      selectedAutocompleteIndex = Math.min(selectedAutocompleteIndex + 1, items.length - 1);
+    } else if (event.key === 'ArrowUp') {
+      event.preventDefault();
+      selectedAutocompleteIndex = Math.max(selectedAutocompleteIndex - 1, 0);
+    } else if (event.key === 'Enter') {
+      event.preventDefault();
+      if (selectedAutocompleteIndex >= 0 && items[selectedAutocompleteIndex]) {
+        const id = items[selectedAutocompleteIndex].dataset.id;
+        selectProduct(id);
+      } else if (items.length === 1) {
+        selectProduct(items[0].dataset.id);
+      }
+      return;
+    } else if (event.key === 'Escape') {
+      list.classList.remove('show');
+      return;
+    }
+
+    items.forEach((item, i) => {
+      item.classList.toggle('selected', i === selectedAutocompleteIndex);
+      if (i === selectedAutocompleteIndex) {
+        item.scrollIntoView({ block: 'nearest' });
+      }
+    });
+  }
+
+  function selectProduct(id) {
+    const product = allProducts.find(p => p.id === id);
+    if (!product) return;
+
+    document.getElementById('itemNameInput').value = product.name;
+    document.getElementById('autocompleteList').classList.remove('show');
+
+    // تركيز على حقل الكمية
+    const qtyInput = document.getElementById('itemQtyInput');
+    qtyInput.focus();
+    qtyInput.select();
+
+    // تخزين المنتج المحدد
+    document.getElementById('itemNameInput').dataset.selectedId = id;
+  }
+
+  // =====================
+  // إدارة عناصر الطلب
+  // =====================
+  function addItem() {
+    const nameInput = document.getElementById('itemNameInput');
+    const qtyInput = document.getElementById('itemQtyInput');
+    const name = nameInput.value.trim();
+    const qty = parseFloat(qtyInput.value);
+    const selectedId = nameInput.dataset.selectedId;
+
+    if (!name) {
+      showToast('يرجى إدخال اسم الصنف', 'warning');
+      nameInput.focus();
+      return;
+    }
+
+    if (!qty || qty <= 0) {
+      showToast('يرجى إدخال كمية صحيحة', 'warning');
+      qtyInput.focus();
+      return;
+    }
+
+    // البحث عن المنتج
+    let product = null;
+    if (selectedId) {
+      product = allProducts.find(p => p.id === selectedId);
+    }
+    if (!product) {
+      product = allProducts.find(p => p.name.toLowerCase() === name.toLowerCase());
+    }
+
+    // التحقق من عدم التكرار
+    const existingIndex = orderItems.findIndex(item =>
+      item.name.toLowerCase() === (product ? product.name : name).toLowerCase()
+    );
+
+    if (existingIndex >= 0) {
+      // تحديث الكمية إذا كان موجوداً
+      orderItems[existingIndex].quantity += qty;
+      orderItems[existingIndex].total = orderItems[existingIndex].quantity * orderItems[existingIndex].price;
+      showToast(`تم تحديث كمية "${orderItems[existingIndex].name}"`, 'info');
+    } else {
+      const price = product ? (product.discount > 0 ? product.price * (1 - product.discount/100) : product.price) : 0;
+      orderItems.push({
+        id: product ? product.id : null,
+        name: product ? product.name : name,
+        unit: product ? product.unit : 'وحدة',
+        quantity: qty,
+        price: price,
+        total: price * qty
+      });
+      showToast(`تمت إضافة "${product ? product.name : name}"`, 'success');
+    }
+
+    // مسح الحقول والتركيز مجدداً على اسم الصنف
+    nameInput.value = '';
+    qtyInput.value = '1';
+    nameInput.dataset.selectedId = '';
+    document.getElementById('autocompleteList').classList.remove('show');
+    nameInput.focus();
+
+    renderOrderItems();
+    saveDraft();
+  }
+
+  function removeItem(index) {
+    const name = orderItems[index].name;
+    orderItems.splice(index, 1);
+    renderOrderItems();
+    saveDraft();
+    showToast(`تم حذف "${name}"`, 'info');
+  }
+
+  function updateQuantity(index, newQty) {
+    const qty = parseFloat(newQty);
+    if (qty <= 0) {
+      showToast('الكمية يجب أن تكون أكبر من صفر', 'warning');
+      return;
+    }
+    orderItems[index].quantity = qty;
+    orderItems[index].total = qty * orderItems[index].price;
+    updateSummary();
+    saveDraft();
+  }
+
+  function renderOrderItems() {
+    const tbody = document.getElementById('itemsTableBody');
+    const table = document.getElementById('itemsTable');
+    const empty = document.getElementById('emptyItems');
+    const summary = document.getElementById('orderSummary');
+    const countBadge = document.getElementById('itemsCount');
+
+    countBadge.textContent = `${orderItems.length} صنف`;
+
+    if (orderItems.length === 0) {
+      table.style.display = 'none';
+      empty.style.display = 'block';
+      summary.style.display = 'none';
+      return;
+    }
+
+    empty.style.display = 'none';
+    table.style.display = 'table';
+    summary.style.display = 'block';
+
+    tbody.innerHTML = orderItems.map((item, i) => `
+      <tr class="item-row">
+        <td>${i + 1}</td>
+        <td>
+          <strong>${item.name}</strong>
+          ${item.id ? '' : '<span class="badge badge-warning" style="font-size:0.65rem; margin-right:5px">غير محدد</span>'}
+        </td>
+        <td>${item.unit}</td>
+        <td>
+          <input type="number" class="item-qty-input" value="${item.quantity}" min="0.01" step="0.5"
+            onchange="updateQuantity(${i}, this.value)" onblur="updateQuantity(${i}, this.value)">
+        </td>
+        <td>${item.price > 0 ? item.price.toLocaleString('ar-YE') + ' ر' : '<span style="color:#aaa">-</span>'}</td>
+        <td style="font-weight:700; color:#27ae60">
+          ${item.total > 0 ? item.total.toLocaleString('ar-YE') + ' ر' : '-'}
+        </td>
+        <td>
+          <button class="btn-remove-item" onclick="removeItem(${i})" title="حذف">
+            <i class="fas fa-trash"></i>
+          </button>
+        </td>
+      </tr>
+    `).join('');
+
+    updateSummary();
+  }
+
+  function updateSummary() {
+    const total = orderItems.reduce((sum, item) => sum + item.total, 0);
+    const summaryItems = document.getElementById('summaryItems');
+    const summaryCount = document.getElementById('summaryCount');
+    const summaryTotal = document.getElementById('summaryTotal');
+
+    summaryCount.textContent = orderItems.length + ' صنف';
+    summaryTotal.textContent = total.toLocaleString('ar-YE') + ' ريال';
+
+    summaryItems.innerHTML = orderItems.map(item =>
+      `<div class="summary-row" style="font-size:0.85rem;">
+        <span>${item.name} × ${item.quantity} ${item.unit}</span>
+        <span>${item.total > 0 ? item.total.toLocaleString('ar-YE') + ' ر' : '-'}</span>
+      </div>`
+    ).join('');
+  }
+
+  // =====================
+  // إرسال الطلب
+  // =====================
+  async function submitOrder() {
+    const name = document.getElementById('customerName').value.trim();
+    const phone = document.getElementById('customerPhone').value.trim();
+    const isMember = document.getElementById('isMember').checked;
+    const memberId = document.getElementById('memberId').value.trim();
+    const orderMode = document.querySelector('input[name=\"orderMode\"]:checked')?.value || 'delivery';
+    const deliveryAddress = document.getElementById('deliveryAddress').value.trim();
+    const deliveryTime = document.getElementById('deliveryTime').value.trim();
+    const paymentMethod = document.getElementById('paymentMethod').value;
+    const paymentReference = document.getElementById('paymentReference').value.trim();
+    const notes = document.getElementById('orderNotes').value.trim();
+
+    // التحقق
+    let valid = true;
+    if (!name) {
+      document.getElementById('nameError').textContent = 'يرجى إدخال الاسم';
+      document.getElementById('customerName').classList.add('is-invalid');
+      valid = false;
+    } else {
+      document.getElementById('nameError').textContent = '';
+      document.getElementById('customerName').classList.remove('is-invalid');
+    }
+
+    if (!validateYemenPhone(phone)) {
+      document.getElementById('phoneError').textContent = 'يرجى إدخال رقم جوال يمني صحيح';
+      document.getElementById('customerPhone').classList.add('is-invalid');
+      valid = false;
+    } else {
+      document.getElementById('phoneError').textContent = '';
+      document.getElementById('customerPhone').classList.remove('is-invalid');
+    }
+
+    if (orderMode === 'delivery' && !deliveryAddress) {
+      showToast('يرجى إدخال عنوان التوصيل أو اختيار الاستلام من المحل', 'warning');
+      valid = false;
+    }
+
+    if (orderItems.length === 0) {
+      showToast('يرجى إضافة صنف واحد على الأقل', 'warning');
+      return;
+    }
+
+    if (!valid) {
+      showToast('يرجى تصحيح الأخطاء أولاً', 'error');
+      return;
+    }
+
+    const btn = document.getElementById('submitOrderBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';
+
+    try {
+      const total = orderItems.reduce((sum, item) => sum + item.total, 0);
+      const orderData = {
+        customer_name: name,
+        phone: phone,
+        is_member: isMember,
+        member_id: memberId,
+        items: JSON.stringify(orderItems),
+        total: total,
+        status: 'جديد',
+        notes: notes,
+        order_mode: orderMode,
+        delivery_address: deliveryAddress,
+        delivery_time: deliveryTime,
+        payment_method: paymentMethod,
+        payment_reference: paymentReference,
+        notification_email: 'yamenameen97@gmail.com',
+        order_date: new Date().toISOString()
+      };
+
+      const order = await apiCreate('orders', orderData);
+
+      // عرض نافذة النجاح
+      document.getElementById('successName').textContent = name;
+      document.getElementById('successPhone').textContent = phone;
+      document.getElementById('successOrderId').textContent = order.id?.substr(0,12) + '...';
+      document.getElementById('memberMsg').style.display = isMember ? 'block' : 'none';
+      document.getElementById('successOverlay').classList.add('show');
+
+      clearDraft();
+      showToast('تم إرسال الطلب بنجاح! 🎉', 'success', 6000);
+    } catch(e) {
+      showToast('حدث خطأ أثناء إرسال الطلب، حاول مجدداً', 'error');
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fas fa-paper-plane"></i> إرسال الطلب';
+    }
+  }
+
+  function resetForm() {
+    document.getElementById('customerName').value = '';
+    document.getElementById('customerPhone').value = '';
+    document.getElementById('isMember').checked = false;
+    document.getElementById('memberId').value = '';
+    document.getElementById('deliveryAddress').value = '';
+    document.getElementById('deliveryTime').value = '';
+    document.getElementById('paymentMethod').value = 'cash';
+    document.getElementById('paymentReference').value = '';
+    document.querySelector('input[name=\"orderMode\"][value=\"delivery\"]').checked = true;
+    document.getElementById('orderNotes').value = '';
+    document.getElementById('memberIdSection').style.display = 'none';
+    toggleOrderMode();
+    orderItems = [];
+    renderOrderItems();
+    document.getElementById('successOverlay').classList.remove('show');
+    const btn = document.getElementById('submitOrderBtn');
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-paper-plane"></i> إرسال الطلب';
+    clearDraft();
+    document.getElementById('customerName').focus();
+  }
+
+  function toggleMemberField() {
+    const checked = document.getElementById('isMember').checked;
+    document.getElementById('memberIdSection').style.display = checked ? 'block' : 'none';
+  }
+
+  function toggleOrderMode() {
+    const mode = document.querySelector('input[name=\"orderMode\"]:checked')?.value || 'delivery';
+    const box = document.getElementById('deliveryFields');
+    if (box) box.style.display = mode === 'delivery' ? 'block' : 'none';
+  }
+
+  // إغلاق الـ autocomplete عند الضغط خارجه
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.autocomplete-wrapper')) {
+      document.getElementById('autocompleteList').classList.remove('show');
+    }
+  });
+
+  // تهيئة
+  window.addEventListener('DOMContentLoaded', () => {
+    bindDraftInputs();
+    toggleOrderMode();
+    loadProducts();
+    if (!document.getElementById('customerName').value) {
+      document.getElementById('customerName').focus();
+    }
+  });
+</script>
+</body>
+</html>

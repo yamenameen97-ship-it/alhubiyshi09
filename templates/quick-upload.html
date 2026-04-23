@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>الرفع السريع | محلات الحبيشي | Alhabeshi Stores</title>
+  <meta name="description" content="رفع سريع لصور وأصناف المنتجات من الجوال إلى موقع محلات الحبيشي.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-brand">
+      <div class="navbar-logo">🏪</div>
+      <div class="navbar-title">
+        <span class="store-name">محلات الحبيشي</span>
+        <span class="store-sub">رفع سريع من الجوال</span>
+      </div>
+    </a>
+    <ul class="navbar-links" id="navLinks">
+      <li><a href="index.html">الرئيسية</a></li>
+      <li><a href="admin.html">الإدارة</a></li>
+      <li><a href="payment.html">الدفع</a></li>
+    </ul>
+    <button class="navbar-toggle" onclick="document.getElementById('navLinks').classList.toggle('open')"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<div class="section" style="max-width:760px; margin:0 auto;">
+  <div class="card" style="margin-top:30px;">
+    <div class="card-header"><i class="fas fa-mobile-alt"></i> رفع صنف جديد أو صورة منتج من الهاتف</div>
+    <div class="card-body">
+      <div class="alert alert-info" style="margin-bottom:20px;">
+        <i class="fas fa-info-circle"></i> اختر الصورة من الاستديو ثم أدخل اسم الصنف واحفظه مباشرة في الموقع.
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
+        <div class="form-group" style="grid-column:1/-1;">
+          <label class="form-label">اسم الصنف *</label>
+          <input type="text" id="qName" class="form-control" placeholder="مثال: خلاط مغسلة">
+        </div>
+        <div class="form-group">
+          <label class="form-label">الفئة</label>
+          <select id="qCategory" class="form-control">
+            <option>مواد البناء</option>
+            <option>السباكة</option>
+            <option>الكهرباء</option>
+            <option>أدوات الورشة</option>
+            <option>الأسمنت</option>
+            <option>مستلزمات طبية</option>
+            <option>عدد ومعدات</option>
+            <option>أخرى</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">الوحدة</label>
+          <input type="text" id="qUnit" class="form-control" value="حبة">
+        </div>
+        <div class="form-group">
+          <label class="form-label">السعر</label>
+          <input type="number" id="qPrice" class="form-control" value="0">
+        </div>
+        <div class="form-group">
+          <label class="form-label">الكمية</label>
+          <input type="number" id="qStock" class="form-control" value="1">
+        </div>
+        <div class="form-group">
+          <label class="form-label">الخصم %</label>
+          <input type="number" id="qDiscount" class="form-control" value="0" min="0" max="100">
+        </div>
+        <div class="form-group">
+          <label class="form-label">رابط الشركة / الشريك</label>
+          <input type="url" id="qExternalLink" class="form-control" placeholder="اختياري">
+        </div>
+        <div class="form-group" style="grid-column:1/-1;">
+          <label class="form-label">الوصف</label>
+          <textarea id="qDesc" class="form-control" rows="3" placeholder="وصف مختصر للصنف"></textarea>
+        </div>
+        <div class="form-group" style="grid-column:1/-1;">
+          <label class="form-label">اختيار صورة من الاستديو</label>
+          <input type="file" id="qImageFile" class="form-control" accept="image/*" onchange="previewQuickImage(this)">
+        </div>
+        <div class="form-group" style="grid-column:1/-1;">
+          <div id="quickPreview" style="min-height:180px;border:2px dashed #d6e2eb;border-radius:14px;display:flex;align-items:center;justify-content:center;background:#f8fbfd;color:#6c757d;overflow:hidden;">معاينة الصورة ستظهر هنا</div>
+        </div>
+        <div class="form-group" style="grid-column:1/-1;">
+          <label class="form-check"><input type="checkbox" id="qIsNew" checked> منتج جديد ✨</label>
+        </div>
+      </div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:15px;">
+        <button class="btn btn-success" id="quickSaveBtn" onclick="saveQuickProduct()"><i class="fas fa-save"></i> حفظ ونشر الصنف</button>
+        <button class="btn btn-outline" onclick="shareCurrentPage('رابط الرفع السريع')"><i class="fas fa-share-alt"></i> مشاركة رابط الصفحة</button>
+        <a class="btn btn-primary" href="mailto:yamenameen97@gmail.com?subject=رابط الرفع السريع - محلات الحبيشي&body=استخدم هذا الرابط لرفع صورة وصنف جديد: "><i class="fas fa-envelope"></i> إرسال بالبريد</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+<footer><div class="footer-bottom" style="padding:20px"><p>© 2025 محلات الحبيشي | Alhabeshi Stores | 771217771</p></div><div class="footer-bottom" style="padding-top:12px"><p>التصنيفات: مواد البناء • السباكة • الكهرباء • أدوات الورشة • الأسمنت • مستلزمات طبية</p></div></footer>
+<script src="js/common.js"></script>
+<script>
+let quickImageData = '';
+function previewQuickImage(input) {
+  const file = input.files && input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    quickImageData = e.target.result;
+    document.getElementById('quickPreview').innerHTML = `<img src="${quickImageData}" alt="preview" style="max-width:100%;max-height:260px;object-fit:contain;">`;
+  };
+  reader.readAsDataURL(file);
+}
+async function saveQuickProduct() {
+  const name = document.getElementById('qName').value.trim();
+  if (!name) { showToast('يرجى إدخال اسم الصنف', 'warning'); return; }
+  const btn = document.getElementById('quickSaveBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحفظ...';
+  try {
+    await apiCreate('products', {
+      name,
+      category: document.getElementById('qCategory').value,
+      unit: document.getElementById('qUnit').value.trim() || 'حبة',
+      price: parseFloat(document.getElementById('qPrice').value) || 0,
+      stock: parseInt(document.getElementById('qStock').value) || 0,
+      discount: parseInt(document.getElementById('qDiscount').value) || 0,
+      description: document.getElementById('qDesc').value.trim(),
+      image_url: quickImageData,
+      external_link: document.getElementById('qExternalLink').value.trim(),
+      is_new: document.getElementById('qIsNew').checked
+    });
+    showToast('تم حفظ الصنف ونشره بنجاح', 'success', 5000);
+    setTimeout(() => window.location.href = 'new-products.html', 1500);
+  } catch (e) {
+    console.error(e);
+    showToast('تعذر حفظ الصنف', 'error');
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-save"></i> حفظ ونشر الصنف';
+  }
+}
+</script>
+</body>
+</html>

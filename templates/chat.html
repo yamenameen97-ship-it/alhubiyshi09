@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="تواصل مع محلات الحبيشي عبر صفحة الدردشة للاستفسارات والطلبات السريعة.">
+  <meta name="keywords" content="محلات الحبيشي, Alhabeshi Stores, مواد البناء, السباكة, الكهرباء, إب, اليمن, توصيل, عروض, متجر مواد بناء">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta name="theme-color" content="#1a5276">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="محلات الحبيشي | Alhabeshi Stores">
+  <meta property="og:title" content="الدردشة | محلات الحبيشي | Alhabeshi Stores">
+  <meta property="og:description" content="تواصل مع محلات الحبيشي عبر صفحة الدردشة للاستفسارات والطلبات السريعة.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="الدردشة | محلات الحبيشي | Alhabeshi Stores">
+  <meta name="twitter:description" content="تواصل مع محلات الحبيشي عبر صفحة الدردشة للاستفسارات والطلبات السريعة.">
+  <title>الدردشة | محلات الحبيشي | Alhabeshi Stores</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    .chat-page {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 25px 20px 40px;
+    }
+
+    .chat-header {
+      background: linear-gradient(135deg, #1a5276, #2e86c1);
+      color: white;
+      padding: 22px 25px;
+      border-radius: 18px 18px 0 0;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .chat-status-dot {
+      width: 10px;
+      height: 10px;
+      background: #2ecc71;
+      border-radius: 50%;
+      animation: blinkDot 1.5s infinite;
+    }
+
+    @keyframes blinkDot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .chat-header-info h3 { font-size: 1.1rem; font-weight: 800; margin-bottom: 2px; }
+    .chat-header-info small { opacity: 0.85; font-size: 0.8rem; }
+
+    .chat-header-actions {
+      margin-right: auto;
+      display: flex;
+      gap: 10px;
+    }
+
+    .chat-container {
+      background: white;
+      border-radius: 0 0 18px 18px;
+      box-shadow: 0 8px 35px rgba(0,0,0,0.12);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      height: 580px;
+    }
+
+    /* Online users bar */
+    .online-users-bar {
+      background: #f8f9fa;
+      border-bottom: 1px solid #e9ecef;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .online-users-bar::-webkit-scrollbar { display: none; }
+
+    .online-user-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: white;
+      border: 1px solid #e9ecef;
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      white-space: nowrap;
+      color: #555;
+    }
+
+    .user-avatar-mini {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 800;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    /* Messages Area */
+    .messages-area {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%231a5276' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .message-bubble {
+      display: flex;
+      flex-direction: column;
+      max-width: 70%;
+      animation: msgAppear 0.3s ease;
+    }
+
+    @keyframes msgAppear {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .message-bubble.from-me {
+      align-self: flex-end;
+      align-items: flex-end;
+    }
+
+    .message-bubble.from-others {
+      align-self: flex-start;
+      align-items: flex-start;
+    }
+
+    .message-bubble.from-admin {
+      align-self: flex-start;
+      align-items: flex-start;
+    }
+
+    .msg-sender {
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin-bottom: 3px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .msg-bubble {
+      padding: 10px 15px;
+      border-radius: 18px;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      position: relative;
+      word-wrap: break-word;
+    }
+
+    .from-me .msg-bubble {
+      background: linear-gradient(135deg, #1a5276, #2e86c1);
+      color: white;
+      border-radius: 18px 18px 4px 18px;
+    }
+
+    .from-others .msg-bubble {
+      background: #f0f4f8;
+      color: #1a1a2e;
+      border-radius: 18px 18px 18px 4px;
+    }
+
+    .from-admin .msg-bubble {
+      background: linear-gradient(135deg, #f39c12, #d35400);
+      color: white;
+      border-radius: 18px 18px 18px 4px;
+    }
+
+    .msg-time {
+      font-size: 0.7rem;
+      color: #aaa;
+      margin-top: 3px;
+    }
+
+    .from-me .msg-time {
+      color: rgba(255,255,255,0.7);
+    }
+
+    /* Admin badge */
+    .admin-badge {
+      background: #f39c12;
+      color: white;
+      border-radius: 4px;
+      padding: 1px 6px;
+      font-size: 0.65rem;
+      font-weight: 800;
+    }
+
+    /* System messages */
+    .system-msg {
+      text-align: center;
+      font-size: 0.78rem;
+      color: #aaa;
+      padding: 5px 15px;
+      background: rgba(0,0,0,0.04);
+      border-radius: 20px;
+      align-self: center;
+    }
+
+    /* Input area */
+    .chat-input-area {
+      border-top: 1px solid #e9ecef;
+      padding: 15px;
+      background: white;
+    }
+
+    /* Name modal */
+    .name-setup-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      backdrop-filter: blur(4px);
+    }
+
+    .name-setup-card {
+      background: white;
+      border-radius: 20px;
+      padding: 35px;
+      text-align: center;
+      max-width: 380px;
+      width: 90%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    }
+
+    .name-setup-card h3 {
+      font-size: 1.3rem;
+      font-weight: 900;
+      color: #1a5276;
+      margin-bottom: 10px;
+    }
+
+    .name-setup-card p {
+      color: #6c757d;
+      font-size: 0.88rem;
+      margin-bottom: 20px;
+    }
+
+    /* Color avatars */
+    .avatar-colors {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 15px;
+    }
+
+    .avatar-color-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 3px solid transparent;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .avatar-color-btn.selected {
+      border-color: #333;
+      transform: scale(1.2);
+    }
+
+    /* Chat wrapper */
+    .chat-wrapper {
+      position: relative;
+    }
+
+    /* Quick replies */
+    .quick-replies {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .quick-reply-btn {
+      background: #f0f4f8;
+      border: 1px solid #e9ecef;
+      border-radius: 20px;
+      padding: 5px 12px;
+      font-size: 0.78rem;
+      cursor: pointer;
+      font-family: 'Cairo', sans-serif;
+      color: #555;
+      transition: all 0.2s;
+    }
+
+    .quick-reply-btn:hover {
+      background: #e0e8f0;
+      border-color: #2e86c1;
+      color: #1a5276;
+    }
+
+    .msg-input-row {
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+    }
+
+    .msg-input {
+      flex: 1;
+      border: 2px solid #e9ecef;
+      border-radius: 12px;
+      padding: 11px 15px;
+      font-family: 'Cairo', sans-serif;
+      font-size: 0.92rem;
+      resize: none;
+      transition: border-color 0.3s;
+      max-height: 100px;
+      overflow-y: auto;
+    }
+
+    .msg-input:focus {
+      outline: none;
+      border-color: #2e86c1;
+    }
+
+    .send-btn {
+      width: 46px;
+      height: 46px;
+      background: linear-gradient(135deg, #1a5276, #2e86c1);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .send-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 15px rgba(26,82,118,0.4);
+    }
+
+    .typing-indicator {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      color: #6c757d;
+      padding: 0 20px;
+      height: 24px;
+    }
+
+    .typing-dots {
+      display: flex;
+      gap: 3px;
+    }
+
+    .typing-dots span {
+      width: 6px;
+      height: 6px;
+      background: #6c757d;
+      border-radius: 50%;
+      animation: typingBounce 1.2s infinite;
+    }
+
+    .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes typingBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    @media (max-width: 600px) {
+      .message-bubble { max-width: 85%; }
+      .chat-container { height: 500px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- شريط التنقل -->
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-brand">
+      <div class="navbar-logo">🏪</div>
+      <div class="navbar-title">
+        <span class="store-name">محلات الحبيشي</span>
+        <span class="store-sub">المواد البناء • السباكة • الكهرباء</span>
+      </div>
+    </a>
+    <ul class="navbar-links" id="navLinks">
+      <li><a href="index.html"><i class="fas fa-home"></i> الرئيسية</a></li>
+      <li><a href="new-products.html"><i class="fas fa-star"></i> جديدنا</a></li>
+      <li><a href="order.html"><i class="fas fa-shopping-cart"></i> اطلب الآن</a></li>
+      <li><a href="offers.html"><i class="fas fa-tags"></i> العروض</a></li>
+      <li><a href="chat.html"><i class="fas fa-comments"></i> الدردشة</a></li>
+      <li><a href="about.html"><i class="fas fa-info-circle"></i> عن المحل</a></li>
+      <li><a href="admin.html" style="background:rgba(243,156,18,0.2);">
+        <i class="fas fa-cog"></i> الإدارة
+        <span class="nav-badge" id="orders-badge" style="display:none">0</span>
+      </a></li>
+    </ul>
+    <button class="navbar-toggle" onclick="document.getElementById('navLinks').classList.toggle('open')">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="chat-page">
+
+  <div class="feature-grid" style="margin-bottom:20px;">
+    <div class="feature-card">
+      <div class="feature-icon"><i class="fas fa-search-dollar"></i></div>
+      <h3>اسأل عن الأسعار</h3>
+      <p>تقدر تستفسر عن سعر صنف أو توفره قبل أن تنتقل مباشرة إلى صفحة الطلب.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(39,174,96,0.12); color:#27ae60;"><i class="fas fa-truck"></i></div>
+      <h3>استفسارات التوصيل</h3>
+      <p>استفسر عن التوصيل والمناطق المتاحة وملاحظات الاستلام والحمولات المناسبة.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(243,156,18,0.12); color:#d68910;"><i class="fas fa-box-open"></i></div>
+      <h3>بدائل الأصناف</h3>
+      <p>إذا الصنف غير ظاهر عندك بالموقع تقدر تسأل عن بديل أو عن موعد توفره.</p>
+    </div>
+  </div>
+
+  <!-- معلومات الدردشة -->
+  <div class="alert alert-info mb-20">
+    <i class="fas fa-info-circle"></i>
+    <strong>دردشة مفتوحة للجميع!</strong> يمكنك التحدث مع فريق المحل والزوار الآخرين. الردود من الإدارة تظهر بشارة <strong>إدارة</strong> مميزة.
+  </div>
+
+  <div class="chat-wrapper">
+    <!-- رأس الدردشة -->
+    <div class="chat-header">
+      <div style="width:42px; height:42px; background:rgba(255,255,255,0.2); border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:1.3rem; flex-shrink:0;">💬</div>
+      <div class="chat-header-info">
+        <h3>دردشة محلات الحبيشي</h3>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <div class="chat-status-dot"></div>
+          <small>مفتوح الآن • <span id="onlineCount">3</span> متصل</small>
+        </div>
+      </div>
+      <div class="chat-header-actions">
+        <button class="btn btn-sm" style="background:rgba(255,255,255,0.2); color:white; border-color:rgba(255,255,255,0.3);" onclick="clearChat()">
+          <i class="fas fa-trash"></i>
+        </button>
+        <a href="order.html" class="btn btn-secondary btn-sm">
+          <i class="fas fa-shopping-cart"></i> اطلب الآن
+        </a>
+      </div>
+    </div>
+
+    <!-- الدردشة الفعلية -->
+    <div class="chat-container">
+      <!-- شريط المتصلين -->
+      <div class="online-users-bar">
+        <span style="font-size:0.75rem; color:#6c757d; white-space:nowrap;">👥 المتصلون:</span>
+        <div class="online-user-badge">
+          <div class="user-avatar-mini" style="background:#1a5276;">إ</div>
+          الإدارة
+        </div>
+        <div class="online-user-badge" id="myBadge" style="display:none">
+          <div class="user-avatar-mini" id="myAvatarMini" style="background:#27ae60;">أ</div>
+          <span id="myNameBadge">أنت</span>
+        </div>
+        <div class="online-user-badge">
+          <div class="user-avatar-mini" style="background:#e74c3c;">م</div>
+          محمد
+        </div>
+        <div class="online-user-badge">
+          <div class="user-avatar-mini" style="background:#8e44ad;">ع</div>
+          علي
+        </div>
+      </div>
+
+      <!-- منطقة الرسائل -->
+      <div class="messages-area" id="messagesArea">
+        <!-- رسائل مبدئية -->
+      </div>
+
+      <!-- مؤشر الكتابة -->
+      <div class="typing-indicator" id="typingIndicator" style="display:none">
+        <div class="typing-dots"><span></span><span></span><span></span></div>
+        <span id="typingName">شخص ما يكتب...</span>
+      </div>
+
+      <!-- منطقة الإدخال -->
+      <div class="chat-input-area">
+        <div class="quick-replies" id="quickReplies">
+          <button class="quick-reply-btn" onclick="sendQuickReply(this)">السلام عليكم 👋</button>
+          <button class="quick-reply-btn" onclick="sendQuickReply(this)">ما هو سعر الأسمنت؟</button>
+          <button class="quick-reply-btn" onclick="sendQuickReply(this)">هل يوجد توصيل؟</button>
+          <button class="quick-reply-btn" onclick="sendQuickReply(this)">شكراً لكم 🙏</button>
+          <button class="quick-reply-btn" onclick="sendQuickReply(this)">كيف أطلب؟</button>
+        </div>
+        <div class="msg-input-row">
+          <textarea class="msg-input" id="msgInput" placeholder="اكتب رسالتك..." rows="1"
+            onkeydown="handleMsgKey(event)" oninput="autoResize(this)"></textarea>
+          <button class="send-btn" onclick="sendMessage()">
+            <i class="fas fa-paper-plane"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- نافذة إدخال الاسم -->
+    <div class="name-setup-overlay" id="nameSetupOverlay">
+      <div class="name-setup-card">
+        <div style="font-size:3rem; margin-bottom:10px;">💬</div>
+        <h3>أهلاً بك في دردشة الحبيشي!</h3>
+        <p>أدخل اسمك للانضمام إلى الدردشة الجماعية مع فريقنا والزوار</p>
+        <div class="avatar-colors" id="avatarColors"></div>
+        <div class="form-group">
+          <input type="text" id="userNameInput" class="form-control" placeholder="اسمك..."
+            style="text-align:center; font-size:1rem;" maxlength="25"
+            onkeydown="if(event.key==='Enter') joinChat()">
+        </div>
+        <button class="btn btn-primary w-100" onclick="joinChat()">
+          <i class="fas fa-sign-in-alt"></i> دخول الدردشة
+        </button>
+        <button class="btn btn-outline w-100 mt-10" onclick="joinAsGuest()" style="margin-top:8px;">
+          دخول كزائر مجهول
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div id="toast-container"></div>
+
+<footer>
+  <div class="footer-bottom" style="padding:20px">
+    <p>© 2025 محلات الحبيشي | إب - المجمعة - اليمن</p>
+  </div>
+<div class="footer-bottom" style="padding-top:12px"><p>التصنيفات: مواد البناء • السباكة • الكهرباء • أدوات الورشة • الأسمنت • مستلزمات طبية</p></div></footer>
+
+<script src="js/common.js"></script>
+<script>
+  // =====================
+  // إعدادات المستخدم
+  // =====================
+  let currentUser = null;
+  let selectedColor = '#1a5276';
+  let refreshInterval = null;
+  let lastMsgId = null;
+  let isTypingTimeout = null;
+  const CHAT_USER_KEY = 'hiba_chat_user';
+  const CHAT_MODERATION_KEY = 'hiba_moderation_v1';
+
+  const avatarColorsList = ['#1a5276','#27ae60','#e74c3c','#f39c12','#8e44ad','#16a085','#2980b9','#c0392b'];
+
+  // رسائل الترحيب المبدئية من الإدارة
+  const welcomeMessages = [
+    { sender: 'الإدارة', text: 'أهلاً وسهلاً بكم في دردشة محلات الحبيشي! 🏪\nنحن هنا للإجابة على استفساراتكم.', time: Date.now() - 300000, isAdmin: true, id: 'w1' },
+    { sender: 'الإدارة', text: '📢 عروض اليوم: خصم 10% على مواد البناء وخصم 15% على الكهرباء!', time: Date.now() - 180000, isAdmin: true, id: 'w2' },
+    { sender: 'محمد', text: 'السلام عليكم، ما سعر طن الحديد 12 مم؟', time: Date.now() - 120000, isAdmin: false, id: 'w3' },
+    { sender: 'الإدارة', text: 'وعليكم السلام أخ محمد 👋\nسعر الحديد 12mm = 18,500 ريال/طن. يمكنك الطلب من هنا: order.html', time: Date.now() - 90000, isAdmin: true, id: 'w4' },
+    { sender: 'علي', text: 'جزاكم الله خيراً على الخدمة الممتازة 🙏', time: Date.now() - 30000, isAdmin: false, id: 'w5' }
+  ];
+
+  let allMessages = [...welcomeMessages];
+
+  // =====================
+  // ألوان الأفاتار
+  // =====================
+  function setupAvatarColors() {
+    const container = document.getElementById('avatarColors');
+    container.innerHTML = avatarColorsList.map(c => `
+      <button class="avatar-color-btn ${c === selectedColor ? 'selected' : ''}"
+        style="background:${c};" onclick="selectColor('${c}', this)"></button>
+    `).join('');
+  }
+
+  function selectColor(color, btn) {
+    selectedColor = color;
+    document.querySelectorAll('.avatar-color-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+  }
+
+  // =====================
+  // الانضمام للدردشة
+  // =====================
+  function getModerationSettings() {
+    try {
+      return JSON.parse(localStorage.getItem(CHAT_MODERATION_KEY) || '{}');
+    } catch(e) { return {}; }
+  }
+
+  function isBlockedName(name) {
+    const settings = getModerationSettings();
+    const blockedNames = (settings.blockedNames || []).map(v => String(v).toLowerCase());
+    return blockedNames.includes(String(name || '').toLowerCase());
+  }
+
+  function hasBlockedWord(text) {
+    const settings = getModerationSettings();
+    const blockedWords = (settings.blockedWords || []).map(v => String(v).toLowerCase());
+    const msg = String(text || '').toLowerCase();
+    return blockedWords.some(word => word && msg.includes(word));
+  }
+
+  function joinChat() {
+    const name = document.getElementById('userNameInput').value.trim();
+    if (!name || name.length < 2) {
+      showToast('يرجى إدخال اسم لا يقل عن حرفين', 'warning');
+      return;
+    }
+    if (isBlockedName(name)) {
+      showToast('هذا الاسم محظور من قبل الإدارة', 'error');
+      return;
+    }
+    enterChat(name, false);
+  }
+
+  function joinAsGuest() {
+    enterChat('زائر_' + Math.floor(Math.random() * 1000), false);
+  }
+
+  function enterChat(name, isAnon) {
+    currentUser = { name, color: selectedColor };
+    localStorage.setItem(CHAT_USER_KEY, JSON.stringify(currentUser));
+    document.getElementById('nameSetupOverlay').style.display = 'none';
+    document.getElementById('myBadge').style.display = 'flex';
+    document.getElementById('myNameBadge').textContent = name;
+    document.getElementById('myAvatarMini').textContent = name[0];
+    document.getElementById('myAvatarMini').style.background = selectedColor;
+
+    // رسالة ترحيب
+    addSystemMessage(`انضم ${name} إلى الدردشة 👋`);
+    renderMessages();
+    startAutoRefresh();
+
+    // تركيز على الإدخال
+    setTimeout(() => document.getElementById('msgInput').focus(), 200);
+    showToast(`أهلاً ${name}! أنت الآن في الدردشة 🎉`, 'success');
+  }
+
+  // =====================
+  // الرسائل
+  // =====================
+  function sendMessage() {
+    if (!currentUser) return;
+    const input = document.getElementById('msgInput');
+    const text = input.value.trim();
+    if (!text) return;
+    if (isBlockedName(currentUser.name) || hasBlockedWord(text)) {
+      showToast('تم منع الرسالة بسبب إعدادات الحظر أو الكلمات الممنوعة', 'warning');
+      input.value = '';
+      return;
+    }
+
+    const msg = {
+      id: 'u_' + Date.now(),
+      sender: currentUser.name,
+      text,
+      time: Date.now(),
+      isAdmin: false,
+      isMe: true,
+      color: currentUser.color
+    };
+
+    allMessages.push(msg);
+    input.value = '';
+    input.style.height = 'auto';
+    renderMessages();
+
+    // محاكاة رد تلقائي من الإدارة
+    simulateAdminReply(text);
+  }
+
+  function sendQuickReply(btn) {
+    if (!currentUser) {
+      showToast('يرجى الانضمام للدردشة أولاً', 'warning');
+      return;
+    }
+    document.getElementById('msgInput').value = btn.textContent.trim();
+    sendMessage();
+  }
+
+  function handleMsgKey(event) {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      sendMessage();
+    }
+  }
+
+  function autoResize(el) {
+    el.style.height = 'auto';
+    el.style.height = Math.min(el.scrollHeight, 100) + 'px';
+  }
+
+  function addSystemMessage(text) {
+    allMessages.push({ id: 'sys_' + Date.now(), isSystem: true, text, time: Date.now() });
+  }
+
+  // =====================
+  // ردود الإدارة التلقائية
+  // =====================
+  function simulateAdminReply(userMsg) {
+    const q = userMsg.toLowerCase();
+    let reply = null;
+
+    if (q.includes('سعر') || q.includes('كم') || q.includes('بكم')) {
+      reply = 'يمكنك الاطلاع على أسعار جميع منتجاتنا في الصفحة الرئيسية، أو طلب السعر مباشرة عبر صفحة الطلب 😊';
+    } else if (q.includes('توصيل') || q.includes('شحن')) {
+      reply = 'نعم! نوفر توصيل داخل مدينة إب والمناطق المجاورة. تواصل معنا على 771217771 أو البريد yamenameen97@gmail.com لتفاصيل التوصيل 🚚';
+    } else if (q.includes('أسمنت') || q.includes('اسمنت')) {
+      reply = 'أسمنت 42.5 متوفر بسعر 5,500 ريال/كيس. للطلب اضغط على "اطلب الآن" في الأعلى 📦';
+    } else if (q.includes('حديد')) {
+      reply = 'الحديد متوفر بأحجام مختلفة 10mm و 12mm. سعر الطن يبدأ من 18,000 ريال. اطلب الآن! 💪';
+    } else if (q.includes('سلام') || q.includes('مرحبا') || q.includes('هلا')) {
+      reply = 'وعليكم السلام ورحمة الله 🌟 أهلاً بك في محلات الحبيشي! كيف يمكننا مساعدتك؟';
+    } else if (q.includes('شكر') || q.includes('الله خير')) {
+      reply = 'وإياكم، نسعد بخدمتكم دائماً 🙏 لا تترددوا في التواصل معنا في أي وقت!';
+    } else if (q.includes('طلب') || q.includes('اطلب')) {
+      reply = 'لتقديم طلبك: اضغط على "اطلب الآن" في شريط التنقل، أو اضغط الزر أعلاه. البروسيجر بسيط جداً! ✅';
+    } else if (q.includes('عرض') || q.includes('خصم') || q.includes('تخفيض')) {
+      reply = '🎁 عروضنا الحالية: خصم 10% على مواد البناء و15% على الكهرباء! قسم العروض لديه كل التفاصيل.';
+    } else if (q.includes('جديد') || q.includes('وصل') || q.includes('جديدة')) {
+      reply = '✨ شاهد آخر الواصلات في قسم "جديدنا" في القائمة العليا!';
+    }
+
+    if (reply) {
+      // عرض مؤشر الكتابة
+      document.getElementById('typingIndicator').style.display = 'flex';
+      document.getElementById('typingName').textContent = 'الإدارة تكتب...';
+
+      const delay = 1500 + Math.random() * 1000;
+      setTimeout(() => {
+        document.getElementById('typingIndicator').style.display = 'none';
+        allMessages.push({
+          id: 'admin_' + Date.now(),
+          sender: 'الإدارة',
+          text: reply,
+          time: Date.now(),
+          isAdmin: true,
+          isMe: false
+        });
+        renderMessages();
+      }, delay);
+    }
+  }
+
+  // =====================
+  // رسم الرسائل
+  // =====================
+  function renderMessages() {
+    const area = document.getElementById('messagesArea');
+    const isAtBottom = area.scrollHeight - area.scrollTop - area.clientHeight < 100;
+
+    area.innerHTML = allMessages.map(msg => {
+      if (msg.isSystem) {
+        return `<div class="system-msg">${msg.text}</div>`;
+      }
+
+      const isMe = msg.isMe || (currentUser && msg.sender === currentUser.name && !msg.isAdmin);
+      const bubbleClass = isMe ? 'from-me' : msg.isAdmin ? 'from-admin' : 'from-others';
+      const timeStr = formatMsgTime(msg.time);
+      const firstLetter = msg.sender[0] || '?';
+      const avatarBg = msg.isAdmin ? '#f39c12' : (msg.color || '#1a5276');
+
+      return `
+        <div class="message-bubble ${bubbleClass}">
+          ${!isMe ? `
+            <div class="msg-sender">
+              <div style="width:24px;height:24px;border-radius:50%;background:${avatarBg};color:white;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:800;flex-shrink:0;">${firstLetter}</div>
+              ${msg.sender}
+              ${msg.isAdmin ? '<span class="admin-badge">إدارة</span>' : ''}
+            </div>
+          ` : ''}
+          <div class="msg-bubble">${escapeHtml(msg.text).replace(/\n/g, '<br>')}</div>
+          <div class="msg-time">${timeStr}</div>
+        </div>
+      `;
+    }).join('');
+
+    if (isAtBottom || allMessages.length <= welcomeMessages.length + 1) {
+      area.scrollTop = area.scrollHeight;
+    }
+  }
+
+  function escapeHtml(text) {
+    return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function formatMsgTime(timestamp) {
+    const date = new Date(timestamp);
+    return date.toLocaleTimeString('ar-YE', { hour: '2-digit', minute: '2-digit' });
+  }
+
+  // =====================
+  // تحميل من API
+  // =====================
+  async function loadChatMessages() {
+    try {
+      const data = await apiGet('chat_messages', { limit: 50, sort: 'created_at' });
+      const apiMsgs = data.data || [];
+      if (apiMsgs.length > 0) {
+        const converted = apiMsgs.map(m => ({
+          id: m.id,
+          sender: m.sender_name,
+          text: m.message,
+          time: m.created_at,
+          isAdmin: m.is_admin,
+          isMe: currentUser && m.sender_name === currentUser.name && !m.is_admin,
+          color: '#1a5276'
+        }));
+        allMessages = [...welcomeMessages, ...converted];
+        renderMessages();
+      }
+    } catch(e) {}
+  }
+
+  async function saveChatMessage(text) {
+    try {
+      await apiCreate('chat_messages', {
+        sender_name: currentUser.name,
+        message: text,
+        is_admin: false,
+        timestamp: new Date().toISOString()
+      });
+    } catch(e) {}
+  }
+
+  function startAutoRefresh() {
+    loadChatMessages();
+    refreshInterval = setInterval(loadChatMessages, 8000);
+  }
+
+  function clearChat() {
+    if (!confirm('هل تريد مسح المحادثة من شاشتك؟')) return;
+    allMessages = [...welcomeMessages];
+    renderMessages();
+    showToast('تم مسح المحادثة', 'info');
+  }
+
+  // =====================
+  // تهيئة
+  // =====================
+  window.addEventListener('DOMContentLoaded', () => {
+    setupAvatarColors();
+    renderMessages();
+
+    // تحقق من اسم محفوظ
+    const savedName = sessionStorage.getItem('chatUserName');
+    const savedColor = sessionStorage.getItem('chatUserColor');
+    if (savedName) {
+      selectedColor = savedColor || '#1a5276';
+      document.getElementById('userNameInput').value = savedName;
+    }
+
+    try {
+      const savedUser = JSON.parse(localStorage.getItem(CHAT_USER_KEY) || 'null');
+      if (savedUser?.name) {
+        selectedColor = savedUser.color || selectedColor;
+        document.getElementById('userNameInput').value = savedUser.name;
+      }
+      setupAvatarColors();
+    } catch (e) {}
+
+    window.addEventListener('beforeunload', () => {
+      if (currentUser) {
+        sessionStorage.setItem('chatUserName', currentUser.name);
+        sessionStorage.setItem('chatUserColor', currentUser.color);
+      }
+      if (refreshInterval) clearInterval(refreshInterval);
+    });
+  });
+</script>
+</body>
+</html>
