@@ -87,6 +87,9 @@
         <div class="form-group" style="grid-column:1/-1;">
           <label class="form-check"><input type="checkbox" id="qIsNew" checked> منتج جديد ✨</label>
         </div>
+        <div class="form-group" style="grid-column:1/-1;">
+          <label class="form-check"><input type="checkbox" id="qNotifySubscribers" checked> إرسال إشعار للمشتركين عند النشر</label>
+        </div>
       </div>
       <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:15px;">
         <button class="btn btn-success" id="quickSaveBtn" onclick="saveQuickProduct()"><i class="fas fa-save"></i> حفظ ونشر الصنف</button>
@@ -129,7 +132,8 @@ async function saveQuickProduct() {
       description: document.getElementById('qDesc').value.trim(),
       image_url: quickImageData,
       external_link: document.getElementById('qExternalLink').value.trim(),
-      is_new: document.getElementById('qIsNew').checked
+      is_new: document.getElementById('qIsNew').checked,
+      notify_subscribers: document.getElementById('qNotifySubscribers').checked
     });
     showToast('تم حفظ الصنف ونشره بنجاح', 'success', 5000);
     setTimeout(() => window.location.href = 'new-products.html', 1500);
@@ -140,6 +144,23 @@ async function saveQuickProduct() {
     btn.innerHTML = '<i class="fas fa-save"></i> حفظ ونشر الصنف';
   }
 }
+
+async function verifyQuickUploadAccess() {
+  try {
+    await requestJSON('/api/auth/admin/me', { method: 'GET' });
+    return true;
+  } catch (e) {
+    showToast('يلزم تسجيل دخول الإدارة أولاً، سيتم تحويلك إلى لوحة الإدارة', 'warning', 3500);
+    setTimeout(() => {
+      window.location.href = '/admin';
+    }, 1600);
+    return false;
+  }
+}
+
+window.addEventListener('DOMContentLoaded', async () => {
+  await verifyQuickUploadAccess();
+});
 </script>
 </body>
 </html>

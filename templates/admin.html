@@ -275,10 +275,189 @@
       opacity: 0.7;
     }
 
+    .admin-top-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .admin-service-toggle {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.24);
+      background: rgba(255,255,255,0.12);
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      box-shadow: 0 8px 22px rgba(0,0,0,0.12);
+    }
+
+    .admin-service-toggle:hover {
+      background: rgba(255,255,255,0.2);
+      transform: translateY(-1px);
+    }
+
+    .admin-service-toggle span {
+      width: 20px;
+      height: 2px;
+      border-radius: 999px;
+      background: #fff;
+      display: block;
+    }
+
+    .admin-services-dropdown {
+      position: fixed;
+      top: 82px;
+      left: 20px;
+      width: min(420px, calc(100vw - 40px));
+      z-index: 1800;
+      display: none;
+    }
+
+    .admin-services-dropdown.open {
+      display: block;
+    }
+
+    .admin-services-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .admin-service-btn {
+      border: 1px solid #d7e5ef;
+      background: #f8fbfd;
+      border-radius: 14px;
+      padding: 12px 14px;
+      text-align: right;
+      font-family: 'Cairo', sans-serif;
+      font-weight: 800;
+      color: #1a5276;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .admin-service-btn i {
+      color: #2e86c1;
+    }
+
+    .admin-service-btn small {
+      display: block;
+      color: #6c757d;
+      font-size: 0.73rem;
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    .admin-service-btn:hover,
+    .admin-service-btn.active {
+      background: linear-gradient(135deg, rgba(26,82,118,.12), rgba(46,134,193,.08));
+      border-color: rgba(26,82,118,.28);
+      transform: translateY(-1px);
+    }
+
+    .admin-services-footer {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid #eef4f8;
+    }
+
+    .admin-mobile-shortcuts {
+      display: none;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 12px 15px 0;
+      scroll-snap-type: x proximity;
+    }
+
+    .admin-shortcut-chip {
+      border: 1px solid #d8e3ed;
+      background: #fff;
+      color: #1a5276;
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-family: 'Cairo', sans-serif;
+      font-weight: 800;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      scroll-snap-align: start;
+      cursor: pointer;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.06);
+    }
+
+    .admin-shortcut-chip.active {
+      background: linear-gradient(135deg, #1a5276, #2e86c1);
+      border-color: transparent;
+      color: white;
+    }
+
+    @media (max-width: 992px) {
+      .admin-sidebar {
+        width: 215px;
+      }
+    }
+
     @media (max-width: 768px) {
-      .admin-sidebar { display: none; }
-      .admin-content { padding: 15px; }
-      .order-detail-grid { grid-template-columns: 1fr; }
+      .admin-layout {
+        display: block;
+      }
+      .admin-sidebar {
+        display: none;
+      }
+      .admin-content {
+        padding: 15px;
+      }
+      .order-detail-grid,
+      .modal-body > div[style*='grid-template-columns:1fr 1fr'],
+      .card-body > div[style*='grid-template-columns:1fr 1fr'],
+      .card-body > div[style*='grid-template-columns:1.2fr 1fr'] {
+        grid-template-columns: 1fr !important;
+      }
+      .desktop-site-link {
+        display: none !important;
+      }
+      .admin-top-actions {
+        gap: 6px;
+      }
+      .admin-services-dropdown {
+        top: 76px;
+        right: 12px;
+        left: 12px;
+        width: auto;
+      }
+      .admin-services-grid {
+        grid-template-columns: 1fr;
+      }
+      .admin-mobile-shortcuts {
+        display: flex;
+      }
+      .product-list-item,
+      .debtor-card {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .product-list-item > div:last-child,
+      .debtor-card > div:last-child {
+        width: 100%;
+        justify-content: flex-end;
+      }
+      .order-row-actions {
+        flex-wrap: wrap;
+      }
     }
   </style>
 </head>
@@ -296,17 +475,36 @@
     </a>
     <ul class="navbar-links" id="navLinks">
       <li><a href="index.html"><i class="fas fa-home"></i> الرئيسية</a></li>
-      <li><a href="order.html"><i class="fas fa-shopping-cart"></i> اطلب الآن</a></li>
-      <li><a href="admin.html" style="background:rgba(243,156,18,0.2);">
+      <li><a href="quick-upload.html" target="_blank"><i class="fas fa-mobile-alt"></i> رفع سريع</a></li>
+      <li><a href="/admin" style="background:rgba(243,156,18,0.2);">
         <i class="fas fa-cog"></i> الإدارة
         <span class="nav-badge" id="orders-badge" style="display:none">0</span>
       </a></li>
     </ul>
-    <button class="navbar-toggle" onclick="document.getElementById('navLinks').classList.toggle('open')">
-      <span></span><span></span><span></span>
-    </button>
+    <div class="admin-top-actions">
+      <a class="btn btn-outline btn-sm desktop-site-link" href="index.html" target="_blank">
+        <i class="fas fa-external-link-alt"></i> عرض الموقع
+      </a>
+      <button class="admin-service-toggle" type="button" onclick="toggleAdminServicesMenu(event)" aria-label="خدمات الإدارة">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
   </div>
 </nav>
+
+<div class="admin-services-dropdown" id="adminServicesDropdown">
+  <div class="card" style="margin:0;">
+    <div class="card-header"><i class="fas fa-layer-group"></i> خدمات الإدارة السريعة</div>
+    <div class="card-body">
+      <div class="admin-services-grid" id="adminServicesGrid"></div>
+      <div class="admin-services-footer">
+        <button class="btn btn-primary btn-sm" type="button" onclick="enableAdminBrowserNotifications()"><i class="fas fa-bell"></i> تفعيل تنبيهات المتصفح</button>
+        <a class="btn btn-success btn-sm" href="quick-upload.html" target="_blank"><i class="fas fa-mobile-alt"></i> رفع سريع من الجوال</a>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="admin-mobile-shortcuts" id="adminMobileShortcuts"></div>
 
 <div class="admin-layout">
   <!-- القائمة الجانبية -->
@@ -351,6 +549,19 @@
     <!-- Dashboard -->
     <div class="tab-content active" id="tab-dashboard">
       <h2 class="section-title"><i class="fas fa-tachometer-alt" style="color:#1a5276"></i> لوحة التحكم</h2>
+
+      <div class="card mb-20">
+        <div class="card-body" style="display:flex;gap:15px;flex-wrap:wrap;align-items:center;justify-content:space-between;">
+          <div>
+            <div style="font-weight:900;color:#1a5276;font-size:1.05rem;">إدارة أسرع من الجوال والكمبيوتر</div>
+            <div style="color:#6c757d;font-size:.88rem;line-height:1.8;">فعّل تنبيهات الطلبات الجديدة، وافتح أدوات الإدارة من زر القائمة أعلى الصفحة، وارفع الأصناف الجديدة مباشرة من الجوال.</div>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <button class="btn btn-primary btn-sm" type="button" onclick="enableAdminBrowserNotifications()"><i class="fas fa-bell"></i> تفعيل تنبيهات الطلبات</button>
+            <a class="btn btn-success btn-sm" href="quick-upload.html" target="_blank"><i class="fas fa-mobile-alt"></i> رفع سريع من الجوال</a>
+          </div>
+        </div>
+      </div>
 
       <div class="stats-grid" id="dashStats">
         <div class="stat-card">
@@ -958,6 +1169,11 @@
             <input type="checkbox" id="pIsNew"> منتج جديد ✨
           </label>
         </div>
+        <div class="form-group" style="grid-column:1/-1">
+          <label class="form-check">
+            <input type="checkbox" id="pNotifySubscribers" checked> إرسال إشعار للمشتركين عند إضافة منتج جديد
+          </label>
+        </div>
       </div>
     </div>
     <div class="modal-footer">
@@ -1125,6 +1341,9 @@
   let filteredMembers = [];
   let filteredSubscribers = [];
   const MODERATION_KEY = 'hiba_moderation_v1';
+  let adminKnownNewOrderIds = new Set();
+  let adminOrderWatcherTimer = null;
+  let adminDropdownBound = false;
 
   // ===================
   // Tab Navigation
@@ -1157,6 +1376,8 @@
     document.querySelectorAll('.sidebar-menu a').forEach(a => a.classList.remove('active'));
     document.getElementById(`tab-${name}`).classList.add('active');
     if (link) link.classList.add('active');
+    highlightActiveAdminService(name);
+    closeAdminServicesMenu();
 
     // Load data for tab
     if (name === 'dashboard') loadDashboard();
@@ -1167,6 +1388,178 @@
     else if (name === 'notifications') { loadDebtors(); loadModerationSettings(); loadSubscribersAdmin(); }
     else if (name === 'subscribers') loadSubscribersAdmin();
     else if (name === 'offers-admin') loadOffersAdmin();
+  }
+
+  function getSidebarAdminTabs() {
+    return Array.from(document.querySelectorAll('.sidebar-menu a')).map(link => {
+      const onclick = link.getAttribute('onclick') || '';
+      const match = onclick.match(/switchTab\('([^']+)'/);
+      return {
+        tab: match ? match[1] : '',
+        label: link.textContent.replace(/\s+/g, ' ').trim(),
+        icon: (link.querySelector('i') || {}).className || 'fas fa-circle',
+        badge: link.querySelector('.sidebar-badge') ? link.querySelector('.sidebar-badge').id : ''
+      };
+    }).filter(item => item.tab);
+  }
+
+  function openAdminServiceTab(tabName) {
+    const link = Array.from(document.querySelectorAll('.sidebar-menu a')).find(a => {
+      const onclick = a.getAttribute('onclick') || '';
+      return onclick.includes(`'${tabName}'`);
+    });
+    if (link) {
+      switchTab(tabName, link);
+      return;
+    }
+    if (tabName === 'sports-admin' && typeof loadSportsAdminPanel === 'function') {
+      loadSportsAdminPanel();
+      const sportsLink = document.querySelector('[data-sports-admin]');
+      switchTab('sports-admin', sportsLink);
+    }
+  }
+
+  function highlightActiveAdminService(tabName) {
+    document.querySelectorAll('.admin-service-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.tab === tabName);
+    });
+    document.querySelectorAll('.admin-shortcut-chip').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.tab === tabName);
+    });
+  }
+
+  function buildAdminServiceMenu() {
+    const grid = document.getElementById('adminServicesGrid');
+    const shortcuts = document.getElementById('adminMobileShortcuts');
+    if (!grid || !shortcuts) return;
+    const items = getSidebarAdminTabs();
+    grid.innerHTML = items.map(item => `
+      <button class="admin-service-btn" type="button" data-tab="${item.tab}" onclick="openAdminServiceTab('${item.tab}')">
+        <div>
+          <div>${item.label}</div>
+          <small>فتح القسم مباشرة</small>
+        </div>
+        <i class="${item.icon}"></i>
+      </button>
+    `).join('');
+    shortcuts.innerHTML = items.slice(0, 8).map(item => `
+      <button class="admin-shortcut-chip" type="button" data-tab="${item.tab}" onclick="openAdminServiceTab('${item.tab}')">
+        <i class="${item.icon}"></i> ${item.label}
+      </button>
+    `).join('');
+    const activeTab = document.querySelector('.tab-content.active')?.id?.replace('tab-', '') || 'dashboard';
+    highlightActiveAdminService(activeTab);
+  }
+
+  function toggleAdminServicesMenu(event) {
+    event?.preventDefault();
+    const menu = document.getElementById('adminServicesDropdown');
+    if (!menu) return;
+    buildAdminServiceMenu();
+    menu.classList.toggle('open');
+  }
+
+  function closeAdminServicesMenu() {
+    document.getElementById('adminServicesDropdown')?.classList.remove('open');
+  }
+
+  function setupAdminResponsiveTools() {
+    buildAdminServiceMenu();
+    if (!adminDropdownBound) {
+      adminDropdownBound = true;
+      document.addEventListener('click', (event) => {
+        const menu = document.getElementById('adminServicesDropdown');
+        const toggle = document.querySelector('.admin-service-toggle');
+        if (!menu || !menu.classList.contains('open')) return;
+        if (menu.contains(event.target) || (toggle && toggle.contains(event.target))) return;
+        closeAdminServicesMenu();
+      });
+      window.addEventListener('resize', () => {
+        buildAdminServiceMenu();
+        if (window.innerWidth > 768) closeAdminServicesMenu();
+      });
+    }
+  }
+
+  async function enableAdminBrowserNotifications() {
+    if (!('Notification' in window)) {
+      showToast('متصفحك لا يدعم تنبيهات سطح المكتب', 'warning');
+      return;
+    }
+    const permission = await Notification.requestPermission();
+    if (permission === 'granted') {
+      showToast('تم تفعيل تنبيهات الطلبات الجديدة', 'success');
+    } else {
+      showToast('تم رفض الإذن الخاص بالتنبيهات', 'warning');
+    }
+  }
+
+  function playAdminAlertTone() {
+    try {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) return;
+      const ctx = new AudioCtx();
+      const oscillator = ctx.createOscillator();
+      const gain = ctx.createGain();
+      oscillator.type = 'sine';
+      oscillator.frequency.setValueAtTime(840, ctx.currentTime);
+      oscillator.frequency.exponentialRampToValueAtTime(560, ctx.currentTime + 0.35);
+      gain.gain.setValueAtTime(0.0001, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.08, ctx.currentTime + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.45);
+      oscillator.connect(gain);
+      gain.connect(ctx.destination);
+      oscillator.start();
+      oscillator.stop(ctx.currentTime + 0.45);
+    } catch (_) {}
+  }
+
+  function sendAdminDesktopNotification(order) {
+    if (!('Notification' in window) || Notification.permission !== 'granted') return;
+    const body = `${order.customer_name || 'عميل'} • ${(order.total || 0).toLocaleString('ar-YE')} ر`;
+    const notification = new Notification('طلب جديد في محلات الحبيشي', {
+      body,
+      icon: '/static/img/logo.jpg',
+      badge: '/static/img/logo.jpg'
+    });
+    notification.onclick = () => {
+      window.focus();
+      openAdminServiceTab('orders');
+      notification.close();
+    };
+  }
+
+  async function pollAdminNewOrders({ silent = false } = {}) {
+    try {
+      const data = await apiGet('orders', { limit: 80 });
+      const all = (data.data || []).sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
+      const newOrders = all.filter(order => order.status === 'جديد');
+      const currentIds = new Set(newOrders.map(order => order.id));
+      if (!adminKnownNewOrderIds.size || silent) {
+        adminKnownNewOrderIds = currentIds;
+        return;
+      }
+      const incoming = newOrders.filter(order => !adminKnownNewOrderIds.has(order.id));
+      adminKnownNewOrderIds = currentIds;
+      if (!incoming.length) return;
+      const latest = incoming[0];
+      showToast(`وصل ${incoming.length} طلب جديد${incoming.length > 1 ? 'ة' : ''} الآن`, 'success', 6000);
+      sendAdminDesktopNotification(latest);
+      playAdminAlertTone();
+      updateOrdersBadge();
+      if (document.getElementById('tab-orders')?.classList.contains('active')) {
+        loadOrders();
+      }
+      if (document.getElementById('tab-dashboard')?.classList.contains('active')) {
+        loadDashboard();
+      }
+    } catch (_) {}
+  }
+
+  function startAdminOrderWatcher() {
+    if (adminOrderWatcherTimer) return;
+    pollAdminNewOrders({ silent: true });
+    adminOrderWatcherTimer = setInterval(() => pollAdminNewOrders(), 30000);
   }
 
   // ===================
@@ -1633,6 +2026,7 @@
     });
     document.getElementById('pImageFile').value = '';
     document.getElementById('pIsNew').checked = false;
+    document.getElementById('pNotifySubscribers').checked = true;
     updateProductImagePreview('');
     openModal('addProductModal');
   }
@@ -1653,6 +2047,7 @@
     document.getElementById('pExternalLink').value = p.external_link || '';
     document.getElementById('pImageFile').value = '';
     document.getElementById('pIsNew').checked = !!p.is_new;
+    document.getElementById('pNotifySubscribers').checked = false;
     updateProductImagePreview(p.image_url || '');
     openModal('addProductModal');
   }
@@ -1671,7 +2066,8 @@
       description: document.getElementById('pDesc').value.trim(),
       image_url: document.getElementById('pImageUrl').value.trim(),
       external_link: document.getElementById('pExternalLink').value.trim(),
-      is_new: document.getElementById('pIsNew').checked
+      is_new: document.getElementById('pIsNew').checked,
+      notify_subscribers: !document.getElementById('editProductId').value && document.getElementById('pNotifySubscribers').checked
     };
 
     const editId = document.getElementById('editProductId').value;
@@ -1724,7 +2120,8 @@
           description: String(pick(row, ['description','الوصف'])).trim(),
           image_url: String(pick(row, ['image','image_url','رابط الصورة'])).trim(),
           external_link: String(pick(row, ['external_link','partner_link','رابط الشريك'])).trim(),
-          is_new: /^(1|true|yes|نعم|new)$/i.test(String(pick(row, ['is_new','جديد'])).trim())
+          is_new: /^(1|true|yes|نعم|new)$/i.test(String(pick(row, ['is_new','جديد'])).trim()),
+          notify_subscribers: false
         };
         if (!data.name) continue;
         await apiCreate('products', data);
@@ -2304,8 +2701,7 @@
     const message = document.getElementById('notifEmailMessage').value.trim();
     const cta_link = document.getElementById('notifEmailLink').value.trim();
     const recipient_emails = (document.getElementById('notifEmailRecipients')?.value || '')
-      .split(/[
-,;]+/)
+      .split(/[\n,;]+/)
       .map(v => v.trim())
       .filter(Boolean);
     if (!subject || !message) {
@@ -2458,11 +2854,13 @@ ${message}`);
   window.addEventListener('DOMContentLoaded', async () => {
     const ok = await verifyAdminSession();
     if (!ok) return;
+    setupAdminResponsiveTools();
     loadDashboard();
     loadCustomers();
     loadSubscribersAdmin();
     loadStoreDescriptionSettings();
     loadModerationSettings();
+    startAdminOrderWatcher();
   });
 </script>
 </body>
