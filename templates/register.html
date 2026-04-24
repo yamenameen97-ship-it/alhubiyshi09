@@ -1,17 +1,180 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="إنشاء حساب زائر في محلات الحبيشي لتسهيل الطلبات وربط التنبيهات البريدية وتجربة الشراء.">
+  <meta name="robots" content="noindex,nofollow">
+  <title>إنشاء حساب | محلات الحبيشي | Alhabeshi Stores</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    body { background: linear-gradient(180deg, #f2f7fb 0%, #ffffff 55%); }
+    .register-shell { max-width: 1240px; margin: 0 auto; padding: 34px 20px 50px; }
+    .register-grid { display:grid; grid-template-columns: 1fr 1fr; gap:24px; align-items:start; }
+    .feature-card {
+      background: linear-gradient(135deg, #123a56 0%, #1a5276 55%, #2e86c1 100%);
+      color:#fff; border-radius:30px; padding:34px; box-shadow:0 24px 60px rgba(18,58,86,.22); position:relative; overflow:hidden;
+    }
+    .feature-card::before { content:''; position:absolute; width:360px; height:360px; background:rgba(255,255,255,.07); border-radius:50%; top:-160px; right:-120px; }
+    .feature-card::after { content:''; position:absolute; width:220px; height:220px; background:rgba(255,209,102,.18); border-radius:50%; bottom:-100px; left:-70px; }
+    .feature-card > * { position:relative; z-index:1; }
+    .feature-badge { display:inline-flex; align-items:center; gap:8px; padding:10px 16px; border-radius:999px; background:rgba(255,255,255,.13); border:1px solid rgba(255,255,255,.15); font-weight:800; margin-bottom:18px; }
+    .feature-card h1 { font-size:2.4rem; line-height:1.25; margin-bottom:12px; font-weight:900; }
+    .feature-card p { line-height:1.95; color:rgba(255,255,255,.94); }
+    .benefits { display:grid; gap:14px; margin:24px 0; }
+    .benefit { display:flex; gap:12px; align-items:flex-start; padding:16px; border-radius:18px; background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.14); }
+    .benefit i { color:#ffd166; margin-top:4px; }
+    .cta-bar { display:flex; gap:12px; flex-wrap:wrap; margin-top:22px; }
+    .form-card { background:#fff; border:1px solid rgba(26,82,118,.08); border-radius:26px; box-shadow:0 18px 48px rgba(22,49,73,.1); padding:26px; }
+    .form-card h2 { color:#1a5276; margin-bottom:8px; font-size:1.5rem; font-weight:900; }
+    .form-card > p { color:#64798f; line-height:1.85; margin-bottom:18px; }
+    .form-grid { display:grid; gap:14px; }
+    .dual-box { margin-top:20px; padding-top:18px; border-top:1px solid #e5edf5; }
+    .soft-info { display:flex; gap:10px; align-items:flex-start; padding:14px 16px; border-radius:16px; background:#eef6ff; color:#18405e; border:1px solid #d5e6f6; margin-bottom:16px; }
+    .support-strip { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin-top:18px; }
+    .support-item { background:#f8fbfe; border:1px solid #dbe8f2; border-radius:18px; padding:16px; text-align:center; color:#173b56; }
+    .support-item i { display:inline-flex; width:46px; height:46px; align-items:center; justify-content:center; border-radius:14px; background:linear-gradient(135deg,#1a5276,#2e86c1); color:#fff; margin-bottom:10px; }
+    .account-box { display:none; margin-bottom:16px; padding:16px; border-radius:18px; background:linear-gradient(180deg,#eff9f2,#ffffff); border:1px solid rgba(39,174,96,.22); }
+    .account-box strong { color:#1e8449; }
+    @media (max-width: 980px) {
+      .register-grid, .support-strip { grid-template-columns:1fr; }
+    }
+  </style>
 </head>
-<body class="bg-light">
-<div class="container mt-5" style="max-width:420px;">
-<h4>إنشاء حساب</h4>
-<form method="POST">
-  <input name="username" class="form-control mb-2" placeholder="اسم المستخدم" required>
-  <input name="password" type="password" class="form-control mb-2" placeholder="كلمة المرور" required>
-  <button class="btn btn-success w-100">تسجيل</button>
-</form>
-</div>
+<body>
+  <div class="topbar">
+    <div class="topbar-info">
+      <span><i class="fas fa-store"></i> حسابات الزوار والعملاء</span>
+      <span><i class="fas fa-shield-check"></i> تجربة أكثر وضوحاً وجاهزة للنشر</span>
+    </div>
+  </div>
+
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="/" class="navbar-brand">
+        <div class="navbar-logo">🏪</div>
+        <div class="navbar-title">
+          <span class="store-name">محلات الحبيشي</span>
+          <span class="store-sub">إنشاء حساب زائر</span>
+        </div>
+      </a>
+      <ul class="navbar-links" id="navLinks">
+        <li><a href="/"><i class="fas fa-house"></i> الرئيسية</a></li>
+        <li><a href="/new-products"><i class="fas fa-box-open"></i> الأصناف الجديدة</a></li>
+        <li><a href="/order"><i class="fas fa-cart-shopping"></i> اطلب الآن</a></li>
+        <li><a href="/subscribe"><i class="fas fa-bell"></i> الاشتراك</a></li>
+        <li><a href="/login"><i class="fas fa-right-to-bracket"></i> الدخول</a></li>
+        <li><a class="active" href="/register"><i class="fas fa-user-plus"></i> حساب جديد</a></li>
+      </ul>
+      <button class="navbar-toggle" onclick="document.getElementById('navLinks').classList.toggle('open')"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <main class="register-shell">
+    <div class="register-grid">
+      <section class="feature-card">
+        <div class="feature-badge"><i class="fas fa-stars"></i> حساب واحد.. استخدام أسهل</div>
+        <h1>افتح حسابك وخلي الطلبات والتنبيهات أسرع</h1>
+        <p>تم تحويل صفحة التسجيل القديمة لواجهة أوضح وأكثر احترافية، مربوطة مباشرة بواجهة المتجر ونظام التنبيهات وحسابات الزوار.</p>
+
+        <div class="benefits">
+          <div class="benefit"><i class="fas fa-address-card"></i><div><strong>حفظ بياناتك</strong><br><small>اسمك ورقمك وبريدك يبقوا جاهزين لما تبدأ طلب جديد.</small></div></div>
+          <div class="benefit"><i class="fas fa-bell"></i><div><strong>إدارة التنبيهات</strong><br><small>تحدد إذا كنت تريد إشعارات بالأصناف الجديدة والعروض أم لا.</small></div></div>
+          <div class="benefit"><i class="fas fa-bolt"></i><div><strong>إكمال أسرع للطلبات</strong><br><small>النظام يربط بيانات العضو مع صفحة الطلب تلقائياً.</small></div></div>
+        </div>
+
+        <div class="cta-bar">
+          <a class="btn btn-secondary btn-lg" href="/order"><i class="fas fa-bag-shopping"></i> ابدأ الطلب الآن</a>
+          <a class="btn btn-outline btn-lg" href="/login"><i class="fas fa-right-to-bracket"></i> عندي حساب بالفعل</a>
+        </div>
+      </section>
+
+      <section class="form-card">
+        <h2><i class="fas fa-user-plus"></i> إنشاء الحساب</h2>
+        <p>املأ البيانات التالية، وسيتم إنشاء حسابك مباشرة داخل قاعدة البيانات مع تفعيل الجلسة الحالية.</p>
+
+        <div id="memberLoggedBox" class="account-box"></div>
+        <button id="memberLogoutBtn" class="btn btn-outline" type="button" onclick="logoutCurrentPageMember()" style="display:none;margin-bottom:16px;"><i class="fas fa-right-from-bracket"></i> تسجيل الخروج من الحساب الحالي</button>
+
+        <div class="soft-info"><i class="fas fa-circle-info"></i><div>لو فعلت خيار التنبيهات، سيتم إضافتك أيضاً لقائمة المشتركين النشطين في لوحة الإدارة.</div></div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">الاسم الكامل</label>
+            <input id="memberFullName" class="form-control" placeholder="مثال: أحمد الحبيشي">
+          </div>
+          <div class="form-group">
+            <label class="form-label">رقم الجوال</label>
+            <input id="memberPhone" class="form-control" placeholder="771217771">
+          </div>
+          <div class="form-group">
+            <label class="form-label">البريد الإلكتروني</label>
+            <input id="memberEmail" class="form-control" type="email" placeholder="name@example.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label">كلمة المرور</label>
+            <input id="memberPassword" class="form-control" type="password" placeholder="6 أحرف أو أكثر">
+          </div>
+          <label style="display:flex;gap:10px;align-items:flex-start;padding:14px 16px;border-radius:16px;background:#f7fbff;border:1px solid #dce9f4;cursor:pointer;">
+            <input id="memberWantsNotifications" type="checkbox" checked style="margin-top:5px;">
+            <span><strong>تفعيل التنبيهات البريدية</strong><br><small style="color:#6b8094">وصول الأصناف الجديدة والعروض والإشعارات المهمة.</small></span>
+          </label>
+          <button class="btn btn-success" type="button" onclick="registerMember()"><i class="fas fa-user-check"></i> إنشاء الحساب الآن</button>
+        </div>
+
+        <div class="dual-box">
+          <h2 style="font-size:1.2rem;"><i class="fas fa-right-to-bracket"></i> عندك حساب بالفعل</h2>
+          <p style="margin-bottom:14px;">تقدر تسجل الدخول من نفس الصفحة بدون الرجوع لواجهة أخرى.</p>
+          <div class="form-grid">
+            <div class="form-group"><label class="form-label">البريد الإلكتروني</label><input id="memberLoginEmail" class="form-control" type="email" placeholder="name@example.com"></div>
+            <div class="form-group"><label class="form-label">كلمة المرور</label><input id="memberLoginPassword" class="form-control" type="password" placeholder="••••••••"></div>
+            <button class="btn btn-primary" type="button" onclick="loginMember()"><i class="fas fa-right-to-bracket"></i> دخول الحساب</button>
+          </div>
+        </div>
+
+        <div class="support-strip">
+          <div class="support-item"><i class="fas fa-bell"></i><strong>الاشتراك</strong><br><small>إدارة البريد والتنبيهات</small></div>
+          <div class="support-item"><i class="fas fa-cart-shopping"></i><strong>الطلبات</strong><br><small>بدء الطلب ببيانات جاهزة</small></div>
+          <div class="support-item"><i class="fas fa-gift"></i><strong>العروض</strong><br><small>متابعة الخصومات أولاً</small></div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-section">
+        <h4>🏪 محلات الحبيشي</h4>
+        <p><span class="store-description-target">وجهتك الأولى لمواد البناء والسباكة والكهرباء ومستلزمات الورش والأسمنت والمستلزمات الطبية في إب والمنطقة.</span></p>
+      </div>
+      <div class="footer-section">
+        <h4>الروابط المهمة</h4>
+        <a href="/login">تسجيل الدخول</a>
+        <a href="/subscribe">إدارة التنبيهات</a>
+        <a href="/order">إرسال طلب</a>
+        <a href="/offers">العروض</a>
+      </div>
+      <div class="footer-section">
+        <h4>الدعم السريع</h4>
+        <p><i class="fas fa-phone"></i> <a href="tel:+967771217771" style="color:inherit;text-decoration:none">771217771</a></p>
+        <p><i class="fas fa-envelope"></i> <a href="mailto:yamenameen97@gmail.com" style="color:inherit;text-decoration:none">yamenameen97@gmail.com</a></p>
+      </div>
+    </div>
+    <div class="footer-bottom"><p>© 2026 محلات الحبيشي | صفحة تسجيل حديثة ومربوطة بالنظام</p></div>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/common.js') }}"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', async () => {
+      try { await refreshMemberSession(); } catch (_) {}
+      const savedName = localStorage.getItem('hiba_newsletter_name') || '';
+      const savedEmail = localStorage.getItem('hiba_newsletter_email') || '';
+      if (savedName && !document.getElementById('memberFullName').value) document.getElementById('memberFullName').value = savedName;
+      if (savedEmail && !document.getElementById('memberEmail').value) document.getElementById('memberEmail').value = savedEmail;
+      if (savedEmail && !document.getElementById('memberLoginEmail').value) document.getElementById('memberLoginEmail').value = savedEmail;
+    });
+  </script>
 </body>
 </html>

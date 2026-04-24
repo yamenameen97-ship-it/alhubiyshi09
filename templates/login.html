@@ -1,15 +1,226 @@
-<!DOCTYPE html><html lang="ar">
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <title>تسجيل الدخول</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="دخول العملاء أو الإدارة إلى محلات الحبيشي لمتابعة الطلبات والتنبيهات وإدارة الموقع بسهولة.">
+  <meta name="robots" content="noindex,nofollow">
+  <title>تسجيل الدخول | محلات الحبيشي | Alhabeshi Stores</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    body { background: linear-gradient(180deg, #eef4f9 0%, #f8fbfe 45%, #ffffff 100%); }
+    .auth-shell { max-width: 1240px; margin: 0 auto; padding: 34px 20px 48px; }
+    .auth-grid { display:grid; grid-template-columns: 1.08fr 0.92fr; gap:24px; align-items:start; }
+    .hero-card {
+      background: linear-gradient(135deg, rgba(26,82,118,.98), rgba(46,134,193,.94));
+      color:#fff; border-radius:28px; padding:34px; position:relative; overflow:hidden; box-shadow:0 22px 55px rgba(26,82,118,.22);
+    }
+    .hero-card::before, .hero-card::after { content:''; position:absolute; border-radius:50%; background:rgba(255,255,255,.08); }
+    .hero-card::before { width:320px; height:320px; top:-120px; left:-90px; }
+    .hero-card::after { width:220px; height:220px; bottom:-70px; right:-60px; }
+    .hero-card > * { position:relative; z-index:1; }
+    .hero-badge { display:inline-flex; gap:8px; align-items:center; padding:10px 16px; border-radius:999px; background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.18); font-weight:800; margin-bottom:18px; }
+    .hero-title { font-size:2.45rem; line-height:1.25; margin-bottom:12px; font-weight:900; }
+    .hero-text { font-size:1rem; line-height:1.95; color:rgba(255,255,255,.93); max-width:650px; }
+    .hero-points { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; margin:24px 0; }
+    .hero-point { background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.14); border-radius:18px; padding:14px 16px; display:flex; gap:12px; align-items:flex-start; backdrop-filter: blur(5px); }
+    .hero-point i { color:#ffd166; font-size:1.1rem; margin-top:4px; }
+    .hero-actions { display:flex; gap:12px; flex-wrap:wrap; margin-top:22px; }
+    .hero-actions .btn { box-shadow:none; }
+    .panel-stack { display:grid; gap:20px; }
+    .panel-card { background:#fff; border-radius:24px; padding:24px; box-shadow:0 16px 42px rgba(22,49,73,.09); border:1px solid rgba(26,82,118,.08); }
+    .panel-card h2 { color:#1a5276; margin-bottom:8px; font-size:1.35rem; font-weight:900; }
+    .panel-card p { color:#61758a; line-height:1.85; margin-bottom:18px; }
+    .status-card { background:linear-gradient(180deg, #f8fbfe, #eef5fb); border:1px dashed #bdd0e2; border-radius:18px; padding:16px; margin-bottom:16px; }
+    .status-card strong { color:#123a56; }
+    .form-grid { display:grid; gap:14px; }
+    .auth-divider { height:1px; background:linear-gradient(90deg, transparent, #d8e3ec, transparent); margin:18px 0; }
+    .inline-note { display:flex; gap:10px; align-items:flex-start; padding:12px 14px; border-radius:14px; background:#fff6e7; color:#7d5a10; border:1px solid #f4dcaa; }
+    .mini-links { display:flex; gap:10px; flex-wrap:wrap; margin-top:16px; }
+    .account-box { display:none; margin-bottom:16px; padding:16px; border-radius:18px; background:linear-gradient(180deg,#eff9f2,#ffffff); border:1px solid rgba(39,174,96,.22); }
+    .account-box strong { color:#1e8449; }
+    .quick-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin-top:16px; }
+    .quick-link { display:flex; flex-direction:column; gap:8px; align-items:center; justify-content:center; min-height:110px; padding:14px; border-radius:18px; text-decoration:none; color:#123a56; background:#f7fbff; border:1px solid #d9e7f2; transition:.25s ease; }
+    .quick-link:hover { transform:translateY(-4px); border-color:#2e86c1; box-shadow:0 16px 30px rgba(46,134,193,.14); }
+    .quick-link i { width:44px; height:44px; border-radius:14px; display:flex; align-items:center; justify-content:center; color:#fff; background:linear-gradient(135deg,#1a5276,#2e86c1); }
+    footer { margin-top:34px; }
+    @media (max-width: 980px) {
+      .auth-grid { grid-template-columns:1fr; }
+      .hero-points, .quick-grid { grid-template-columns:1fr; }
+    }
+  </style>
 </head>
-<body style="text-align:center; font-family:Arial; margin-top:50px;"><h2>تسجيل دخول الادارة</h2>
+<body>
+  <div class="topbar">
+    <div class="topbar-info">
+      <span><i class="fas fa-map-marker-alt"></i> إب - المجمعة، اليمن</span>
+      <span><i class="fas fa-phone"></i> <a href="tel:+967771217771" style="color:inherit;text-decoration:none">771217771</a></span>
+      <span><i class="fas fa-envelope"></i> <a href="mailto:yamenameen97@gmail.com" style="color:inherit;text-decoration:none">yamenameen97@gmail.com</a></span>
+    </div>
+  </div>
 
-<form method="POST">
-    <input name="username" placeholder="اسم المستخدم" required><br><br>
-    <input name="password" type="password" placeholder="كلمة المرور" required><br><br>
-    <button type="submit">دخول</button>
-</form>
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="/" class="navbar-brand">
+        <div class="navbar-logo">🏪</div>
+        <div class="navbar-title">
+          <span class="store-name">محلات الحبيشي</span>
+          <span class="store-sub">بوابة الدخول السريع</span>
+        </div>
+      </a>
+      <ul class="navbar-links" id="navLinks">
+        <li><a href="/"><i class="fas fa-house"></i> الرئيسية</a></li>
+        <li><a href="/new-products"><i class="fas fa-box-open"></i> الأصناف الجديدة</a></li>
+        <li><a href="/offers"><i class="fas fa-tags"></i> العروض</a></li>
+        <li><a href="/order"><i class="fas fa-cart-shopping"></i> اطلب الآن</a></li>
+        <li><a href="/subscribe"><i class="fas fa-bell"></i> الاشتراك</a></li>
+        <li><a class="active" href="/login"><i class="fas fa-right-to-bracket"></i> الدخول</a></li>
+      </ul>
+      <button class="navbar-toggle" onclick="document.getElementById('navLinks').classList.toggle('open')"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
 
+  <main class="auth-shell">
+    <div class="auth-grid">
+      <section class="hero-card">
+        <div class="hero-badge"><i class="fas fa-shield-heart"></i> دخول آمن وسريع</div>
+        <h1 class="hero-title">ادخل لحسابك أو جهّز إدارة المتجر خلال دقائق</h1>
+        <p class="hero-text">الصفحة دي اتراجعت بالكامل علشان تكون أوضح وأسهل في الاستخدام على الموبايل والكمبيوتر. تقدر منها تدخل كعميل، تفتح حساب جديد، أو تجهز دخول الإدارة لأول مرة بدون أي تعقيد.</p>
+
+        <div class="hero-points">
+          <div class="hero-point"><i class="fas fa-user-check"></i><div><strong>للعملاء والزوار</strong><br><small>تسجيل دخول سريع لإكمال الطلبات وحفظ بياناتك والتنبيهات البريدية.</small></div></div>
+          <div class="hero-point"><i class="fas fa-gear"></i><div><strong>للإدارة</strong><br><small>إنشاء حساب المدير لأول مرة أو دخول مباشر للوحة التحكم.</small></div></div>
+          <div class="hero-point"><i class="fas fa-envelope-open-text"></i><div><strong>تنبيهات مرتبطة بالحساب</strong><br><small>تحكم أسهل في الاشتراك بالعروض والأصناف الجديدة.</small></div></div>
+          <div class="hero-point"><i class="fas fa-mobile-screen-button"></i><div><strong>تجربة مرنة</strong><br><small>واجهة أخف، أوضح، وجاهزة للاستخدام على Render بدون صفحات معطلة.</small></div></div>
+        </div>
+
+        <div class="hero-actions">
+          <a class="btn btn-secondary btn-lg" href="/register"><i class="fas fa-user-plus"></i> إنشاء حساب جديد</a>
+          <a class="btn btn-outline btn-lg" href="/order"><i class="fas fa-bag-shopping"></i> ابدأ الطلب</a>
+        </div>
+      </section>
+
+      <section class="panel-stack">
+        <div class="panel-card">
+          <h2><i class="fas fa-user-circle"></i> دخول العملاء والزوار</h2>
+          <p>استخدم بريدك وكلمة المرور للوصول لحسابك. ولو لسه ماعندكش حساب، انتقل مباشرة لصفحة التسجيل المحسّنة.</p>
+
+          <div id="memberLoggedBox" class="account-box"></div>
+          <button id="memberLogoutBtn" class="btn btn-outline" type="button" onclick="logoutCurrentPageMember()" style="display:none;margin-bottom:16px;"><i class="fas fa-right-from-bracket"></i> تسجيل الخروج</button>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">البريد الإلكتروني</label>
+              <input id="memberLoginEmail" class="form-control" type="email" placeholder="name@example.com">
+            </div>
+            <div class="form-group">
+              <label class="form-label">كلمة المرور</label>
+              <input id="memberLoginPassword" class="form-control" type="password" placeholder="••••••••">
+            </div>
+            <button class="btn btn-primary" type="button" onclick="loginMember()"><i class="fas fa-right-to-bracket"></i> دخول الحساب</button>
+          </div>
+
+          <div class="auth-divider"></div>
+          <div class="inline-note"><i class="fas fa-lightbulb"></i><div>لو أول مرة تزور الموقع، صفحة التسجيل الجديدة بقت أوضح ومرتبطة مباشرة بنظام الحسابات والتنبيهات.</div></div>
+          <div class="mini-links">
+            <a class="btn btn-success btn-sm" href="/register"><i class="fas fa-user-plus"></i> فتح حساب جديد</a>
+            <a class="btn btn-outline btn-sm" href="/subscribe"><i class="fas fa-bell"></i> إدارة الاشتراك البريدي</a>
+          </div>
+        </div>
+
+        <div class="panel-card">
+          <h2><i class="fas fa-user-shield"></i> دخول الإدارة</h2>
+          <p>لوحة الإدارة نفسها مازالت محمية، لكن الصفحة دي بتديك نقطة دخول واضحة لتجهيز حساب المدير أو الدخول له.</p>
+
+          <div id="adminAuthSummary" class="status-card"><strong>جاري فحص حالة الإدارة...</strong></div>
+
+          <div id="adminSetupPanel" style="display:none">
+            <div class="form-grid">
+              <div class="form-group"><label class="form-label">اسم المدير</label><input id="adminSetupName" class="form-control" placeholder="مثال: مدير محلات الحبيشي"></div>
+              <div class="form-group"><label class="form-label">البريد الإلكتروني</label><input id="adminSetupEmail" class="form-control" type="email" placeholder="you@example.com"></div>
+              <div class="form-group"><label class="form-label">كلمة المرور</label><input id="adminSetupPassword" class="form-control" type="password" placeholder="6 أحرف أو أكثر"></div>
+              <button class="btn btn-success" type="button" onclick="setupAdminAccount()"><i class="fas fa-shield-alt"></i> إنشاء حساب الإدارة</button>
+            </div>
+          </div>
+
+          <div id="adminLoginPanel" style="display:none">
+            <div class="form-grid">
+              <div class="form-group"><label class="form-label">البريد الإلكتروني</label><input id="adminLoginEmail" class="form-control" type="email" placeholder="admin@example.com"></div>
+              <div class="form-group"><label class="form-label">كلمة المرور</label><input id="adminLoginPassword" class="form-control" type="password" placeholder="••••••••"></div>
+              <button class="btn btn-primary" type="button" onclick="loginAdminAccount()"><i class="fas fa-lock-open"></i> دخول الإدارة</button>
+              <a class="btn btn-outline" href="/admin"><i class="fas fa-arrow-up-right-from-square"></i> فتح لوحة الإدارة</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel-card">
+          <h2><i class="fas fa-bolt"></i> اختصارات سريعة</h2>
+          <p>راجع الصفحات الأساسية بعد الدخول أو قبل التسجيل.</p>
+          <div class="quick-grid">
+            <a class="quick-link" href="/new-products"><i class="fas fa-box-open"></i><strong>وصل حديثاً</strong><small>أصناف جديدة</small></a>
+            <a class="quick-link" href="/offers"><i class="fas fa-tags"></i><strong>العروض</strong><small>خصومات ومسابقات</small></a>
+            <a class="quick-link" href="/order"><i class="fas fa-cart-shopping"></i><strong>الطلب</strong><small>إرسال طلب جديد</small></a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-section">
+        <h4>🏪 محلات الحبيشي</h4>
+        <p><span class="store-description-target">وجهتك الأولى لمواد البناء والسباكة والكهرباء ومستلزمات الورش والأسمنت والمستلزمات الطبية في إب والمنطقة.</span></p>
+      </div>
+      <div class="footer-section">
+        <h4>روابط سريعة</h4>
+        <a href="/">الرئيسية</a>
+        <a href="/register">إنشاء حساب</a>
+        <a href="/admin">لوحة الإدارة</a>
+        <a href="/subscribe">الاشتراك</a>
+      </div>
+      <div class="footer-section">
+        <h4>تواصل</h4>
+        <p><i class="fas fa-phone"></i> <a href="tel:+967771217771" style="color:inherit;text-decoration:none">771217771</a></p>
+        <p><i class="fas fa-envelope"></i> <a href="mailto:yamenameen97@gmail.com" style="color:inherit;text-decoration:none">yamenameen97@gmail.com</a></p>
+      </div>
+    </div>
+    <div class="footer-bottom"><p>© 2026 محلات الحبيشي | تجربة دخول محسّنة وجاهزة للنشر</p></div>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/common.js') }}"></script>
+  <script>
+    async function loadLoginPageState() {
+      const summary = document.getElementById('adminAuthSummary');
+      const setupPanel = document.getElementById('adminSetupPanel');
+      const loginPanel = document.getElementById('adminLoginPanel');
+      try {
+        const health = await requestJSON('/api/health', { method: 'GET' });
+        if (health.adminExists) {
+          setupPanel.style.display = 'none';
+          loginPanel.style.display = 'block';
+          summary.innerHTML = `<strong>حساب الإدارة موجود بالفعل.</strong><br><small>البريد المرتبط بالإشعارات: ${health.ownerEmail || 'غير محدد'} ${health.emailReady ? '• SMTP جاهز ✅' : '• البريد غير مفعّل بالكامل بعد ⚠️'}</small>`;
+          if (health.ownerEmail) document.getElementById('adminLoginEmail').value = health.ownerEmail;
+        } else {
+          setupPanel.style.display = 'block';
+          loginPanel.style.display = 'none';
+          summary.innerHTML = '<strong>لم يتم إعداد الإدارة بعد.</strong><br><small>أنشئ حساب المدير من النموذج التالي ثم افتح لوحة الإدارة مباشرة.</small>';
+        }
+      } catch (e) {
+        summary.innerHTML = `<strong>تعذر فحص حالة الإدارة.</strong><br><small>${e.message || ''}</small>`;
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', async () => {
+      try { await refreshMemberSession(); } catch (_) {}
+      const savedEmail = localStorage.getItem('hiba_newsletter_email') || '';
+      if (savedEmail && !document.getElementById('memberLoginEmail').value) {
+        document.getElementById('memberLoginEmail').value = savedEmail;
+      }
+      await loadLoginPageState();
+    });
+  </script>
 </body>
 </html>
