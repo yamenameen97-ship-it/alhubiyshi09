@@ -1239,6 +1239,52 @@ def table_collection(table: str):
         create_site_notification("تم استقبال طلب جديد", "شكراً لطلبك من محلات الحبيشي، سيتم التواصل معك قريباً لتأكيد التفاصيل.", cta_link="order.html", cta_label="متابعة الطلب", is_active=True, expires_days=5)
         insert_notification_log("order", subject, body, 1 if admin_email else 0, meta=payload.get("phone", ""))
 
+    if table == "products" and boolify(row.get("is_new")) and boolify(payload.get("notify_subscribers", False)):
+        product_name = str(row.get("name") or "منتج جديد").strip()
+        product_category = str(row.get("category") or "قسم المنتجات").strip()
+        product_price = row.get("price") or 0
+        product_message = "\n".join([
+            f"تمت إضافة منتج جديد: {product_name}",
+            f"القسم: {product_category}",
+            f"السعر: {product_price} ريال",
+            f"الوصف: {row.get('description') or '-'}",
+            "يمكنك متابعة الجديد من صفحة الأصناف الجديدة.",
+        ])
+        members = db.fetch_all(
+            "SELECT email FROM members WHERE is_active = {p} AND wants_notifications = {p} AND email IS NOT NULL".format(p=db.placeholder(1)),
+            [True],
+        )
+        subscribers = db.fetch_all(
+            "SELECT email FROM newsletter_subscribers WHERE is_active = {p} AND email IS NOT NULL".format(p=db.placeholder(1)),
+            [True],
+        )
+        recipients = sorted({str(r.get("email") or "").strip().lower() for r in [*members, *subscribers] if str(r.get("email") or "").strip()})
+        html = (
+            f"<div dir='rtl' style='font-family:Arial,sans-serif;line-height:1.9'>"
+            f"<h2>وصل صنف جديد: {product_name}</h2>"
+            f"<p>القسم: <strong>{product_category}</strong></p>"
+            f"<p>السعر: <strong>{product_price} ريال</strong></p>"
+            f"<p>{(row.get('description') or 'متوفر الآن في محلات الحبيشي.')}</p>"
+            f"<p><a href='new-products.html' style='display:inline-block;background:#1a5276;color:#fff;padding:10px 18px;border-radius:8px;text-decoration:none'>عرض الأصناف الجديدة</a></p>"
+            f"</div>"
+        )
+        result = send_email(f"وصل صنف جديد: {product_name}", product_message, recipients, html=html)
+        create_site_notification(
+            f"وصل جديد: {product_name}",
+            f"تمت إضافة {product_name} ضمن قسم {product_category}.",
+            cta_link="new-products.html",
+            cta_label="عرض الأصناف الجديدة",
+            is_active=True,
+            expires_days=7,
+        )
+        insert_notification_log(
+            "new-product",
+            f"وصل صنف جديد: {product_name}",
+            product_message,
+            len(recipients),
+            meta=("smtp-ok" if result.get("ok") else result.get("error") or "smtp-off"),
+        )
+
     return json_response(row, 201)
 
 
