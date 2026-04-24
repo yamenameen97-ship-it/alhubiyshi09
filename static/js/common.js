@@ -6,6 +6,21 @@ const STORE_PHONE = '771217771';
 const STORE_EMAIL = 'yamenameen97@gmail.com';
 let __memberSession = null;
 let __adminAuthInitialized = false;
+let __analyticsInitialized = false;
+
+function normalizePathname(pathname = window.location.pathname || '/') {
+  const clean = String(pathname || '/').replace(/\/+$/, '');
+  return clean || '/';
+}
+
+function isAdminPage() {
+  const path = normalizePathname();
+  return path === '/admin' || path === '/admin.html' || path.endsWith('/admin.html');
+}
+
+function adminPageHref() {
+  return '/admin';
+}
 
 // ======================================
 // إدارة التوست
@@ -66,7 +81,7 @@ async function requestJSON(url, options = {}) {
     const err = new Error(data?.error || `HTTP ${res.status}`);
     err.status = res.status;
     err.payload = data;
-    if (res.status === 401 && window.location.pathname.endsWith('admin.html')) {
+    if (res.status === 401 && isAdminPage()) {
       createAdminAuthOverlay();
     }
     throw err;
@@ -111,11 +126,168 @@ async function apiDelete(table, id) {
 
 let __storeSettings = null;
 
+function upsertFavicon(url) {
+  if (!url) return;
+  let link = document.querySelector('link[rel="icon"]');
+  if (!link) {
+    link = document.createElement('link');
+    link.rel = 'icon';
+    document.head.appendChild(link);
+  }
+  link.href = url;
+}
+
+function applyBranding(storeName, logoUrl, faviconUrl) {
+  if (storeName) {
+    document.querySelectorAll('.store-name').forEach(el => {
+      el.textContent = storeName;
+    });
+  }
+  if (logoUrl) {
+    document.querySelectorAll('.navbar-logo').forEach(el => {
+      el.innerHTML = `<img src="${logoUrl}" alt="${storeName || 'logo'}" style="width:100%;height:100%;object-fit:contain;border-radius:12px;">`;
+      el.style.padding = '4px';
+      el.style.background = '#fff';
+    });
+  }
+  if (faviconUrl) upsertFavicon(faviconUrl);
+}
+
+function getAnalyticsSessionId() {
+  let sessionId = localStorage.getItem('hiba_visitor_session');
+  if (!sessionId) {
+    sessionId = `v-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+    localStorage.setItem('hiba_visitor_session', sessionId);
+  }
+  return sessionId;
+}
+
+async function trackSiteEvent(eventType, extra = {}) {
+  try {
+    await requestJSON('/api/analytics/track', {
+      method: 'POST',
+      body: JSON.stringify({
+        session_id: getAnalyticsSessionId(),
+        event_type: eventType,
+        page_path: normalizePathname(),
+        page_title: document.title,
+        referrer: document.referrer || '',
+        ...extra
+      })
+    });
+  } catch (_) {}
+}
+
+function bindAnalyticsLinks() {
+  document.querySelectorAll('a[href]').forEach(anchor => {
+    if (anchor.dataset.analyticsBound === '1') return;
+    anchor.dataset.analyticsBound = '1';
+    anchor.addEventListener('click', () => {
+      const href = anchor.getAttribute('href') || '';
+      if (!href || href.startsWith('#') || href.startsWith('javascript:')) return;
+      trackSiteEvent('link_open', { target_url: href });
+    });
+  });
+}
+
+function initSiteAnalytics() {
+  if (__analyticsInitialized || isAdminPage()) return;
+  __analyticsInitialized = true;
+  trackSiteEvent('page_view');
+  bindAnalyticsLinks();
+}
+
+function createQuickNewsletterModal() {
+  if (document.getElementById('quickNewsletterModal')) return;
+  const modal = document.createElement('div');
+  modal.id = 'quickNewsletterModal';
+  modal.className = 'modal-overlay';
+  modal.style.display = 'none';
+  modal.innerHTML = `
+    <div class="modal" style="max-width:520px">
+      <div class="modal-header">
+        <span><i class="fas fa-envelope-open-text"></i> الاشتراك بوصولات الجديد</span>
+        <button class="modal-close" onclick="closeModal('quickNewsletterModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-info" style="margin-bottom:16px">سجّل اسمك وبريدك ليصلك إشعار عند إضافة أصناف جديدة أو عروض.</div>
+        <div class="form-group"><label class="form-label">الاسم</label><input id="quickNewsletterName" class="form-control" placeholder="اسمك الكريم"></div>
+        <div class="form-group"><label class="form-label">البريد الإلكتروني</label><input id="quickNewsletterEmail" class="form-control" type="email" placeholder="name@example.com"></div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn btn-success" type="button" onclick="quickSubscribeNewsletter()"><i class="fas fa-bell"></i> اشتراك</button>
+          <button class="btn btn-outline" type="button" onclick="quickUnsubscribeNewsletter()"><i class="fas fa-bell-slash"></i> إلغاء الاشتراك</button>
+          <a class="btn btn-primary" href="/subscribe"><i class="fas fa-up-right-from-square"></i> صفحة الاشتراك</a>
+        </div>
+      </div>
+    </div>`;
+  document.body.appendChild(modal);
+}
+
+function injectNewsletterShortcut() {
+  if (isAdminPage() || document.getElementById('newsletterQuickShortcut')) return;
+  createQuickNewsletterModal();
+  const btn = document.createElement('button');
+  btn.id = 'newsletterQuickShortcut';
+  btn.type = 'button';
+  btn.innerHTML = '<i class="fas fa-bell"></i>';
+  btn.title = 'الاشتراك بالإشعارات البريدية';
+  btn.style.cssText = 'position:fixed;left:18px;bottom:82px;z-index:2450;width:48px;height:48px;border:none;border-radius:14px;background:linear-gradient(135deg,#27ae60,#1e8449);color:#fff;box-shadow:0 10px 25px rgba(39,174,96,.28);cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;';
+  btn.onclick = () => openQuickNewsletterModal();
+  document.body.appendChild(btn);
+}
+
+function openQuickNewsletterModal() {
+  createQuickNewsletterModal();
+  const savedName = localStorage.getItem('hiba_newsletter_name') || __memberSession?.full_name || '';
+  const savedEmail = localStorage.getItem('hiba_newsletter_email') || __memberSession?.email || '';
+  const nameInput = document.getElementById('quickNewsletterName');
+  const emailInput = document.getElementById('quickNewsletterEmail');
+  if (nameInput && !nameInput.value) nameInput.value = savedName;
+  if (emailInput && !emailInput.value) emailInput.value = savedEmail;
+  openModal('quickNewsletterModal');
+}
+
+async function quickSubscribeNewsletter() {
+  const full_name = (document.getElementById('quickNewsletterName')?.value || '').trim();
+  const email = (document.getElementById('quickNewsletterEmail')?.value || '').trim();
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    showToast('يرجى كتابة بريد إلكتروني صحيح', 'warning');
+    return;
+  }
+  try {
+    await requestJSON('/api/newsletter/subscribe', { method: 'POST', body: JSON.stringify({ full_name, email }) });
+    localStorage.setItem('hiba_newsletter_name', full_name);
+    localStorage.setItem('hiba_newsletter_email', email);
+    showToast('تم تفعيل اشتراكك في إشعارات الأصناف الجديدة', 'success');
+    closeModal('quickNewsletterModal');
+  } catch (e) {
+    showToast(e.message || 'تعذر حفظ الاشتراك', 'error');
+  }
+}
+
+async function quickUnsubscribeNewsletter() {
+  const email = (document.getElementById('quickNewsletterEmail')?.value || '').trim() || localStorage.getItem('hiba_newsletter_email') || '';
+  if (!email) {
+    showToast('أدخل البريد الإلكتروني أولاً', 'warning');
+    return;
+  }
+  try {
+    await requestJSON('/api/newsletter/unsubscribe', { method: 'POST', body: JSON.stringify({ email }) });
+    localStorage.removeItem('hiba_newsletter_name');
+    localStorage.removeItem('hiba_newsletter_email');
+    showToast('تم إلغاء الاشتراك البريدي', 'success');
+    closeModal('quickNewsletterModal');
+  } catch (e) {
+    showToast(e.message || 'تعذر إلغاء الاشتراك', 'error');
+  }
+}
+
 async function applyStoreDescriptionTargets() {
   try {
     const data = await requestJSON('/api/store/settings', { method: 'GET' });
     __storeSettings = data || {};
 
+    const storeName = String(data?.store_name || 'محلات الحبيشي').trim();
     const description = String(data?.store_description || '').trim();
     const phone = String(data?.phone || STORE_PHONE).trim();
     const email = String(data?.email || STORE_EMAIL).trim();
@@ -123,9 +295,13 @@ async function applyStoreDescriptionTargets() {
     const workingHours = String(data?.working_hours || '8 صباحاً - 9 مساءً').trim();
     const externalLink = String(data?.external_link || 'alhabeshi-stores.html').trim();
     const footerNote = String(data?.footer_note || '').trim();
+    const logoUrl = String(data?.logo_url || '/static/img/logo.jpg').trim();
+    const faviconUrl = String(data?.favicon_url || logoUrl || '/static/img/logo.jpg').trim();
     const tickerItems = Array.isArray(data?.ticker_items)
       ? data.ticker_items.filter(Boolean)
       : [];
+
+    applyBranding(storeName, logoUrl, faviconUrl);
 
     if (description) {
       document.querySelectorAll('.store-description-target').forEach(el => {
@@ -176,7 +352,7 @@ async function applyStoreDescriptionTargets() {
 
 async function loadPublicNotifications() {
   try {
-    if (window.location.pathname.endsWith('admin.html')) return;
+    if (isAdminPage()) return;
     const result = await requestJSON('/api/public/notifications', { method: 'GET' });
     const items = result?.data || [];
     const nextItem = items.find(item => !sessionStorage.getItem(`site_notice_${item.id}`));
@@ -266,7 +442,7 @@ function rebuildNavbarMenu() {
     <li><a href="about.html"><i class="fas fa-info-circle"></i> معلومات عن المحل</a></li>
     <li><a href="#" data-logout-menu-link><i class="fas fa-sign-out-alt"></i> تسجيل الخروج من الصفحة</a></li>
     <li><a href="order.html"><i class="fas fa-shopping-cart"></i> اطلب الآن</a></li>
-    <li><a href="admin.html" style="background: rgba(243,156,18,0.2); border-radius: 8px;">
+    <li><a href="/admin" style="background: rgba(243,156,18,0.2); border-radius: 8px;">
       <i class="fas fa-cog"></i> الإدارة
       <span class="nav-badge" id="orders-badge" style="display:none">0</span>
     </a></li>
@@ -322,8 +498,8 @@ function enhanceNavbarLinks() {
 // ======================================
 async function updateOrdersBadge() {
   try {
-    const isAdminPage = window.location.pathname.endsWith('admin.html');
-    if (!isAdminPage) return;
+    const adminPageActive = isAdminPage();
+    if (!adminPageActive) return;
     const data = await apiGet('orders', { limit: 200 });
     const newOrders = data.data ? data.data.filter(o => o.status === 'جديد').length : 0;
     const badge = document.getElementById('orders-badge');
@@ -368,7 +544,7 @@ function injectAdminShortcut() {
   if (document.getElementById('adminQuickShortcut')) return;
   const a = document.createElement('a');
   a.id = 'adminQuickShortcut';
-  a.href = 'admin.html';
+  a.href = adminPageHref();
   a.title = 'لوحة الإدارة';
   a.innerHTML = '<i class="fas fa-user-shield"></i>';
   a.style.cssText = 'position:fixed;top:82px;left:18px;z-index:2400;width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,#f39c12,#e67e22);color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:1.15rem;box-shadow:0 10px 25px rgba(230,126,34,.28);';
@@ -562,7 +738,7 @@ async function logoutCurrentPageMember() {
 // حماية لوحة الإدارة
 // ======================================
 function createAdminAuthOverlay() {
-  if (__adminAuthInitialized || !window.location.pathname.endsWith('admin.html')) return;
+  if (__adminAuthInitialized || !isAdminPage()) return;
   __adminAuthInitialized = true;
   const shell = document.createElement('div');
   shell.id = 'adminAuthShell';
@@ -609,7 +785,7 @@ async function loadAdminAuthState() {
 }
 
 async function verifyAdminSession() {
-  if (!window.location.pathname.endsWith('admin.html')) return true;
+  if (!isAdminPage()) return true;
   try {
     const data = await requestJSON('/api/auth/admin/me', { method: 'GET' });
     removeAdminAuthOverlay();
@@ -665,7 +841,7 @@ async function logoutAdminAccount() {
 }
 
 function injectAdminTopTools(user) {
-  if (!window.location.pathname.endsWith('admin.html')) return;
+  if (!isAdminPage()) return;
   const dashboard = document.getElementById('tab-dashboard');
   if (dashboard && !document.getElementById('adminQuickToolsCard')) {
     const box = document.createElement('div');
@@ -710,7 +886,7 @@ function shareSiteFromAdmin() {
 // تبويب الرياضة داخل الإدارة
 // ======================================
 function injectSportsAdminTab() {
-  if (!window.location.pathname.endsWith('admin.html')) return;
+  if (!isAdminPage()) return;
   const sidebar = document.querySelector('.sidebar-menu');
   if (sidebar && !sidebar.querySelector('[data-sports-admin]')) {
     const li = document.createElement('li');
@@ -830,7 +1006,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   await refreshMemberSession();
   await applyStoreDescriptionTargets();
   await loadPublicNotifications();
-  if (window.location.pathname.endsWith('admin.html')) {
+  initSiteAnalytics();
+  injectNewsletterShortcut();
+  if (isAdminPage()) {
     createAdminAuthOverlay();
     await verifyAdminSession();
     updateOrdersBadge();
