@@ -490,6 +490,7 @@ function initNavbar() {
 }
 
 function enhanceNavbarLinks() {
+  if (isAdminPage()) return;
   rebuildNavbarMenu();
 }
 
