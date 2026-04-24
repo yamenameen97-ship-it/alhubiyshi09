@@ -813,8 +813,15 @@
     <div class="tab-content" id="tab-notifications">
       <h2 class="section-title"><i class="fas fa-bell" style="color:#f39c12"></i> نظام الإشعارات</h2>
 
-      <div class="alert alert-info mb-20">
-        <i class="fas fa-envelope"></i> البريد المرتبط بالموقع لاستلام الإشعارات: <strong id="linkedNotificationEmail">جاري التحميل...</strong>
+      <div class="alert alert-info mb-20" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;">
+        <div>
+          <i class="fas fa-envelope"></i> البريد المرتبط بالموقع لاستلام الإشعارات: <strong id="linkedNotificationEmail">جاري التحميل...</strong>
+          <span id="notificationHealthStatus" class="badge badge-warning" style="margin-right:8px;">جاري فحص البريد...</span>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn btn-success btn-sm" type="button" onclick="sendOwnerTestEmail()"><i class="fas fa-paper-plane"></i> إرسال رسالة اختبار للبريد المرتبط</button>
+          <button class="btn btn-outline btn-sm" type="button" onclick="loadNotificationHealth(true)"><i class="fas fa-rotate"></i> تحديث حالة البريد</button>
+        </div>
       </div>
 
       <div class="card mb-20">
@@ -2713,21 +2720,67 @@
         method: 'POST',
         body: JSON.stringify({ subject, message, cta_link, cta_label: 'عرض التفاصيل', recipient_emails })
       });
+      const audienceCount = Number(result.sent ?? result.queued ?? 0);
       notifHistory.unshift({
         id: Date.now(),
         to: recipient_emails.length ? 'مشتركون محددون' : 'المشتركون',
         channel: '📧 بريد إلكتروني',
-        meta: `${result.count || 0} مستلم`,
+        meta: `${audienceCount} مستلم`,
         message: `${subject}
 
 ${message}`,
         time: new Date().toLocaleString('ar-YE'),
-        status: 'تم الإرسال'
+        status: result.smtp_ok ? 'تم الإرسال' : 'تم إنشاء إشعار الموقع فقط'
       });
       renderNotifHistory();
-      showToast(`تم إرسال البريد إلى ${result.count || 0} مشترك`, 'success');
+      if (result.smtp_ok) {
+        showToast(`تم إرسال البريد إلى ${audienceCount} مستلم`, 'success');
+      } else {
+        showToast(result.error || 'تم إنشاء إشعار الموقع لكن البريد لم يُرسل من الخادم', 'warning', 6500);
+      }
+      await loadNotificationHealth();
     } catch (e) {
       showToast(e.message || 'تعذر إرسال البريد للمشتركين', 'error');
+    }
+  }
+
+  async function loadNotificationHealth(showFeedback = false) {
+    try {
+      const health = await requestJSON('/api/health', { method: 'GET' });
+      const badge = document.getElementById('notificationHealthStatus');
+      const linked = document.getElementById('linkedNotificationEmail');
+      if (linked && health.ownerEmail) linked.textContent = health.ownerEmail;
+      if (badge) {
+        badge.className = `badge ${health.emailReady ? 'badge-success' : 'badge-warning'}`;
+        badge.textContent = health.emailReady ? 'البريد مفعّل ✅' : 'البريد غير مكتمل الإعداد ⚠️';
+      }
+      if (showFeedback) {
+        showToast(health.emailReady ? 'إعدادات البريد جاهزة' : 'البريد غير مكتمل الإعداد على الخادم', health.emailReady ? 'success' : 'warning');
+      }
+    } catch (e) {
+      const badge = document.getElementById('notificationHealthStatus');
+      if (badge) {
+        badge.className = 'badge badge-danger';
+        badge.textContent = 'تعذر فحص حالة البريد';
+      }
+      if (showFeedback) showToast('تعذر فحص حالة البريد', 'error');
+    }
+  }
+
+  async function sendOwnerTestEmail() {
+    try {
+      const result = await requestJSON('/api/notifications/test-owner', {
+        method: 'POST',
+        body: JSON.stringify({})
+      });
+      if (result.smtp_ok) {
+        showToast(`تم إرسال رسالة اختبار إلى ${result.recipient}`, 'success', 6500);
+      } else {
+        showToast(result.error || 'تعذر إرسال رسالة الاختبار', 'warning', 7000);
+      }
+      await loadNotificationHealth();
+    } catch (e) {
+      showToast(e.message || 'تعذر إرسال رسالة الاختبار', 'error');
     }
   }
 
@@ -2859,6 +2912,7 @@ ${message}`);
     loadCustomers();
     loadSubscribersAdmin();
     loadStoreDescriptionSettings();
+    loadNotificationHealth();
     loadModerationSettings();
     startAdminOrderWatcher();
   });

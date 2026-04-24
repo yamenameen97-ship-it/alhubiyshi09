@@ -541,7 +541,7 @@
           <textarea id="contactMsg" class="form-control" rows="4" placeholder="اكتب استفسارك أو ملاحظتك هنا..."></textarea>
         </div>
       </div>
-      <button class="btn btn-primary" onclick="sendContactMessage()">
+      <button class="btn btn-primary" type="button" id="contactSubmitBtn" onclick="sendContactMessage()">
         <i class="fas fa-paper-plane"></i> إرسال الرسالة
       </button>
     </div>
@@ -597,7 +597,7 @@
 
 <script src="{{ url_for('static', filename='js/common.js') }}"></script>
 <script>
-  function sendContactMessage() {
+  async function sendContactMessage() {
     const name = document.getElementById('contactName').value.trim();
     const phone = document.getElementById('contactPhone').value.trim();
     const msg = document.getElementById('contactMsg').value.trim();
@@ -605,13 +605,31 @@
       showToast('يرجى إدخال الاسم والرسالة', 'warning');
       return;
     }
-    const subject = encodeURIComponent('رسالة جديدة من الموقع - ' + name);
-    const body = encodeURIComponent(`الاسم: ${name}\nالجوال: ${phone || '-'}\n\nالرسالة:\n${msg}`);
-    window.open(`mailto:yamenameen97@gmail.com?subject=${subject}&body=${body}`, '_blank');
-    showToast('تم تجهيز رسالة البريد للإرسال إلى إدارة المحل ✉️', 'success', 5000);
-    document.getElementById('contactName').value = '';
-    document.getElementById('contactPhone').value = '';
-    document.getElementById('contactMsg').value = '';
+
+    const btn = document.getElementById('contactSubmitBtn');
+    if (btn) {
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';
+    }
+
+    try {
+      const result = await requestJSON('/api/contact/send', {
+        method: 'POST',
+        body: JSON.stringify({ name, phone, message: msg })
+      });
+      try { await trackSiteEvent('contact_click', { target_url: '/api/contact/send' }); } catch (_) {}
+      showToast(result?.smtp_ok ? 'تم إرسال رسالتك وإشعار الإدارة بنجاح ✅' : 'تم استلام رسالتك بنجاح وسيتم عرضها للإدارة داخل النظام ✅', 'success', 6000);
+      document.getElementById('contactName').value = '';
+      document.getElementById('contactPhone').value = '';
+      document.getElementById('contactMsg').value = '';
+    } catch (e) {
+      showToast(e.message || 'تعذر إرسال الرسالة حالياً', 'error');
+    } finally {
+      if (btn) {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-paper-plane"></i> إرسال الرسالة';
+      }
+    }
   }
 </script>
 </body>

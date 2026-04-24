@@ -634,6 +634,24 @@ def create_site_notification(title: str, message: str, cta_link: str = "", cta_l
     )
 
 
+def notify_owner_email(subject: str, body_text: str, html: Optional[str] = None) -> Dict[str, Any]:
+    settings = get_store_settings()
+    recipient = (settings.get("email") or os.environ.get("EMAIL_USER", "")).strip().lower()
+    if not recipient:
+        return {"ok": False, "sent": 0, "error": "No owner email configured", "recipient": ""}
+    result = send_email(subject, body_text, [recipient], html=html)
+    result["recipient"] = recipient
+    return result
+
+
+def run_noncritical(action_name: str, callback):
+    try:
+        return {"ok": True, "result": callback()}
+    except Exception as exc:
+        app.logger.exception("Non-critical action failed: %s", action_name)
+        return {"ok": False, "error": str(exc)}
+
+
 def parse_rss_datetime(value: str) -> str:
     if not value:
         return iso_now()
@@ -1078,6 +1096,101 @@ def notify_subscribers():
     })
 
 
+@app.post("/api/contact/send")
+def contact_send():
+    payload = request.get_json(silent=True) or {}
+    name = (payload.get("name") or "").strip()
+    phone = (payload.get("phone") or "").strip()
+    message = (payload.get("message") or "").strip()
+
+    if not name or not message:
+        return json_response({"error": "يرجى إدخال الاسم والرسالة"}, 400)
+
+    clean_phone = re.sub(r"\s+", "", phone)
+    if clean_phone and not re.match(r"^(?:\+?967|0)?7\d{8}$", clean_phone):
+        return json_response({"error": "يرجى إدخال رقم جوال يمني صحيح أو ترك الحقل فارغاً"}, 400)
+
+    composed_message = "\n".join([
+        f"الاسم: {name}",
+        f"الجوال: {phone or '-'}",
+        "",
+        "الرسالة:",
+        message,
+    ])
+    record = create_record("chat_messages", {
+        "sender_name": f"رسالة الموقع - {name}",
+        "message": composed_message,
+        "is_admin": False,
+        "timestamp": iso_now(),
+    })
+
+    subject = f"رسالة جديدة من صفحة تواصل معنا - {name}"
+    html = (
+        f"<div dir='rtl' style='font-family:Arial,sans-serif;line-height:1.9'>"
+        f"<h2>{subject}</h2>"
+        f"<p><strong>الاسم:</strong> {name}</p>"
+        f"<p><strong>الجوال:</strong> {phone or '-'}</p>"
+        f"<p><strong>الرسالة:</strong><br>{message.replace(chr(10), '<br>')}</p>"
+        f"</div>"
+    )
+    email_result = run_noncritical("contact owner email", lambda: notify_owner_email(subject, composed_message, html=html))
+    run_noncritical("contact site notification", lambda: create_site_notification(
+        f"رسالة جديدة من {name}",
+        "تم استلام رسالة جديدة من صفحة تواصل معنا.",
+        cta_link="about.html",
+        cta_label="فتح صفحة التواصل",
+        is_active=True,
+        expires_days=5,
+    ))
+    run_noncritical("contact log", lambda: insert_notification_log(
+        "contact",
+        subject,
+        composed_message,
+        1,
+        meta=(phone or name),
+    ))
+
+    email_info = email_result.get("result") if email_result.get("ok") else {"ok": False, "sent": 0, "error": email_result.get("error")}
+    return json_response({
+        "ok": True,
+        "message": "تم استلام رسالتك بنجاح",
+        "contact_id": record.get("id"),
+        "smtp_ok": bool((email_info or {}).get("ok")),
+        "sent": int((email_info or {}).get("sent") or 0),
+        "owner_email": (email_info or {}).get("recipient", ""),
+    })
+
+
+@app.post("/api/notifications/test-owner")
+@require_admin_api
+def notification_test_owner():
+    payload = request.get_json(silent=True) or {}
+    settings = get_store_settings()
+    recipient = (payload.get("email") or settings.get("email") or os.environ.get("EMAIL_USER", "")).strip().lower()
+    if not recipient:
+        return json_response({"error": "لا يوجد بريد مرتبط بالموقع لاختبار الإشعارات"}, 400)
+
+    subject = (payload.get("subject") or "رسالة اختبار من نظام محلات الحبيشي").strip() or "رسالة اختبار من نظام محلات الحبيشي"
+    message = (payload.get("message") or f"هذه رسالة اختبار للتأكد من عمل البريد والإشعارات بتاريخ {utcnow().strftime('%Y-%m-%d %H:%M:%S UTC')}").strip()
+    html = (
+        f"<div dir='rtl' style='font-family:Arial,sans-serif;line-height:1.9'>"
+        f"<h2>{subject}</h2>"
+        f"<p>{message.replace(chr(10), '<br>')}</p>"
+        f"<p style='margin-top:16px;color:#1a5276'>إذا وصلتك هذه الرسالة فإعدادات البريد تعمل بشكل صحيح ✅</p>"
+        f"</div>"
+    )
+    result = notify_owner_email(subject, message, html=html)
+    insert_notification_log("test-email", subject, message, 1, meta=("smtp-ok" if result.get("ok") else result.get("error") or recipient))
+    return json_response({
+        "ok": True,
+        "recipient": recipient,
+        "sent": result.get("sent", 0),
+        "smtp_ok": result.get("ok", False),
+        "error": result.get("error"),
+        "message": "تمت محاولة إرسال رسالة الاختبار للبريد المرتبط بالموقع",
+    })
+
+
 def make_visitor_key(session_id: str = "") -> str:
     forwarded_for = (request.headers.get("X-Forwarded-For") or request.remote_addr or "").split(",")[0].strip()
     user_agent = request.headers.get("User-Agent", "")
@@ -1271,8 +1384,6 @@ def table_collection(table: str):
     row = create_record(table, payload)
 
     if table == "orders":
-        upsert_customer_from_order(payload)
-        settings = get_store_settings()
         subject = f"طلب جديد من {payload.get('customer_name', 'عميل')}"
         body = "\n".join([
             f"الاسم: {payload.get('customer_name', '-')}",
@@ -1282,11 +1393,10 @@ def table_collection(table: str):
             f"العنوان: {payload.get('delivery_address', '-')}",
             f"ملاحظات: {payload.get('notes', '-')}",
         ])
-        admin_email = settings.get("email") or os.environ.get("EMAIL_USER", "")
-        if admin_email:
-            send_email(subject, body, [admin_email])
-        create_site_notification("تم استقبال طلب جديد", "شكراً لطلبك من محلات الحبيشي، سيتم التواصل معك قريباً لتأكيد التفاصيل.", cta_link="order.html", cta_label="متابعة الطلب", is_active=True, expires_days=5)
-        insert_notification_log("order", subject, body, 1 if admin_email else 0, meta=payload.get("phone", ""))
+        owner_mail = notify_owner_email(subject, body)
+        run_noncritical("order upsert customer", lambda: upsert_customer_from_order(payload))
+        run_noncritical("order site notification", lambda: create_site_notification("تم استقبال طلب جديد", "شكراً لطلبك من محلات الحبيشي، سيتم التواصل معك قريباً لتأكيد التفاصيل.", cta_link="order.html", cta_label="متابعة الطلب", is_active=True, expires_days=5))
+        run_noncritical("order notification log", lambda: insert_notification_log("order", subject, body, 1 if owner_mail.get("recipient") else 0, meta=payload.get("phone", "")))
 
     if table == "products" and boolify(row.get("is_new")) and boolify(payload.get("notify_subscribers", False)):
         product_name = str(row.get("name") or "منتج جديد").strip()

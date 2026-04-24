@@ -1257,16 +1257,16 @@ footer {
 
 .autocomplete-list {
   position: absolute;
-  top: 100%;
+  top: calc(100% + 2px);
   right: 0;
   left: 0;
   background: white;
   border: 2px solid var(--primary-light);
   border-top: none;
   border-radius: 0 0 10px 10px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.12);
-  z-index: 100;
-  max-height: 250px;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.18);
+  z-index: 2500;
+  max-height: 320px;
   overflow-y: auto;
   display: none;
 }
