@@ -605,20 +605,22 @@ def seed_initial_data():
 
 def init_db():
     bool_type = "BOOLEAN" if IS_POSTGRES else "INTEGER"
+    bool_true = "TRUE" if IS_POSTGRES else "1"
+    bool_false = "FALSE" if IS_POSTGRES else "0"
     text_pk = "TEXT PRIMARY KEY"
     timestamp_now = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP"
     statements = [
         f"CREATE TABLE IF NOT EXISTS admins (id {text_pk}, display_name TEXT NOT NULL, email TEXT NOT NULL UNIQUE, password_hash TEXT NOT NULL, created_at {timestamp_now})",
-        f"CREATE TABLE IF NOT EXISTS members (id {text_pk}, full_name TEXT NOT NULL, phone TEXT, email TEXT NOT NULL UNIQUE, password_hash TEXT NOT NULL, wants_notifications {bool_type} DEFAULT 1, is_active {bool_type} DEFAULT 1, can_order {bool_type} DEFAULT 1, created_at {timestamp_now}, updated_at {timestamp_now})",
-        f"CREATE TABLE IF NOT EXISTS newsletter_subscribers (id {text_pk}, full_name TEXT, email TEXT NOT NULL UNIQUE, source TEXT DEFAULT 'page', is_active {bool_type} DEFAULT 1, created_at {timestamp_now}, updated_at {timestamp_now})",
-        f"CREATE TABLE IF NOT EXISTS customers (id {text_pk}, name TEXT NOT NULL, phone TEXT, address TEXT, balance REAL DEFAULT 0, email TEXT, notes TEXT, is_member {bool_type} DEFAULT 0, created_at {timestamp_now}, updated_at {timestamp_now})",
-        f"CREATE TABLE IF NOT EXISTS products (id {text_pk}, name TEXT NOT NULL, category TEXT, unit TEXT, price REAL DEFAULT 0, stock INTEGER DEFAULT 0, discount INTEGER DEFAULT 0, description TEXT, image_url TEXT, external_link TEXT, is_new {bool_type} DEFAULT 0, created_at {timestamp_now}, updated_at {timestamp_now})",
-        f"CREATE TABLE IF NOT EXISTS offers (id {text_pk}, title TEXT NOT NULL, description TEXT, type TEXT DEFAULT 'عرض', discount_percent INTEGER DEFAULT 0, is_active {bool_type} DEFAULT 1, created_at {timestamp_now}, updated_at {timestamp_now})",
-        f"CREATE TABLE IF NOT EXISTS orders (id {text_pk}, customer_name TEXT NOT NULL, phone TEXT, is_member {bool_type} DEFAULT 0, member_id TEXT, items TEXT, total REAL DEFAULT 0, status TEXT DEFAULT 'جديد', notes TEXT, order_mode TEXT DEFAULT 'delivery', delivery_address TEXT, delivery_time TEXT, payment_method TEXT, payment_reference TEXT, notification_email TEXT, order_date TEXT, created_at {timestamp_now}, updated_at {timestamp_now})",
-        f"CREATE TABLE IF NOT EXISTS chat_messages (id {text_pk}, sender_name TEXT NOT NULL, message TEXT NOT NULL, is_admin {bool_type} DEFAULT 0, timestamp TEXT, created_at {timestamp_now})",
-        f"CREATE TABLE IF NOT EXISTS sports_sources (id {text_pk}, name TEXT NOT NULL, url TEXT NOT NULL, is_active {bool_type} DEFAULT 1, created_at {timestamp_now}, updated_at {timestamp_now})",
+        f"CREATE TABLE IF NOT EXISTS members (id {text_pk}, full_name TEXT NOT NULL, phone TEXT, email TEXT NOT NULL UNIQUE, password_hash TEXT NOT NULL, wants_notifications {bool_type} DEFAULT {bool_true}, is_active {bool_type} DEFAULT {bool_true}, can_order {bool_type} DEFAULT {bool_true}, created_at {timestamp_now}, updated_at {timestamp_now})",
+        f"CREATE TABLE IF NOT EXISTS newsletter_subscribers (id {text_pk}, full_name TEXT, email TEXT NOT NULL UNIQUE, source TEXT DEFAULT 'page', is_active {bool_type} DEFAULT {bool_true}, created_at {timestamp_now}, updated_at {timestamp_now})",
+        f"CREATE TABLE IF NOT EXISTS customers (id {text_pk}, name TEXT NOT NULL, phone TEXT, address TEXT, balance REAL DEFAULT 0, email TEXT, notes TEXT, is_member {bool_type} DEFAULT {bool_false}, created_at {timestamp_now}, updated_at {timestamp_now})",
+        f"CREATE TABLE IF NOT EXISTS products (id {text_pk}, name TEXT NOT NULL, category TEXT, unit TEXT, price REAL DEFAULT 0, stock INTEGER DEFAULT 0, discount INTEGER DEFAULT 0, description TEXT, image_url TEXT, external_link TEXT, is_new {bool_type} DEFAULT {bool_false}, created_at {timestamp_now}, updated_at {timestamp_now})",
+        f"CREATE TABLE IF NOT EXISTS offers (id {text_pk}, title TEXT NOT NULL, description TEXT, type TEXT DEFAULT 'عرض', discount_percent INTEGER DEFAULT 0, is_active {bool_type} DEFAULT {bool_true}, created_at {timestamp_now}, updated_at {timestamp_now})",
+        f"CREATE TABLE IF NOT EXISTS orders (id {text_pk}, customer_name TEXT NOT NULL, phone TEXT, is_member {bool_type} DEFAULT {bool_false}, member_id TEXT, items TEXT, total REAL DEFAULT 0, status TEXT DEFAULT 'جديد', notes TEXT, order_mode TEXT DEFAULT 'delivery', delivery_address TEXT, delivery_time TEXT, payment_method TEXT, payment_reference TEXT, notification_email TEXT, order_date TEXT, created_at {timestamp_now}, updated_at {timestamp_now})",
+        f"CREATE TABLE IF NOT EXISTS chat_messages (id {text_pk}, sender_name TEXT NOT NULL, message TEXT NOT NULL, is_admin {bool_type} DEFAULT {bool_false}, timestamp TEXT, created_at {timestamp_now})",
+        f"CREATE TABLE IF NOT EXISTS sports_sources (id {text_pk}, name TEXT NOT NULL, url TEXT NOT NULL, is_active {bool_type} DEFAULT {bool_true}, created_at {timestamp_now}, updated_at {timestamp_now})",
         f"CREATE TABLE IF NOT EXISTS sports_articles (id {text_pk}, source_name TEXT, title TEXT NOT NULL, summary TEXT, link TEXT UNIQUE, image_url TEXT, published_at TEXT, created_at {timestamp_now})",
-        f"CREATE TABLE IF NOT EXISTS site_notifications (id {text_pk}, title TEXT NOT NULL, message TEXT NOT NULL, cta_link TEXT, cta_label TEXT, is_active {bool_type} DEFAULT 1, expires_at TEXT, created_at {timestamp_now}, updated_at {timestamp_now})",
+        f"CREATE TABLE IF NOT EXISTS site_notifications (id {text_pk}, title TEXT NOT NULL, message TEXT NOT NULL, cta_link TEXT, cta_label TEXT, is_active {bool_type} DEFAULT {bool_true}, expires_at TEXT, created_at {timestamp_now}, updated_at {timestamp_now})",
         f"CREATE TABLE IF NOT EXISTS notifications_log (id {text_pk}, channel TEXT, subject TEXT, message TEXT, recipient_count INTEGER DEFAULT 0, meta TEXT, created_at {timestamp_now})",
         f"CREATE TABLE IF NOT EXISTS store_settings (id INTEGER PRIMARY KEY, store_name TEXT, store_description TEXT, ticker_items TEXT, footer_note TEXT, phone TEXT, email TEXT, location TEXT, working_hours TEXT, external_link TEXT, created_at {timestamp_now}, updated_at {timestamp_now})",
     ]
