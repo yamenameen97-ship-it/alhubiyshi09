@@ -22,7 +22,8 @@ from xml.etree import ElementTree as ET
 
 import psycopg2
 from psycopg2.extras import RealDictCursor
-from flask import Flask, jsonify, render_template, request, session
+from flask import Flask, Response, jsonify, redirect, render_template, request, session
+from werkzeug.middleware.proxy_fix import ProxyFix
 from werkzeug.security import check_password_hash, generate_password_hash
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -35,6 +36,14 @@ app = Flask(__name__, template_folder="templates", static_folder="static")
 app.secret_key = os.environ.get("SECRET_KEY", secrets.token_hex(32))
 app.config["JSON_AS_ASCII"] = False
 app.config["JSONIFY_PRETTYPRINT_REGULAR"] = False
+app.config["SESSION_COOKIE_HTTPONLY"] = True
+app.config["SESSION_COOKIE_SAMESITE"] = os.environ.get("SESSION_COOKIE_SAMESITE", "Lax")
+app.config["SESSION_COOKIE_SECURE"] = str(
+    os.environ.get("SESSION_COOKIE_SECURE", "true" if os.environ.get("FLASK_ENV", "").lower() == "production" else "false")
+).strip().lower() in {"1", "true", "yes", "on"}
+app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(days=max(1, int(os.environ.get("SESSION_LIFETIME_DAYS", "14"))))
+if str(os.environ.get("TRUST_PROXY", "true")).strip().lower() not in {"0", "false", "no", "off"}:
+    app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)
 
 PUBLIC_TABLES = {"products", "offers", "chat_messages", "sports_articles", "site_notifications"}
 PUBLIC_CREATE_TABLES = {"orders", "chat_messages"}
@@ -107,6 +116,11 @@ DEFAULT_TEMPLATE_ROUTES = {
     "admin.html": "/admin",
     "login.html": "/login",
 }
+LEGACY_TEMPLATE_REDIRECTS = {
+    "base.html": "/",
+    "cart.html": "/order",
+    "orders.html": "/order",
+}
 DEFAULT_STORE_SETTINGS = {
     "store_name": "محلات الحبيشي",
     "store_description": "وجهتك الأولى لمواد البناء والسباكة والكهرباء ومستلزمات الورش والأسمنت والمستلزمات الطبية في إب والمنطقة.",
@@ -148,6 +162,26 @@ def boolify(value: Any) -> bool:
     if isinstance(value, (int, float)):
         return value != 0
     return str(value).strip().lower() in {"1", "true", "yes", "on", "enabled", "مفعل", "نعم"}
+
+
+@app.after_request
+def apply_response_headers(response):
+    response.headers.setdefault("X-Content-Type-Options", "nosniff")
+    response.headers.setdefault("X-Frame-Options", "SAMEORIGIN")
+    response.headers.setdefault("Referrer-Policy", "strict-origin-when-cross-origin")
+    response.headers.setdefault("Permissions-Policy", "geolocation=(), microphone=(), camera=()")
+    if request.path.startswith("/static/"):
+        response.headers.setdefault("Cache-Control", "public, max-age=86400")
+    elif request.path.startswith("/api/"):
+        response.headers.setdefault("Cache-Control", "no-store")
+    return response
+
+
+def site_base_url() -> str:
+    configured = os.environ.get("APP_BASE_URL", "").strip()
+    if configured:
+        return configured.rstrip("/")
+    return request.host_url.rstrip("/")
 
 
 class Database:
@@ -496,7 +530,7 @@ def get_member_user() -> Optional[Dict[str, Any]]:
 
 
 def smtp_ready() -> bool:
-    return bool(os.environ.get("EMAIL_USER") and os.environ.get("EMAIL_PASS"))
+    return bool(os.environ.get("EMAIL_USER") and os.environ.get("EMAIL_PASS") and os.environ.get("SMTP_HOST", "smtp.gmail.com"))
 
 
 def send_email(subject: str, body_text: str, recipients: List[str], html: Optional[str] = None) -> Dict[str, Any]:
@@ -508,19 +542,26 @@ def send_email(subject: str, body_text: str, recipients: List[str], html: Option
 
     import smtplib
 
-    user = os.environ.get("EMAIL_USER")
-    password = os.environ.get("EMAIL_PASS")
+    user = (os.environ.get("EMAIL_USER") or "").strip()
+    password = os.environ.get("EMAIL_PASS") or ""
+    smtp_host = (os.environ.get("SMTP_HOST") or "smtp.gmail.com").strip()
+    smtp_port = int(os.environ.get("SMTP_PORT", "587"))
+    smtp_use_tls = boolify(os.environ.get("SMTP_USE_TLS", True))
+    smtp_use_ssl = boolify(os.environ.get("SMTP_USE_SSL", False))
+    sender = (os.environ.get("SMTP_FROM") or user).strip() or user
     sent = 0
     last_error = None
     try:
-        with smtplib.SMTP("smtp.gmail.com", 587, timeout=25) as server:
-            server.starttls()
+        server_factory = smtplib.SMTP_SSL if smtp_use_ssl else smtplib.SMTP
+        with server_factory(smtp_host, smtp_port, timeout=25) as server:
+            if smtp_use_tls and not smtp_use_ssl:
+                server.starttls()
             server.login(user, password)
             for recipient in recipients:
                 try:
                     msg = EmailMessage()
                     msg["Subject"] = subject
-                    msg["From"] = user
+                    msg["From"] = sender
                     msg["To"] = recipient
                     msg.set_content(body_text)
                     if html:
@@ -1165,10 +1206,18 @@ def sports_sync():
 @app.get("/api/sports/articles")
 def sports_articles_get():
     limit = max(1, min(int(request.args.get("limit", 20)), 100))
-    rows = db.fetch_all(
-        "SELECT * FROM sports_articles ORDER BY COALESCE(published_at, created_at) DESC LIMIT {p}".format(p=db.placeholder(1)),
-        [limit],
-    )
+    query = (request.args.get("q") or "").strip().lower()
+    if query:
+        like = f"%{query}%"
+        rows = db.fetch_all(
+            "SELECT * FROM sports_articles WHERE lower(COALESCE(title, '')) LIKE {p} OR lower(COALESCE(summary, '')) LIKE {p} OR lower(COALESCE(source_name, '')) LIKE {p} ORDER BY COALESCE(published_at, created_at) DESC LIMIT {p}".format(p=db.placeholder(1)),
+            [like, like, like, limit],
+        )
+    else:
+        rows = db.fetch_all(
+            "SELECT * FROM sports_articles ORDER BY COALESCE(published_at, created_at) DESC LIMIT {p}".format(p=db.placeholder(1)),
+            [limit],
+        )
     return json_response({"data": [serialize_record("sports_articles", row) for row in rows]})
 
 
@@ -1364,8 +1413,43 @@ def login_page():
     return render_template("login.html")
 
 
+@app.get("/register")
+def register_page():
+    return render_template("register.html")
+
+
+@app.get("/robots.txt")
+def robots_txt():
+    body = "User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /tables/\n"
+    return Response(body, mimetype="text/plain")
+
+
+@app.get("/sitemap.xml")
+def sitemap_xml():
+    public_paths = [
+        "/",
+        "/about",
+        "/chat",
+        "/new-products",
+        "/offers",
+        "/order",
+        "/payment",
+        "/quick-upload",
+        "/sports",
+        "/alhabeshi-stores",
+        "/products",
+        "/subscribe",
+        "/login",
+        "/register",
+    ]
+    base = site_base_url()
+    items = "\n".join([f"  <url><loc>{base}{path}</loc></url>" for path in public_paths])
+    xml = f"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n{items}\n</urlset>"
+    return Response(xml, mimetype="application/xml")
+
+
 for template_name, route_path in DEFAULT_TEMPLATE_ROUTES.items():
-    if route_path in {"/", "/products", "/subscribe", "/admin", "/login"}:
+    if route_path in {"/", "/products", "/subscribe", "/admin", "/login", "/register"}:
         continue
 
     def _make_view(name: str):
@@ -1385,6 +1469,8 @@ def static_template_page(page: str):
         return render_template(safe_page)
     if not safe_page.endswith(".html"):
         safe_page = f"{safe_page}.html"
+    if safe_page in LEGACY_TEMPLATE_REDIRECTS:
+        return redirect(LEGACY_TEMPLATE_REDIRECTS[safe_page])
     template_path = BASE_DIR / "templates" / safe_page
     if template_path.exists():
         return render_template(safe_page)
