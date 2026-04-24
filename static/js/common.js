@@ -109,14 +109,80 @@ async function apiDelete(table, id) {
   return true;
 }
 
+let __storeSettings = null;
+
 async function applyStoreDescriptionTargets() {
   try {
     const data = await requestJSON('/api/store/settings', { method: 'GET' });
+    __storeSettings = data || {};
+
     const description = String(data?.store_description || '').trim();
-    if (!description) return;
-    document.querySelectorAll('.store-description-target').forEach(el => {
-      el.textContent = description;
+    const phone = String(data?.phone || STORE_PHONE).trim();
+    const email = String(data?.email || STORE_EMAIL).trim();
+    const location = String(data?.location || 'إب - المجمعة، اليمن').trim();
+    const workingHours = String(data?.working_hours || '8 صباحاً - 9 مساءً').trim();
+    const externalLink = String(data?.external_link || 'alhabeshi-stores.html').trim();
+    const footerNote = String(data?.footer_note || '').trim();
+    const tickerItems = Array.isArray(data?.ticker_items)
+      ? data.ticker_items.filter(Boolean)
+      : [];
+
+    if (description) {
+      document.querySelectorAll('.store-description-target').forEach(el => {
+        el.textContent = description;
+      });
+    }
+
+    document.querySelectorAll('a[href^="tel:"]').forEach(el => {
+      el.href = `tel:+967${phone.replace(/^0+/, '')}`;
+      el.textContent = phone;
     });
+
+    document.querySelectorAll('a[href^="mailto:"]').forEach(el => {
+      el.href = `mailto:${email}`;
+      el.textContent = email;
+    });
+
+    const topbar = document.querySelector('.topbar');
+    if (topbar) {
+      const infoBlocks = topbar.querySelectorAll('.topbar-info');
+      if (infoBlocks[0]) {
+        infoBlocks[0].innerHTML = `
+          <span><i class="fas fa-map-marker-alt"></i> ${location}</span>
+          <span><i class="fas fa-phone"></i> <a href="tel:+967${phone.replace(/^0+/, '')}" style="color:inherit;text-decoration:none">${phone}</a></span>
+          <span><i class="fas fa-envelope"></i> <a href="mailto:${email}" style="color:inherit;text-decoration:none">${email}</a></span>
+          <span><i class="fas fa-clock"></i> ساعات العمل: ${workingHours}</span>
+        `;
+      }
+    }
+
+    const ticker = document.getElementById('tickerContent');
+    if (ticker && tickerItems.length) {
+      const doubled = [...tickerItems, ...tickerItems];
+      ticker.innerHTML = doubled.map(item => `<span>${item}</span>`).join('');
+    }
+
+    const footerLink = document.querySelector('a[href="alhabeshi-stores.html"]');
+    if (footerLink && externalLink) {
+      footerLink.href = externalLink;
+      footerLink.textContent = externalLink;
+    }
+
+    document.querySelectorAll('.footer-bottom p:first-child').forEach(el => {
+      if (footerNote) el.textContent = footerNote;
+    });
+  } catch (_) {}
+}
+
+async function loadPublicNotifications() {
+  try {
+    if (window.location.pathname.endsWith('admin.html')) return;
+    const result = await requestJSON('/api/public/notifications', { method: 'GET' });
+    const items = result?.data || [];
+    const nextItem = items.find(item => !sessionStorage.getItem(`site_notice_${item.id}`));
+    if (!nextItem) return;
+    sessionStorage.setItem(`site_notice_${nextItem.id}`, '1');
+    showToast(`🔔 ${nextItem.title}\n${nextItem.message}`, 'info', 7000);
   } catch (_) {}
 }
 
@@ -195,7 +261,8 @@ function rebuildNavbarMenu() {
     <li><a href="new-products.html"><i class="fas fa-star"></i> الأصناف الجديدة</a></li>
     <li><a href="offers.html"><i class="fas fa-tags"></i> العروض</a></li>
     <li><a href="offers.html#competitions"><i class="fas fa-trophy"></i> المسابقات</a></li>
-    <li><a href="#" data-subscribe-menu-link><i class="fas fa-user-plus"></i> تسجيل الاشتراك في الصفحة</a></li>
+    <li><a href="subscribe.html"><i class="fas fa-bell"></i> صفحة الاشتراك</a></li>
+    <li><a href="#" data-member-menu-link><i class="fas fa-user-circle"></i> حساب الزائر</a></li>
     <li><a href="about.html"><i class="fas fa-info-circle"></i> معلومات عن المحل</a></li>
     <li><a href="#" data-logout-menu-link><i class="fas fa-sign-out-alt"></i> تسجيل الخروج من الصفحة</a></li>
     <li><a href="order.html"><i class="fas fa-shopping-cart"></i> اطلب الآن</a></li>
@@ -205,9 +272,9 @@ function rebuildNavbarMenu() {
     </a></li>
   `;
 
-  list.querySelector('[data-subscribe-menu-link]')?.addEventListener('click', (e) => {
+  list.querySelector('[data-member-menu-link]')?.addEventListener('click', (e) => {
     e.preventDefault();
-    openMemberAuthModal('register');
+    openMemberAuthModal(__memberSession ? 'login' : 'register');
   });
 
   list.querySelector('[data-logout-menu-link]')?.addEventListener('click', async (e) => {
@@ -762,6 +829,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   createMemberAuthModal();
   await refreshMemberSession();
   await applyStoreDescriptionTargets();
+  await loadPublicNotifications();
   if (window.location.pathname.endsWith('admin.html')) {
     createAdminAuthOverlay();
     await verifyAdminSession();
