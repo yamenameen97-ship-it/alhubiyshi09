@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import re
@@ -122,6 +123,8 @@ DEFAULT_STORE_SETTINGS = {
     "location": "إب - المجمعة، اليمن",
     "working_hours": "8 صباحاً - 9 مساءً",
     "external_link": "alhabeshi-stores.html",
+    "logo_url": "/static/img/logo.jpg",
+    "favicon_url": "/static/img/logo.jpg",
 }
 
 
@@ -242,6 +245,195 @@ def ensure_list(value: Any) -> List[str]:
     return []
 
 
+def _table_info_rows(table: str) -> List[Dict[str, Any]]:
+    with closing(db.connect()) as conn:
+        if IS_POSTGRES:
+            with conn.cursor(cursor_factory=RealDictCursor) as cur:
+                cur.execute(
+                    "SELECT column_name FROM information_schema.columns WHERE table_schema = 'public' AND table_name = %s",
+                    (table,),
+                )
+                return [dict(row) for row in cur.fetchall()]
+        cur = conn.cursor()
+        cur.execute(f"PRAGMA table_info({table})")
+        rows = [{"column_name": row[1]} for row in cur.fetchall()]
+        cur.close()
+        return rows
+
+
+def ensure_table_columns(table: str, column_definitions: Dict[str, str]):
+    existing = {str(row.get("column_name") or "").strip() for row in _table_info_rows(table)}
+    missing = [(column, definition) for column, definition in column_definitions.items() if column not in existing]
+    if not missing:
+        return
+    with closing(db.connect()) as conn:
+        if IS_POSTGRES:
+            with conn.cursor() as cur:
+                for column, definition in missing:
+                    cur.execute(f"ALTER TABLE {table} ADD COLUMN IF NOT EXISTS {column} {definition}")
+            conn.commit()
+            return
+        cur = conn.cursor()
+        for column, definition in missing:
+            cur.execute(f"ALTER TABLE {table} ADD COLUMN {column} {definition}")
+        conn.commit()
+        cur.close()
+
+
+def run_schema_migrations():
+    bool_type = "BOOLEAN" if IS_POSTGRES else "INTEGER"
+    bool_true = "TRUE" if IS_POSTGRES else "1"
+    bool_false = "FALSE" if IS_POSTGRES else "0"
+    migrations = {
+        "admins": {
+            "display_name": "TEXT",
+            "email": "TEXT",
+            "password_hash": "TEXT",
+            "created_at": "TIMESTAMP",
+        },
+        "members": {
+            "full_name": "TEXT",
+            "phone": "TEXT",
+            "email": "TEXT",
+            "password_hash": "TEXT",
+            "wants_notifications": f"{bool_type} DEFAULT {bool_true}",
+            "is_active": f"{bool_type} DEFAULT {bool_true}",
+            "can_order": f"{bool_type} DEFAULT {bool_true}",
+            "created_at": "TIMESTAMP",
+            "updated_at": "TIMESTAMP",
+        },
+        "newsletter_subscribers": {
+            "full_name": "TEXT",
+            "email": "TEXT",
+            "source": "TEXT DEFAULT 'page'",
+            "is_active": f"{bool_type} DEFAULT {bool_true}",
+            "created_at": "TIMESTAMP",
+            "updated_at": "TIMESTAMP",
+        },
+        "customers": {
+            "name": "TEXT",
+            "phone": "TEXT",
+            "address": "TEXT",
+            "balance": "REAL DEFAULT 0",
+            "email": "TEXT",
+            "notes": "TEXT",
+            "is_member": f"{bool_type} DEFAULT {bool_false}",
+            "created_at": "TIMESTAMP",
+            "updated_at": "TIMESTAMP",
+        },
+        "products": {
+            "name": "TEXT",
+            "category": "TEXT",
+            "unit": "TEXT",
+            "price": "REAL DEFAULT 0",
+            "stock": "INTEGER DEFAULT 0",
+            "discount": "INTEGER DEFAULT 0",
+            "description": "TEXT",
+            "image_url": "TEXT",
+            "external_link": "TEXT",
+            "is_new": f"{bool_type} DEFAULT {bool_false}",
+            "created_at": "TIMESTAMP",
+            "updated_at": "TIMESTAMP",
+        },
+        "offers": {
+            "title": "TEXT",
+            "description": "TEXT",
+            "type": "TEXT DEFAULT 'عرض'",
+            "discount_percent": "INTEGER DEFAULT 0",
+            "is_active": f"{bool_type} DEFAULT {bool_true}",
+            "created_at": "TIMESTAMP",
+            "updated_at": "TIMESTAMP",
+        },
+        "orders": {
+            "customer_name": "TEXT",
+            "phone": "TEXT",
+            "is_member": f"{bool_type} DEFAULT {bool_false}",
+            "member_id": "TEXT",
+            "items": "TEXT",
+            "total": "REAL DEFAULT 0",
+            "status": "TEXT DEFAULT 'جديد'",
+            "notes": "TEXT",
+            "order_mode": "TEXT DEFAULT 'delivery'",
+            "delivery_address": "TEXT",
+            "delivery_time": "TEXT",
+            "payment_method": "TEXT",
+            "payment_reference": "TEXT",
+            "notification_email": "TEXT",
+            "order_date": "TEXT",
+            "created_at": "TIMESTAMP",
+            "updated_at": "TIMESTAMP",
+        },
+        "chat_messages": {
+            "sender_name": "TEXT",
+            "message": "TEXT",
+            "is_admin": f"{bool_type} DEFAULT {bool_false}",
+            "timestamp": "TEXT",
+            "created_at": "TIMESTAMP",
+        },
+        "sports_sources": {
+            "name": "TEXT",
+            "url": "TEXT",
+            "is_active": f"{bool_type} DEFAULT {bool_true}",
+            "created_at": "TIMESTAMP",
+            "updated_at": "TIMESTAMP",
+        },
+        "sports_articles": {
+            "source_name": "TEXT",
+            "title": "TEXT",
+            "summary": "TEXT",
+            "link": "TEXT",
+            "image_url": "TEXT",
+            "published_at": "TEXT",
+            "created_at": "TIMESTAMP",
+        },
+        "site_notifications": {
+            "title": "TEXT",
+            "message": "TEXT",
+            "cta_link": "TEXT",
+            "cta_label": "TEXT",
+            "is_active": f"{bool_type} DEFAULT {bool_true}",
+            "expires_at": "TEXT",
+            "created_at": "TIMESTAMP",
+            "updated_at": "TIMESTAMP",
+        },
+        "notifications_log": {
+            "channel": "TEXT",
+            "subject": "TEXT",
+            "message": "TEXT",
+            "recipient_count": "INTEGER DEFAULT 0",
+            "meta": "TEXT",
+            "created_at": "TIMESTAMP",
+        },
+        "store_settings": {
+            "store_name": "TEXT",
+            "store_description": "TEXT",
+            "ticker_items": "TEXT",
+            "footer_note": "TEXT",
+            "phone": "TEXT",
+            "email": "TEXT",
+            "location": "TEXT",
+            "working_hours": "TEXT",
+            "external_link": "TEXT",
+            "logo_url": "TEXT",
+            "favicon_url": "TEXT",
+            "created_at": "TIMESTAMP",
+            "updated_at": "TIMESTAMP",
+        },
+        "analytics_events": {
+            "session_id": "TEXT",
+            "event_type": "TEXT",
+            "page_path": "TEXT",
+            "page_title": "TEXT",
+            "referrer": "TEXT",
+            "target_url": "TEXT",
+            "visitor_key": "TEXT",
+            "created_at": "TIMESTAMP",
+        },
+    }
+    for table_name, columns in migrations.items():
+        ensure_table_columns(table_name, columns)
+
+
 def get_store_settings() -> Dict[str, Any]:
     row = db.fetch_one("SELECT * FROM store_settings WHERE id = 1") or {}
     result = {**DEFAULT_STORE_SETTINGS, **row}
@@ -258,11 +450,12 @@ def save_store_settings(payload: Dict[str, Any]) -> Dict[str, Any]:
     ticker_json = json.dumps(merged["ticker_items"], ensure_ascii=False)
     sql = (
         "UPDATE store_settings SET store_name = {p}, store_description = {p}, ticker_items = {p}, footer_note = {p}, "
-        "phone = {p}, email = {p}, location = {p}, working_hours = {p}, external_link = {p}, updated_at = CURRENT_TIMESTAMP WHERE id = 1"
+        "phone = {p}, email = {p}, location = {p}, working_hours = {p}, external_link = {p}, logo_url = {p}, favicon_url = {p}, "
+        "updated_at = CURRENT_TIMESTAMP WHERE id = 1"
     ).format(p=db.placeholder(1))
     db.execute(sql, [
         merged["store_name"], merged["store_description"], ticker_json, merged["footer_note"], merged["phone"],
-        merged["email"], merged["location"], merged["working_hours"], merged["external_link"]
+        merged["email"], merged["location"], merged["working_hours"], merged["external_link"], merged["logo_url"], merged["favicon_url"]
     ])
     return get_store_settings()
 
@@ -557,7 +750,7 @@ def delete_record(table: str, record_id: str) -> bool:
 def seed_initial_data():
     if db.fetch_one("SELECT id FROM store_settings WHERE id = 1") is None:
         db.execute(
-            "INSERT INTO store_settings (id, store_name, store_description, ticker_items, footer_note, phone, email, location, working_hours, external_link, created_at, updated_at) VALUES (1, {p}, {p}, {p}, {p}, {p}, {p}, {p}, {p}, {p}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)".format(p=db.placeholder(1)),
+            "INSERT INTO store_settings (id, store_name, store_description, ticker_items, footer_note, phone, email, location, working_hours, external_link, logo_url, favicon_url, created_at, updated_at) VALUES (1, {p}, {p}, {p}, {p}, {p}, {p}, {p}, {p}, {p}, {p}, {p}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)".format(p=db.placeholder(1)),
             [
                 DEFAULT_STORE_SETTINGS["store_name"],
                 DEFAULT_STORE_SETTINGS["store_description"],
@@ -568,6 +761,8 @@ def seed_initial_data():
                 DEFAULT_STORE_SETTINGS["location"],
                 DEFAULT_STORE_SETTINGS["working_hours"],
                 DEFAULT_STORE_SETTINGS["external_link"],
+                DEFAULT_STORE_SETTINGS["logo_url"],
+                DEFAULT_STORE_SETTINGS["favicon_url"],
             ],
         )
 
@@ -622,7 +817,8 @@ def init_db():
         f"CREATE TABLE IF NOT EXISTS sports_articles (id {text_pk}, source_name TEXT, title TEXT NOT NULL, summary TEXT, link TEXT UNIQUE, image_url TEXT, published_at TEXT, created_at {timestamp_now})",
         f"CREATE TABLE IF NOT EXISTS site_notifications (id {text_pk}, title TEXT NOT NULL, message TEXT NOT NULL, cta_link TEXT, cta_label TEXT, is_active {bool_type} DEFAULT {bool_true}, expires_at TEXT, created_at {timestamp_now}, updated_at {timestamp_now})",
         f"CREATE TABLE IF NOT EXISTS notifications_log (id {text_pk}, channel TEXT, subject TEXT, message TEXT, recipient_count INTEGER DEFAULT 0, meta TEXT, created_at {timestamp_now})",
-        f"CREATE TABLE IF NOT EXISTS store_settings (id INTEGER PRIMARY KEY, store_name TEXT, store_description TEXT, ticker_items TEXT, footer_note TEXT, phone TEXT, email TEXT, location TEXT, working_hours TEXT, external_link TEXT, created_at {timestamp_now}, updated_at {timestamp_now})",
+        f"CREATE TABLE IF NOT EXISTS store_settings (id INTEGER PRIMARY KEY, store_name TEXT, store_description TEXT, ticker_items TEXT, footer_note TEXT, phone TEXT, email TEXT, location TEXT, working_hours TEXT, external_link TEXT, logo_url TEXT, favicon_url TEXT, created_at {timestamp_now}, updated_at {timestamp_now})",
+        f"CREATE TABLE IF NOT EXISTS analytics_events (id {text_pk}, session_id TEXT, event_type TEXT, page_path TEXT, page_title TEXT, referrer TEXT, target_url TEXT, visitor_key TEXT, created_at {timestamp_now})",
     ]
     with closing(db.connect()) as conn:
         if IS_POSTGRES:
@@ -636,6 +832,7 @@ def init_db():
                 cur.execute(statement)
             conn.commit()
             cur.close()
+    run_schema_migrations()
     seed_initial_data()
 
 
@@ -837,6 +1034,89 @@ def notify_subscribers():
         "smtp_ok": result.get("ok", False),
         "message": "تم إنشاء إشعار الموقع وتجهيز الإرسال البريدي" if recipients else "تم إنشاء إشعار الموقع، ولا يوجد مشتركون نشطون حالياً",
         "error": result.get("error"),
+    })
+
+
+def make_visitor_key(session_id: str = "") -> str:
+    forwarded_for = (request.headers.get("X-Forwarded-For") or request.remote_addr or "").split(",")[0].strip()
+    user_agent = request.headers.get("User-Agent", "")
+    raw = f"{session_id}|{forwarded_for}|{user_agent[:180]}"
+    return hashlib.sha256(raw.encode("utf-8", errors="ignore")).hexdigest()[:40]
+
+
+def parse_event_day(value: str) -> str:
+    text = str(value or "").strip()
+    if not text:
+        return utcnow().date().isoformat()
+    normalized = text.replace("Z", "+00:00")
+    try:
+        return datetime.fromisoformat(normalized).date().isoformat()
+    except Exception:
+        return text.split(" ")[0].split("T")[0]
+
+
+@app.post("/api/analytics/track")
+def analytics_track():
+    payload = request.get_json(silent=True) or {}
+    session_id = str(payload.get("session_id") or "").strip()[:120]
+    event_type = str(payload.get("event_type") or "page_view").strip().lower()[:40]
+    if event_type not in {"page_view", "link_open", "cta_click", "contact_click"}:
+        event_type = "page_view"
+    page_path = str(payload.get("page_path") or request.path or "/").strip()[:255] or "/"
+    page_title = str(payload.get("page_title") or "").strip()[:255]
+    referrer = str(payload.get("referrer") or request.referrer or "").strip()[:500]
+    target_url = str(payload.get("target_url") or "").strip()[:500]
+    visitor_key = make_visitor_key(session_id)
+    db.execute(
+        "INSERT INTO analytics_events (id, session_id, event_type, page_path, page_title, referrer, target_url, visitor_key, created_at) VALUES ({p}, {p}, {p}, {p}, {p}, {p}, {p}, {p}, CURRENT_TIMESTAMP)".format(p=db.placeholder(1)),
+        [str(uuid.uuid4()), session_id, event_type, page_path, page_title, referrer, target_url, visitor_key],
+    )
+    return json_response({"ok": True})
+
+
+@app.get("/api/analytics/summary")
+@require_admin_api
+def analytics_summary():
+    rows = db.fetch_all(
+        "SELECT session_id, event_type, page_path, page_title, referrer, target_url, visitor_key, created_at FROM analytics_events ORDER BY created_at DESC LIMIT {p}".format(p=db.placeholder(1)),
+        [5000],
+    )
+    page_views = [row for row in rows if str(row.get("event_type") or "") == "page_view"]
+    link_opens = [row for row in rows if str(row.get("event_type") or "") == "link_open"]
+    unique_visitors = {
+        (str(row.get("session_id") or "").strip() or str(row.get("visitor_key") or "").strip())
+        for row in page_views
+        if str(row.get("session_id") or "").strip() or str(row.get("visitor_key") or "").strip()
+    }
+    top_pages: Dict[str, int] = {}
+    daily_views: Dict[str, int] = {}
+    for row in page_views:
+        page = str(row.get("page_path") or "/").strip() or "/"
+        top_pages[page] = top_pages.get(page, 0) + 1
+        day = parse_event_day(str(row.get("created_at") or ""))
+        daily_views[day] = daily_views.get(day, 0) + 1
+    top_links: Dict[str, int] = {}
+    for row in link_opens:
+        target = str(row.get("target_url") or "").strip()
+        if not target:
+            continue
+        top_links[target] = top_links.get(target, 0) + 1
+    today = utcnow().date()
+    ordered_days = []
+    for offset in range(13, -1, -1):
+        day = (today - timedelta(days=offset)).isoformat()
+        ordered_days.append({"day": day, "views": daily_views.get(day, 0)})
+    homepage_paths = {"/", "/index.html", "index.html", "/admin", "/admin.html"}
+    homepage_opens = sum(1 for row in page_views if str(row.get("page_path") or "") in homepage_paths)
+    return json_response({
+        "ok": True,
+        "total_views": len(page_views),
+        "unique_visitors": len(unique_visitors),
+        "homepage_opens": homepage_opens,
+        "link_opens": len(link_opens),
+        "daily_views": ordered_days,
+        "top_pages": [{"page": key, "views": value} for key, value in sorted(top_pages.items(), key=lambda item: item[1], reverse=True)[:8]],
+        "top_links": [{"target_url": key, "opens": value} for key, value in sorted(top_links.items(), key=lambda item: item[1], reverse=True)[:8]],
     })
 
 
