@@ -1,0 +1,21 @@
+
+{% extends 'base.html' %}
+{% block content %}
+<h3 class="mb-3">📦 طلباتي</h3>
+{% for o in orders %}
+<div class="card mb-3">
+  <div class="card-body">
+    <div class="d-flex justify-content-between">
+      <div>الحالة: <b>{{ o.order.status }}</b></div>
+      <div>الإجمالي: ${{ '%.2f'|format(o.order.total) }}</div>
+    </div>
+    <hr>
+    <ul class="mb-0">
+      {% for it in o.items %}
+      <li>{{ it.name }} × {{ it.qty }} — ${{ '%.2f'|format(it.price) }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endfor %}
+{% endblock %}

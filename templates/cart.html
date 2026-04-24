@@ -1,0 +1,32 @@
+
+{% extends 'base.html' %}
+{% block content %}
+<h3 class="mb-3">🛒 السلة</h3>
+{% if items %}
+<table class="table table-striped">
+  <tr><th>المنتج</th><th>السعر</th><th>الكمية</th><th>المجموع</th><th></th></tr>
+  {% for it in items %}
+  <tr>
+    <td>{{ it.name }}</td>
+    <td>${{ '%.2f'|format(it.price) }}</td>
+    <td>
+      <form method="POST" action="/update_cart/{{ it.id }}" class="d-flex gap-2">
+        <input type="number" name="quantity" value="{{ it.qty }}" min="0" class="form-control" style="width:90px;">
+        <button class="btn btn-sm btn-primary">تحديث</button>
+      </form>
+    </td>
+    <td>${{ '%.2f'|format(it.subtotal) }}</td>
+    <td><a href="/remove_from_cart/{{ it.id }}" class="btn btn-sm btn-danger">حذف</a></td>
+  </tr>
+  {% endfor %}
+</table>
+<div class="d-flex justify-content-between">
+  <h5>الإجمالي: ${{ '%.2f'|format(total) }}</h5>
+  <form method="POST" action="/checkout">
+    <button class="btn btn-success">إتمام الطلب</button>
+  </form>
+</div>
+{% else %}
+<div class="alert alert-warning">السلة فارغة</div>
+{% endif %}
+{% endblock %}
