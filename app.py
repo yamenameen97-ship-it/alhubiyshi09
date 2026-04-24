@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 import os
 import re
-import secrets
+import secrets 
 import sqlite3
 import uuid
 from contextlib import closing
@@ -1065,7 +1065,8 @@ def static_template_page(page: str):
 
 init_db()
 
+import os
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 10000))
-    app.run(host="0.0.0.0", port=port, debug=False)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
