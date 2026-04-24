@@ -18,8 +18,8 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js') }}"></script>
-  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js') }}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <style>
     .admin-layout {
       display: flex;
@@ -602,16 +602,46 @@
 
       <div class="card mb-20">
         <div class="card-header">
-          <i class="fas fa-store"></i> وصف المتجر الظاهر للزوار
+          <i class="fas fa-store"></i> إعدادات الواجهة العامة للموقع
         </div>
         <div class="card-body">
-          <div class="form-group">
-            <label class="form-label">وصف المتجر</label>
-            <textarea id="storeDescriptionInput" class="form-control" rows="4" placeholder="اكتب وصفًا مختصرًا قابلًا للتعديل من لوحة الإدارة"></textarea>
+          <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:15px;">
+            <div class="form-group" style="grid-column:1/-1">
+              <label class="form-label">وصف المتجر</label>
+              <textarea id="storeDescriptionInput" class="form-control" rows="4" placeholder="اكتب وصفًا مختصرًا قابلًا للتعديل من لوحة الإدارة"></textarea>
+            </div>
+            <div class="form-group" style="grid-column:1/-1">
+              <label class="form-label">رسائل الشريط المتحرك</label>
+              <textarea id="tickerItemsInput" class="form-control" rows="4" placeholder="كل رسالة في سطر مستقل\nمثال: 🚚 توصيل داخل المدينة"></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">رقم الهاتف</label>
+              <input id="storePhoneInput" class="form-control" placeholder="771217771">
+            </div>
+            <div class="form-group">
+              <label class="form-label">البريد الإلكتروني</label>
+              <input id="storeEmailInput" class="form-control" placeholder="name@example.com">
+            </div>
+            <div class="form-group">
+              <label class="form-label">ساعات العمل</label>
+              <input id="storeHoursInput" class="form-control" placeholder="8 صباحاً - 9 مساءً">
+            </div>
+            <div class="form-group">
+              <label class="form-label">الموقع</label>
+              <input id="storeLocationInput" class="form-control" placeholder="إب - المجمعة، اليمن">
+            </div>
+            <div class="form-group" style="grid-column:1/-1">
+              <label class="form-label">رابط التعريف أو الفرع</label>
+              <input id="storeLinkInput" class="form-control" placeholder="alhabeshi-stores.html أو رابط خارجي">
+            </div>
+            <div class="form-group" style="grid-column:1/-1">
+              <label class="form-label">نص الفوتر السفلي</label>
+              <textarea id="footerNoteInput" class="form-control" rows="2" placeholder="© 2026 محلات الحبيشي | إب - المجمعة - اليمن"></textarea>
+            </div>
           </div>
           <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
-            <button class="btn btn-success" onclick="saveStoreDescriptionSettings()"><i class="fas fa-save"></i> حفظ الوصف</button>
-            <span id="storeDescriptionHint" style="color:#6c757d; font-size:.85rem;">سيظهر هذا الوصف في الصفحات العامة.</span>
+            <button class="btn btn-success" onclick="saveStoreDescriptionSettings()"><i class="fas fa-save"></i> حفظ إعدادات الواجهة</button>
+            <span id="storeDescriptionHint" style="color:#6c757d; font-size:.85rem;">سيتم تحديث الوصف والشريط المتحرك وبيانات الفوتر في الصفحات العامة.</span>
           </div>
         </div>
       </div>
@@ -2000,27 +2030,57 @@
   async function loadStoreDescriptionSettings() {
     try {
       const data = await requestJSON('/api/store/settings', { method: 'GET' });
-      const input = document.getElementById('storeDescriptionInput');
-      if (input) input.value = data.store_description || '';
+      const descriptionInput = document.getElementById('storeDescriptionInput');
+      const tickerInput = document.getElementById('tickerItemsInput');
+      const phoneInput = document.getElementById('storePhoneInput');
+      const emailInput = document.getElementById('storeEmailInput');
+      const hoursInput = document.getElementById('storeHoursInput');
+      const locationInput = document.getElementById('storeLocationInput');
+      const linkInput = document.getElementById('storeLinkInput');
+      const footerInput = document.getElementById('footerNoteInput');
+
+      if (descriptionInput) descriptionInput.value = data.store_description || '';
+      if (tickerInput) tickerInput.value = (data.ticker_items || []).join('\n');
+      if (phoneInput) phoneInput.value = data.phone || '';
+      if (emailInput) emailInput.value = data.email || '';
+      if (hoursInput) hoursInput.value = data.working_hours || '';
+      if (locationInput) locationInput.value = data.location || '';
+      if (linkInput) linkInput.value = data.external_link || '';
+      if (footerInput) footerInput.value = data.footer_note || '';
     } catch (e) {
-      showToast('تعذر تحميل وصف المتجر', 'warning');
+      showToast('تعذر تحميل إعدادات المتجر', 'warning');
     }
   }
 
   async function saveStoreDescriptionSettings() {
     const store_description = document.getElementById('storeDescriptionInput').value.trim();
+    const ticker_items = (document.getElementById('tickerItemsInput').value || '')
+      .split(/\n+/)
+      .map(v => v.trim())
+      .filter(Boolean);
+    const phone = document.getElementById('storePhoneInput').value.trim();
+    const email = document.getElementById('storeEmailInput').value.trim();
+    const working_hours = document.getElementById('storeHoursInput').value.trim();
+    const location = document.getElementById('storeLocationInput').value.trim();
+    const external_link = document.getElementById('storeLinkInput').value.trim();
+    const footer_note = document.getElementById('footerNoteInput').value.trim();
+
     if (!store_description) {
       showToast('يرجى كتابة وصف المتجر', 'warning');
+      return;
+    }
+    if (!ticker_items.length) {
+      showToast('أضف رسالة واحدة على الأقل للشريط المتحرك', 'warning');
       return;
     }
     try {
       await requestJSON('/api/store/settings', {
         method: 'PATCH',
-        body: JSON.stringify({ store_description })
+        body: JSON.stringify({ store_description, ticker_items, phone, email, working_hours, location, external_link, footer_note })
       });
-      showToast('تم حفظ وصف المتجر', 'success');
+      showToast('تم حفظ إعدادات الواجهة بنجاح', 'success');
     } catch (e) {
-      showToast(e.message || 'تعذر حفظ وصف المتجر', 'error');
+      showToast(e.message || 'تعذر حفظ إعدادات المتجر', 'error');
     }
   }
 

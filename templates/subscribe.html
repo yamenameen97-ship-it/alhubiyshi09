@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="اشترك لاستلام أخبار محلات الحبيشي والعروض والأصناف الجديدة عبر البريد الإلكتروني.">
+  <meta name="theme-color" content="#1a5276">
+  <title>الاشتراك في الأخبار | محلات الحبيشي</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    .subscribe-page {
+      min-height: calc(100vh - 70px);
+      background: linear-gradient(135deg, #eef6fb 0%, #f8fbfd 55%, #ffffff 100%);
+      padding: 40px 20px 70px;
+    }
+    .subscribe-shell {
+      max-width: 1080px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 24px;
+    }
+    .hero-card, .form-card {
+      background: white;
+      border-radius: 24px;
+      box-shadow: 0 10px 35px rgba(26,82,118,.10);
+      overflow: hidden;
+    }
+    .hero-card {
+      padding: 34px;
+      position: relative;
+      background: linear-gradient(135deg, #1a5276, #2e86c1);
+      color: white;
+    }
+    .hero-card::before {
+      content: '';
+      position: absolute;
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.08);
+      left: -60px;
+      top: -60px;
+    }
+    .hero-card::after {
+      content: '';
+      position: absolute;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.06);
+      right: -40px;
+      bottom: -50px;
+    }
+    .hero-card > * { position: relative; z-index: 1; }
+    .hero-badges {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+      margin-bottom: 24px;
+    }
+    .hero-badge {
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.13);
+      border: 1px solid rgba(255,255,255,.18);
+      font-weight: 700;
+      font-size: .86rem;
+    }
+    .hero-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+    .hero-list .item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255,255,255,.10);
+      border-radius: 16px;
+      padding: 12px 14px;
+    }
+    .hero-list .item i {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,.16);
+    }
+    .form-card { padding: 28px; }
+    .form-grid {
+      display: grid;
+      gap: 16px;
+    }
+    .hint-box {
+      padding: 14px 16px;
+      border-radius: 14px;
+      background: rgba(46,134,193,.08);
+      color: #1a5276;
+      font-weight: 600;
+      margin-bottom: 18px;
+    }
+    .inline-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 6px;
+    }
+    .mini-note {
+      color: #6c757d;
+      font-size: .85rem;
+      line-height: 1.8;
+    }
+    @media (max-width: 900px) {
+      .subscribe-shell { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-brand">
+      <div class="navbar-logo">🏪</div>
+      <div class="navbar-title">
+        <span class="store-name">محلات الحبيشي</span>
+        <span class="store-sub">الاشتراك في الأخبار والتنبيهات</span>
+      </div>
+    </a>
+    <ul class="navbar-links" id="navLinks">
+      <li><a href="index.html">الرئيسية</a></li>
+      <li><a href="new-products.html">الأصناف الجديدة</a></li>
+      <li><a href="offers.html">العروض</a></li>
+      <li><a href="order.html">اطلب الآن</a></li>
+      <li><a href="admin.html">الإدارة</a></li>
+    </ul>
+    <button class="navbar-toggle" onclick="document.getElementById('navLinks').classList.toggle('open')">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="subscribe-page">
+  <div class="subscribe-shell">
+    <section class="hero-card">
+      <div class="hero-badge">🔔 إشعارات مباشرة</div>
+      <h1 style="font-size:2rem;font-weight:900;margin:10px 0 12px;">اشترك ووصل لك الجديد أولاً</h1>
+      <p style="opacity:.95;line-height:1.9;font-size:1rem;max-width:560px;">
+        من هنا تقدر تسجل بريدك عشان يوصلك الجديد من محلات الحبيشي: أصناف وصلت حديثاً، عروض موسمية، وتحديثات مهمة عن الخدمة والمخزون.
+      </p>
+      <div class="hero-badges">
+        <span class="hero-badge">📦 أصناف جديدة</span>
+        <span class="hero-badge">🏷️ عروض وخصومات</span>
+        <span class="hero-badge">📢 تحديثات المتجر</span>
+      </div>
+      <div class="hero-list">
+        <div class="item"><i class="fas fa-envelope-open-text"></i><div><strong>نشرة بريدية منظمة</strong><br><small>رسائل مختصرة وواضحة وقت وجود جديد فعلاً</small></div></div>
+        <div class="item"><i class="fas fa-user-check"></i><div><strong>ربط بالحساب</strong><br><small>لو عندك حساب زائر تقدر تدير التنبيهات بسهولة</small></div></div>
+        <div class="item"><i class="fas fa-store"></i><div><strong>محتوى من الإدارة مباشرة</strong><br><small>الإدارة تقدر تنشر الشريط الإخباري والفوتر والتنبيهات من لوحة التحكم</small></div></div>
+      </div>
+    </section>
+
+    <section class="form-card">
+      <h2 style="margin:0 0 8px;color:#1a5276;font-size:1.45rem;font-weight:900;">تسجيل الاشتراك</h2>
+      <p class="mini-note">ادخل الاسم والبريد الإلكتروني، وبعدها تقدر كمان تلغي الاشتراك أو تفتح حساب زائر لإدارة تنبيهاتك.</p>
+      <div class="hint-box">
+        <i class="fas fa-circle-info"></i>
+        البريد اللي تسجله هنا هيتخزن ضمن قائمة المشتركين النشطين في لوحة الإدارة.
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">الاسم</label>
+          <input id="subFullName" class="form-control" placeholder="اسمك الكامل أو اسم الجهة">
+        </div>
+        <div class="form-group">
+          <label class="form-label">البريد الإلكتروني</label>
+          <input id="subEmail" class="form-control" type="email" placeholder="name@example.com">
+        </div>
+        <div class="inline-actions">
+          <button class="btn btn-success" type="button" onclick="subscribeNow()"><i class="fas fa-bell"></i> اشتراك الآن</button>
+          <button class="btn btn-outline" type="button" onclick="unsubscribeNow()"><i class="fas fa-bell-slash"></i> إلغاء الاشتراك</button>
+          <button class="btn btn-primary" type="button" onclick="openMemberAuthModal('register')"><i class="fas fa-user-plus"></i> إنشاء حساب زائر</button>
+        </div>
+        <div class="mini-note">
+          <strong>ملاحظة:</strong> لو كنت مسجل بحساب زائر، هتقدر تتحكم في تفعيل أو إيقاف الإشعارات من بيانات الحساب نفسها.
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-section">
+      <h4>🏪 محلات الحبيشي</h4>
+      <p><span class="store-description-target">وجهتك الأولى لمواد البناء والسباكة والكهرباء ومستلزمات الورش والأسمنت والمستلزمات الطبية في إب والمنطقة.</span></p>
+    </div>
+    <div class="footer-section">
+      <h4>🔗 روابط سريعة</h4>
+      <a href="index.html">الرئيسية</a>
+      <a href="new-products.html">الأصناف الجديدة</a>
+      <a href="offers.html">العروض</a>
+      <a href="order.html">اطلب الآن</a>
+    </div>
+    <div class="footer-section">
+      <h4>📬 تواصل</h4>
+      <p><i class="fas fa-phone"></i> <a href="tel:+967771217771" style="color:inherit;text-decoration:none">771217771</a></p>
+      <p><i class="fas fa-envelope"></i> <a href="mailto:yamenameen97@gmail.com" style="color:inherit;text-decoration:none">yamenameen97@gmail.com</a></p>
+    </div>
+  </div>
+  <div class="footer-bottom"><p>© 2026 محلات الحبيشي | إب - المجمعة - اليمن</p></div>
+</footer>
+
+<script src="{{ url_for('static', filename='js/common.js') }}"></script>
+<script>
+  async function subscribeNow() {
+    const full_name = document.getElementById('subFullName').value.trim();
+    const email = document.getElementById('subEmail').value.trim();
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      showToast('يرجى كتابة بريد إلكتروني صحيح', 'warning');
+      return;
+    }
+    try {
+      await requestJSON('/api/newsletter/subscribe', {
+        method: 'POST',
+        body: JSON.stringify({ full_name, email })
+      });
+      localStorage.setItem('hiba_newsletter_name', full_name);
+      localStorage.setItem('hiba_newsletter_email', email);
+      showToast('تم تسجيل الاشتراك بنجاح', 'success');
+    } catch (e) {
+      showToast(e.message || 'تعذر حفظ الاشتراك', 'error');
+    }
+  }
+
+  async function unsubscribeNow() {
+    const email = document.getElementById('subEmail').value.trim() || localStorage.getItem('hiba_newsletter_email') || '';
+    if (!email) {
+      showToast('اكتب البريد الإلكتروني المطلوب إلغاء اشتراكه', 'warning');
+      return;
+    }
+    try {
+      await requestJSON('/api/newsletter/unsubscribe', {
+        method: 'POST',
+        body: JSON.stringify({ email })
+      });
+      localStorage.removeItem('hiba_newsletter_name');
+      localStorage.removeItem('hiba_newsletter_email');
+      showToast('تم إلغاء الاشتراك بنجاح', 'success');
+    } catch (e) {
+      showToast(e.message || 'تعذر إلغاء الاشتراك', 'error');
+    }
+  }
+
+  window.addEventListener('DOMContentLoaded', async () => {
+    const savedName = localStorage.getItem('hiba_newsletter_name');
+    const savedEmail = localStorage.getItem('hiba_newsletter_email');
+    if (savedName) document.getElementById('subFullName').value = savedName;
+    if (savedEmail) document.getElementById('subEmail').value = savedEmail;
+    if (typeof refreshMemberSession === 'function') {
+      try {
+        await refreshMemberSession();
+        if (window.__memberSession) {
+          document.getElementById('subFullName').value = document.getElementById('subFullName').value || (window.__memberSession.full_name || '');
+          document.getElementById('subEmail').value = document.getElementById('subEmail').value || (window.__memberSession.email || '');
+        }
+      } catch (_) {}
+    }
+  });
+</script>
+</body>
+</html>
