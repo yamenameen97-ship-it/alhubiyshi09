@@ -1,4 +1,3 @@
-flask
-flask_sqlalchemy
-werkzeug
-openai
+Flask
+gunicorn
+psycopg2-binary
